@@ -1,27 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { WEIGHTS, BANDS, INDICATOR_META } from '../indicators.js'
 import { ago } from '../format.js'
+import { useI18n } from '../i18n.js'
 
-const TERM_HELP = [
-  'commands:',
-  '  score              현재 매수 타이밍 점수 + 판정',
-  '  why                무엇이 점수를 끌어올리/내리는지(가중 기여도)',
-  '  show <ind>         지표 상세 (rsi|macd|fng|mayer|dd|cross)',
-  '  bands              5단계 판정 밴드 표',
-  '  sources            데이터 소스 상태/신선도',
-  '  refresh            전체 재조회',
-  '  theme <green|cyan|amber|red> · matrix <on|off>',
-  '  clear · help · whoami',
-]
 const SHOW_MAP = { rsi: 'RSI', macd: 'MACD', fng: 'FNG', mayer: 'Mayer', dd: 'DD', cross: 'GC_DC' }
 
 export default function Terminal({ ctx }) {
-  const [lines, setLines] = useState(['// btc_signal shell — `help` 입력으로 시작'])
+  const { t } = useI18n()
+  const tt = t.term
+  const [lines, setLines] = useState([tt.welcome])
   const [input, setInput] = useState('')
   const [hist, setHist] = useState([])
   const [hi, setHi] = useState(-1)
   const bodyRef = useRef(null)
   const print = (...out) => setLines((p) => [...p, ...out.flat()])
+  const bandLabel = (b) => t.bands[b.id]?.label || b.label
+  const bandAdvice = (b) => t.bands[b.id]?.advice || b.advice
 
   useEffect(() => {
     const el = bodyRef.current
@@ -38,22 +32,22 @@ export default function Terminal({ ctx }) {
     const a = ctx.analysisRef.current
     switch (name.toLowerCase()) {
       case 'help':
-        print(TERM_HELP)
+        print(tt.help)
         break
       case 'score':
         if (!a || a.score == null) {
-          print('  ! 분석 데이터 없음 — `refresh`')
+          print(tt.needRefresh)
           break
         }
         print(
-          `  BUY TIMING SCORE: ${a.score.toFixed(1)} / 100   [${a.band.label}]`,
-          `  ${a.band.advice}`,
-          `  coverage: ${a.online}/6 indicators (${Math.round(a.coverage * 100)}% weight)`,
+          `  BUY TIMING SCORE: ${a.score.toFixed(1)} / 100   [${bandLabel(a.band)}]`,
+          `  ${bandAdvice(a.band)}`,
+          tt.scoreCoverage(a.online, Math.round(a.coverage * 100)),
         )
         break
       case 'why': {
         if (!a || a.score == null) {
-          print('  ! 데이터 없음')
+          print(tt.needData)
           break
         }
         const contribs = Object.keys(WEIGHTS)
@@ -64,27 +58,28 @@ export default function Terminal({ ctx }) {
           .map((c) => ({ ...c, contr: (c.v * c.w) / wsum }))
           .sort((x, y) => y.contr - x.contr)
           .forEach((c) => print(`  ${c.k.padEnd(6)} score ${c.v.toFixed(0).padStart(3)} ×${c.w.toFixed(2)} → ${c.contr >= 0 ? '+' : ''}${c.contr.toFixed(1)}`))
-        print(`  ── 합계 ${a.score.toFixed(1)} (높을수록 매수 우호)`)
+        print(tt.whySum(a.score.toFixed(1)))
         break
       }
       case 'show': {
         const key = SHOW_MAP[(args[0] || '').toLowerCase()]
         if (!key || !a) {
-          print('  ! show rsi|macd|fng|mayer|dd|cross')
+          print(tt.showUsage)
           break
         }
         const m = INDICATOR_META.find((x) => x.key === key)
+        const ti = t.ind[key] || { name: m.name, desc: m.desc }
         const p = a.parts[key]
         print(
-          `  ${m.short} — ${m.name}`,
-          `    값: ${p.value}  (${p.detail})`,
-          `    부분점수: ${p.score == null ? 'N/A' : p.score.toFixed(1) + '/100'}  · 가중치 ${Math.round(WEIGHTS[key] * 100)}%`,
-          `    ${m.desc}`,
+          `  ${m.short} — ${ti.name}`,
+          tt.showVal(p.value, p.detail),
+          tt.showScore(p.score == null ? 'N/A' : p.score.toFixed(1) + '/100', Math.round(WEIGHTS[key] * 100)),
+          `    ${ti.desc}`,
         )
         break
       }
       case 'bands':
-        BANDS.forEach((b) => print(`  ${String(b.min).padStart(3)}~  ${b.label.padEnd(11)} ${b.advice}`))
+        BANDS.forEach((b) => print(`  ${String(b.min).padStart(3)}~  ${bandLabel(b).padEnd(11)} ${bandAdvice(b)}`))
         break
       case 'sources': {
         const f = (s, label) =>
@@ -93,26 +88,26 @@ export default function Terminal({ ctx }) {
         break
       }
       case 'refresh':
-        print('  ↻ refetching all sources...')
+        print(tt.refreshing)
         ctx.api.refresh()
         break
       case 'theme': {
         const ok = ctx.api.theme(args[0])
-        print(ok ? `  ✓ theme → ${args[0]}` : '  ! theme: green | cyan | amber | red')
+        print(ok ? tt.themeOk(args[0]) : tt.themeErr)
         break
       }
       case 'matrix':
         ctx.api.matrix(args[0] !== 'off')
-        print(`  ✓ matrix ${args[0] !== 'off' ? 'ON' : 'OFF'}`)
+        print(tt.matrixMsg(args[0] !== 'off'))
         break
       case 'clear':
         setLines([])
         break
       case 'whoami':
-        print('  satoshi // HODL responsibly. DYOR. 신호는 참고용입니다.')
+        print(tt.whoami)
         break
       default:
-        print(`  command not found: ${name} — \`help\``)
+        print(tt.notFound(name))
     }
   }
 

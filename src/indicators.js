@@ -149,16 +149,35 @@ export function goldenDeathCross(closes) {
 export const WEIGHTS = { RSI: 0.22, MACD: 0.18, FNG: 0.22, Mayer: 0.18, DD: 0.12, GC_DC: 0.08 }
 
 // 판정 밴드 (점수 높을수록 매수 우호 / color: ok=매수 warn=중립 crit=과열)
+// id 는 i18n 번역 키. label/advice 는 번역이 없을 때의 한국어 폴백.
 export const BANDS = [
-  { min: 80, label: 'STRONG BUY', color: 'ok', advice: '과매도+공포+저평가 다중 합류. 분할 매수 적극 구간.' },
-  { min: 65, label: 'ACCUMULATE', color: 'ok', advice: '매수 우호. 분할 적립 권장. 추세 필터와 함께 확인.' },
-  { min: 45, label: 'NEUTRAL', color: 'warn', advice: '관망/중립. 뚜렷한 우위 없음. 추가 신호 대기.' },
-  { min: 25, label: 'CAUTION', color: 'warn', advice: '주의. 탐욕·고평가 진입 초입. 추격 매수 자제.' },
-  { min: 0, label: 'OVERHEATED', color: 'crit', advice: '과열. 극탐욕/고평가/고점 근접. 신규 매수 금지.' },
+  { id: 'STRONG_BUY', min: 80, label: 'STRONG BUY', color: 'ok', advice: '과매도+공포+저평가 다중 합류. 분할 매수 적극 구간.' },
+  { id: 'ACCUMULATE', min: 65, label: 'ACCUMULATE', color: 'ok', advice: '매수 우호. 분할 적립 권장. 추세 필터와 함께 확인.' },
+  { id: 'NEUTRAL', min: 45, label: 'NEUTRAL', color: 'warn', advice: '관망/중립. 뚜렷한 우위 없음. 추가 신호 대기.' },
+  { id: 'CAUTION', min: 25, label: 'CAUTION', color: 'warn', advice: '주의. 탐욕·고평가 진입 초입. 추격 매수 자제.' },
+  { id: 'OVERHEATED', min: 0, label: 'OVERHEATED', color: 'crit', advice: '과열. 극탐욕/고평가/고점 근접. 신규 매수 금지.' },
 ]
 export const bandFor = (score) => BANDS.find((b) => score >= b.min) || BANDS[BANDS.length - 1]
-export const fngLabel = (v) =>
-  v == null ? '—' : v <= 25 ? 'Extreme Fear' : v <= 45 ? 'Fear' : v < 55 ? 'Neutral' : v < 75 ? 'Greed' : 'Extreme Greed'
+
+// 번역 폴백(한국어). App이 t를 넘기면 t.fng / t.det 가 우선한다.
+const FNG_KO = { extremeFear: 'Extreme Fear', fear: 'Fear', neutral: 'Neutral', greed: 'Greed', extremeGreed: 'Extreme Greed' }
+const DET_KO = {
+  nodata: '데이터 부족',
+  oversold: '과매도 ⚑',
+  overbought: '과매수',
+  neutral: '중립',
+  posZone: '+영역',
+  negZone: '−영역',
+  turnUp: ' · 상승전환',
+  falling: ' · 하락',
+  vs200: 'vs 200일선',
+  fallback200: (d) => `200D 폴백(${d}d)`,
+  high: (v) => `고점 $${v}`,
+}
+export const fngLabel = (v, t) => {
+  const f = t?.fng || FNG_KO
+  return v == null ? '—' : v <= 25 ? f.extremeFear : v <= 45 ? f.fear : v < 55 ? f.neutral : v < 75 ? f.greed : f.extremeGreed
+}
 
 export const INDICATOR_META = [
   { key: 'RSI', short: 'RSI·14', name: 'Relative Strength Index (Wilder)', desc: '과매도(<30) = 매수 / 과매수(>70) = 경계' },
@@ -173,21 +192,22 @@ const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x))
 
 // 모든 지표를 계산하고 0~100 합성 매수 타이밍 점수를 산출한다.
 // 결측 지표는 합성에서 제외하고 가중치를 재정규화(부분 실패 허용).
-export function computeAnalysis({ closes = [], fngArr = [], livePrice = null }) {
+export function computeAnalysis({ closes = [], fngArr = [], livePrice = null, t = null }) {
   const parts = {}
+  const D = t?.det || DET_KO
 
   const rsiSeries = rsiWilder(closes, 14)
   const r = closes.length ? rsiSeries[closes.length - 1] : null
   parts.RSI = {
     score: r == null ? null : clamp(((70 - clamp(r, 30, 70)) / 40) * 100, 0, 100),
     value: r == null ? 'N/A' : r.toFixed(1),
-    detail: r == null ? '데이터 부족' : r < 30 ? '과매도 ⚑' : r > 70 ? '과매수' : '중립',
+    detail: r == null ? D.nodata : r < 30 ? D.oversold : r > 70 ? D.overbought : D.neutral,
     series: rsiSeries.filter((v) => v != null).slice(-120),
   }
 
   let macdScore = null,
     macdVal = 'N/A',
-    macdDetail = '데이터 부족',
+    macdDetail = D.nodata,
     macdSeries = []
   if (closes.length >= 35) {
     const { histogram: h } = macd(closes, 12, 26, 9)
@@ -199,7 +219,7 @@ export function computeAnalysis({ closes = [], fngArr = [], livePrice = null }) 
         delta = cur > prev ? 40 : -40
       macdScore = clamp(base + delta, 0, 100)
       macdVal = (cur > prev ? '▲' : '▼') + ' ' + (Math.abs(cur) >= 1 ? cur.toFixed(0) : cur.toFixed(2))
-      macdDetail = (cur > 0 ? '+영역' : '−영역') + (cur > prev ? ' · 상승전환' : ' · 하락')
+      macdDetail = (cur > 0 ? D.posZone : D.negZone) + (cur > prev ? D.turnUp : D.falling)
     }
   }
   parts.MACD = { score: macdScore, value: macdVal, detail: macdDetail, series: macdSeries }
@@ -209,7 +229,7 @@ export function computeAnalysis({ closes = [], fngArr = [], livePrice = null }) 
   parts.FNG = {
     score: fngScore,
     value: fngCur == null ? 'N/A' : String(fngCur),
-    detail: fngLabel(fngCur),
+    detail: fngLabel(fngCur, t),
     series: fngArr.slice(-120),
   }
 
@@ -217,21 +237,21 @@ export function computeAnalysis({ closes = [], fngArr = [], livePrice = null }) 
   parts.Mayer = {
     score: mm == null ? null : clamp(((2.4 - mm.mayer) / 1.6) * 100, 0, 100),
     value: mm == null ? 'N/A' : mm.mayer.toFixed(2) + '×',
-    detail: mm == null ? '데이터 부족' : mm.isFallback ? `200D 폴백(${mm.usedPeriod}d)` : 'vs 200일선',
+    detail: mm == null ? D.nodata : mm.isFallback ? D.fallback200(mm.usedPeriod) : D.vs200,
   }
 
   const dd = drawdownFromHigh(closes, 365, livePrice)
   parts.DD = {
     score: dd == null ? null : clamp((-dd.drawdownPct / 50) * 100, 0, 100),
     value: dd == null ? 'N/A' : dd.drawdownPct.toFixed(1) + '%',
-    detail: dd == null ? '데이터 부족' : `고점 $${dd.rollingHigh.toLocaleString('en-US', { maximumFractionDigits: 0 })}`,
+    detail: dd == null ? D.nodata : D.high(dd.rollingHigh.toLocaleString('en-US', { maximumFractionDigits: 0 })),
   }
 
   const gc = goldenDeathCross(closes)
   parts.GC_DC = {
     score: gc == null ? 50 : gc.event === 'GOLDEN_CROSS' ? 100 : gc.event === 'DEATH_CROSS' ? 0 : gc.crossState === 'GOLDEN' ? 75 : 25,
     value: gc == null ? 'N/A' : gc.crossState + (gc.event !== 'NONE' ? ' ⚡' : ''),
-    detail: gc == null ? '데이터 부족' : `gap ${gc.gapPct.toFixed(1)}%` + (gc.event !== 'NONE' ? ' · ' + gc.event : ''),
+    detail: gc == null ? D.nodata : `gap ${gc.gapPct.toFixed(1)}%` + (gc.event !== 'NONE' ? ' · ' + gc.event : ''),
   }
 
   let acc = 0,

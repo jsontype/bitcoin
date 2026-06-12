@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-const LINES = [
+const FALLBACK_LINES = [
   '> initializing btc_signal_terminal v1.0 ...',
   '> linking market feeds: coingecko / binance / alternative.me',
   '> establishing secure uplink ............ [ OK ]',
@@ -9,8 +9,9 @@ const LINES = [
   '> ACCESS GRANTED. // signal only — not financial advice',
 ]
 
-// 한 글자씩 타이핑되는 부팅 시퀀스. 끝나면 onDone 호출.
-export default function BootSequence({ onDone }) {
+// 한 글자씩 타이핑되는 부팅 시퀀스. 끝나면 onDone 호출. (현재 언어로 표시)
+export default function BootSequence({ onDone, t }) {
+  const LINES = t?.boot?.lines || FALLBACK_LINES
   const [rendered, setRendered] = useState([])
   const [current, setCurrent] = useState('')
   const doneRef = useRef(false)
@@ -43,10 +44,10 @@ export default function BootSequence({ onDone }) {
     }
     tick()
     return () => clearTimeout(timer)
-  }, [onDone])
+  }, [onDone, LINES])
 
   return (
-    <div className="boot" onClick={onDone} title="클릭하면 건너뜁니다">
+    <div className="boot" onClick={onDone} title={t?.boot?.skipTitle || '클릭하면 건너뜁니다'}>
       <pre className="boot-text">
         {rendered.map((l, i) => (
           <div key={i} className="boot-line">
@@ -60,7 +61,7 @@ export default function BootSequence({ onDone }) {
           </div>
         )}
       </pre>
-      <div className="boot-skip">[ click / 아무 키나 눌러 건너뛰기 ]</div>
+      <div className="boot-skip">{t?.boot?.skip || '[ click / 아무 키나 눌러 건너뛰기 ]'}</div>
     </div>
   )
 }

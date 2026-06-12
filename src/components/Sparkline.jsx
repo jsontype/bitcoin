@@ -1,8 +1,10 @@
 // 라인 스파크라인 + (MACD용) 히스토그램. 모두 순수 SVG.
+import { useI18n } from '../i18n.js'
 
 export function Sparkline({ data = [], color = '#00ff9c', height = 64, refLines = [], baseline }) {
+  const { t } = useI18n()
   const W = 600
-  if (!data || data.length < 2) return <div className="spark-empty">// 데이터 부족</div>
+  if (!data || data.length < 2) return <div className="spark-empty">// {t.det.nodata}</div>
   const pad = 3
   const max = Math.max(...data)
   const min = Math.min(...data, baseline != null ? baseline : Infinity)
@@ -29,8 +31,9 @@ export function Sparkline({ data = [], color = '#00ff9c', height = 64, refLines 
 }
 
 export function Histogram({ data = [], height = 40 }) {
+  const { t } = useI18n()
   const W = 600
-  if (!data || data.length < 2) return <div className="spark-empty spark-sm">// 데이터 부족</div>
+  if (!data || data.length < 2) return <div className="spark-empty spark-sm">// {t.det.nodata}</div>
   const maxAbs = Math.max(...data.map((v) => Math.abs(v))) || 1
   const bw = W / data.length
   const mid = height / 2

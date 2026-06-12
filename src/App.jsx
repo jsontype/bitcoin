@@ -10,8 +10,10 @@ import SourceBadge from './components/SourceBadge.jsx'
 import Terminal from './components/Terminal.jsx'
 import { Sparkline } from './components/Sparkline.jsx'
 import Term, { TipsContext } from './components/Term.jsx'
+import { LANGS, DEFAULT_LANG, getT, I18nContext } from './i18n.js'
 
 const THEMES = { green: '#00ff9c', cyan: '#00e5ff', amber: '#ffb000', red: '#ff3b5c' }
+const localeOf = (lang) => (LANGS.find((l) => l.code === lang) || LANGS[0]).locale
 
 function useClock() {
   const [now, setNow] = useState(new Date())
@@ -29,9 +31,12 @@ export default function App() {
   const [accent, setAccent] = useLocalStorage('btc:accent', THEMES.green)
   const [matrixOn, setMatrixOn] = useLocalStorage('btc:matrix', true)
   const [tipsOn, setTipsOn] = useLocalStorage('btc:tips', true)
+  const [lang, setLang] = useLocalStorage('btc:lang', DEFAULT_LANG)
   const [scoreHist, setScoreHist] = useLocalStorage('btc:scoreHist', [])
   const [booted, setBooted] = useState(() => sessionStorage.getItem('btcbooted') === '1')
   const now = useClock()
+  const t = getT(lang)
+  const locale = localeOf(lang)
 
   useEffect(() => {
     document.documentElement.style.setProperty('--neon', accent)
@@ -71,8 +76,8 @@ export default function App() {
     const fngArr = fng?.arr || []
     const livePrice = price?.price ?? (closes.length ? closes[closes.length - 1] : null)
     if (!closes.length && !fngArr.length) return null
-    return computeAnalysis({ closes, fngArr, livePrice })
-  }, [klines, fng, price])
+    return computeAnalysis({ closes, fngArr, livePrice, t })
+  }, [klines, fng, price, t])
 
   const analysisRef = useRef(analysis)
   analysisRef.current = analysis
@@ -104,7 +109,7 @@ export default function App() {
     setBooted(true)
   }, [])
 
-  if (!booted) return <BootSequence onDone={finishBoot} />
+  if (!booted) return <BootSequence onDone={finishBoot} t={t} />
 
   const band = analysis?.band
   const sysColor = band ? band.color : 'warn'
@@ -119,6 +124,7 @@ export default function App() {
   const ctx = { analysisRef, price, klines, fng, api }
 
   return (
+    <I18nContext.Provider value={{ lang, t }}>
     <TipsContext.Provider value={tipsOn}>
     <div className={`app status-${sysColor}`}>
       <MatrixRain enabled={matrixOn} accent={accent} />
@@ -131,26 +137,43 @@ export default function App() {
             <span className="logo">₿▰▱</span>
             <div>
               <h1 className="title">
-                BTC_SIGNAL <span className="dim">// buy-timing terminal</span>
+                BTC_SIGNAL <span className="dim">// {t.tagline}</span>
               </h1>
-              <p className="subtitle">실시간 비트코인 지표 6종 → 매수 타이밍 합성 점수 · 신호 참고용(투자자문 아님)</p>
+              <p className="subtitle">{t.subtitle}</p>
             </div>
           </div>
           <div className="topbar-right">
-            <label className="tips-toggle" title="어려운 용어에 마우스를 올리면 쉬운 설명이 나옵니다">
+            <label className="lang-select" title={t.langLabel}>
+              <span className="lang-globe" aria-hidden="true">🌐</span>
+              <select value={lang} onChange={(e) => setLang(e.target.value)} aria-label={t.langLabel}>
+                {LANGS.map((l) => (
+                  <option key={l.code} value={l.code}>
+                    {l.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="tips-toggle" title={t.tipsHint}>
               <input type="checkbox" checked={tipsOn} onChange={(e) => setTipsOn(e.target.checked)} />
-              <span>용어 설명 {tipsOn ? 'ON' : 'OFF'}</span>
+              <span>{t.tips} {tipsOn ? 'ON' : 'OFF'}</span>
             </label>
             <div className={`sys-status status-${sysColor}`}>
               <span className="pulse" />
-              {band ? band.label : 'LOADING'}
+              {band ? t.bands[band.id]?.label || band.label : t.loading}
             </div>
             <div className="clock">
-              <span className="clock-time">{now.toLocaleTimeString('ko-KR', { hour12: false })}</span>
-              <span className="clock-date">{now.toLocaleDateString('ko-KR')}</span>
+              <span className="clock-time">{now.toLocaleTimeString(locale, { hour12: false })}</span>
+              <span className="clock-date">{now.toLocaleDateString(locale)}</span>
             </div>
           </div>
         </header>
+
+        <div className="disclaimer-banner" role="note">
+          <span className="dz-icon">⚠</span>
+          <span>
+            {t.banner.p1} <strong>{t.banner.s1}</strong> {t.banner.p2} <strong>{t.banner.s2}</strong> {t.banner.p3}
+          </span>
+        </div>
 
         <section className="hero">
           <div className={`panel gauge-panel status-${sysColor}`} style={{ '--accent': gaugeColor }}>
@@ -158,7 +181,7 @@ export default function App() {
             <span className="corner tr" />
             <span className="corner bl" />
             <span className="corner br" />
-            <div className="panel-label">// <Term k="score">BUY TIMING SCORE</Term></div>
+            <div className="panel-label">// <Term k="score">{t.buyTimingScore}</Term></div>
             <div className="gauge-big">
               <svg viewBox="0 0 210 210">
                 <circle cx="105" cy="105" r={r} className="gauge-track" />
@@ -180,13 +203,13 @@ export default function App() {
               </div>
             </div>
             <div className="verdict" style={{ color: gaugeColor }}>
-              {band ? band.label : '…'}
+              {band ? t.bands[band.id]?.label || band.label : '…'}
             </div>
-            <div className="verdict-advice">{band ? band.advice : '데이터 로딩 중…'}</div>
+            <div className="verdict-advice">{band ? t.bands[band.id]?.advice || band.advice : t.dataLoading}</div>
             <div className="coverage">
               {analysis ? (
                 <>
-                  <Term k="coverage">{`${analysis.online}/6 지표 온라인`}</Term> · 높을수록 매수 우호
+                  <Term k="coverage">{t.indicatorsOnline(analysis.online)}</Term> · {t.higherMoreBuy}
                 </>
               ) : (
                 ''
@@ -203,7 +226,7 @@ export default function App() {
                   // BTC / USD{' '}
                   {priceStale && (
                     <Term k="stale">
-                      <span className="na-flag">STALE</span>
+                      <span className="na-flag">{t.stale}</span>
                     </Term>
                   )}
                 </div>
@@ -213,11 +236,11 @@ export default function App() {
                     <span className={`chg ${chgUp ? 'up' : 'down'}`}>{fmtPct(price?.change24hPct)} (24h)</span>
                   </Term>
                   <Term k="vol">
-                    <span>vol {fmtCompact(price?.vol24h)}</span>
+                    <span>{t.vol} {fmtCompact(price?.vol24h)}</span>
                   </Term>
                   {price?.marketCap != null && (
                     <Term k="mcap">
-                      <span>mcap {fmtCompact(price.marketCap)}</span>
+                      <span>{t.mcap} {fmtCompact(price.marketCap)}</span>
                     </Term>
                   )}
                 </div>
@@ -230,18 +253,18 @@ export default function App() {
             </div>
             <div className="spark-wrap">
               <div className="spark-title">
-                <span>BTC 가격 (최근 {Math.min(120, klines?.closes?.length || 0)}일)</span>
+                <span>{t.priceHistory(Math.min(120, klines?.closes?.length || 0))}</span>
                 <span>{klines?.source || ''}</span>
               </div>
               {klines?.closes?.length ? (
                 <Sparkline data={klines.closes.slice(-120)} color={accent} height={64} />
               ) : (
-                <div className="spark-empty">// 가격 히스토리 로딩…</div>
+                <div className="spark-empty">{t.histLoading}</div>
               )}
             </div>
             <div className="spark-wrap">
               <div className="spark-title">
-                <span>매수 타이밍 점수 추이</span>
+                <span>{t.scoreTrend}</span>
                 <span>{scoreHist.length}p</span>
               </div>
               {scoreHist.length > 1 ? (
@@ -253,7 +276,7 @@ export default function App() {
                   refLines={[{ v: 65, color: 'rgba(0,255,156,.25)' }, { v: 45, color: 'rgba(255,176,0,.25)' }]}
                 />
               ) : (
-                <div className="spark-empty spark-sm">// 점수 추이는 시간이 지나며 쌓입니다</div>
+                <div className="spark-empty spark-sm">{t.trendAccrues}</div>
               )}
             </div>
           </div>
@@ -269,12 +292,11 @@ export default function App() {
 
         <footer className="footer">
           <span>
-            ⚠ 본 점수는 공개 지표를 합성한 <strong>참고 신호</strong>이며 투자 자문이 아닙니다. 데이터: CoinGecko · Binance ·
-            Alternative.me
+            {t.footer} {t.dataLabel} CoinGecko · Binance · Alternative.me
           </span>
           <span className="footer-cmds">
             <button className="chip" onClick={refresh}>
-              ↻ refresh
+              ↻ {t.refresh}
             </button>
             <button className="chip" onClick={() => setMatrixOn((v) => !v)}>
               matrix:{matrixOn ? 'on' : 'off'}
@@ -287,12 +309,13 @@ export default function App() {
                 lastScore.current = analysis?.score ?? null
               }}
             >
-              clear history
+              {t.clearHistory}
             </button>
           </span>
         </footer>
       </div>
     </div>
     </TipsContext.Provider>
+    </I18nContext.Provider>
   )
 }

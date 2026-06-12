@@ -1,9 +1,12 @@
 import { WEIGHTS, bandFor } from '../indicators.js'
 import { Sparkline, Histogram } from './Sparkline.jsx'
 import Term from './Term.jsx'
+import { useI18n } from '../i18n.js'
 
 // 지표 1종 카드: 원시값 + 추이 + 0~100 부분점수 막대
 export default function IndicatorCard({ meta, part }) {
+  const { t } = useI18n()
+  const ti = t.ind[meta.key] || { name: meta.name, desc: meta.desc }
   const s = part?.score
   const status = s == null ? 'na' : bandFor(s).color
   return (
@@ -16,7 +19,7 @@ export default function IndicatorCard({ meta, part }) {
         </Term>
         <span className="ind-weight">w {Math.round(WEIGHTS[meta.key] * 100)}%</span>
       </div>
-      <div className="ind-name">{meta.name}</div>
+      <div className="ind-name">{ti.name}</div>
       <div className="ind-value" style={{ color: 'var(--accent)' }}>
         {part ? part.value : '…'}
       </div>
@@ -37,10 +40,10 @@ export default function IndicatorCard({ meta, part }) {
         <div className="mini-fill" style={{ width: `${s == null ? 0 : s}%`, background: 'var(--accent)' }} />
       </div>
       <div className="mini-row">
-        <span>{s == null ? <span className="na-flag">N/A · OFFLINE</span> : '부분점수'}</span>
+        <span>{s == null ? <span className="na-flag">N/A · OFFLINE</span> : t.subScore}</span>
         <span>{s == null ? '' : s.toFixed(0) + ' / 100'}</span>
       </div>
-      <div className="ind-desc">{meta.desc}</div>
+      <div className="ind-desc">{ti.desc}</div>
     </article>
   )
 }
