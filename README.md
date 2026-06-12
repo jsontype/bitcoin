@@ -11,6 +11,26 @@
 > 점수는 미래 가격을 보장하지 않으며, 암호화폐 투자는 **원금 전액 손실** 위험이 있습니다.
 > **모든 투자 판단과 그 결과(손익)에 대한 책임은 전적으로 이용자 본인에게 있습니다.** 반드시 스스로 조사하세요 (DYOR).
 
+## 🚀 배포 (Git Flow)
+
+`master`에 push하면 **자동으로 GitHub Pages에 재배포**됩니다 — 별도 설정 불필요.
+
+```text
+  git push origin master
+          │
+          ▼
+  GitHub Actions   ( .github/workflows/deploy-pages.yml )
+    1. standalone.html  →  index.html 로 발행
+    2. Pages 자동 활성화(enablement) + 아티팩트 업로드 + 배포
+          │
+          ▼
+  🌐 라이브 데모   https://jsontype.github.io/bitcoin/   (push 후 ~1분 반영)
+```
+
+- 자체완결형 `standalone.html`(CDN React · 빌드 불필요 · 경로 독립적)을 그대로 발행하므로 빌드 단계가 없습니다.
+- 코드를 고친 뒤 `master`에 push만 하면 끝 — 워크플로가 알아서 재배포합니다.
+- 데모가 잠깐 안 보이면 **CDN 전파 지연**이니 몇 초 뒤 새로고침하세요.
+
 ## 실행
 
 ### A. 무설치 (가장 빠름) ⚡
