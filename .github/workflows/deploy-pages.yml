@@ -1,0 +1,48 @@
+name: Deploy demo to GitHub Pages
+
+# standalone.html(자체완결 · CDN React · 빌드 불필요)을 index.html 로 발행한다.
+# Pages 가 꺼져 있어도 configure-pages 의 enablement:true 가 자동으로 켜준다.
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 동시에 한 번만 배포 (진행 중이면 취소)
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Assemble site (standalone demo → index.html)
+        run: |
+          mkdir -p _site
+          cp standalone.html _site/index.html
+          cp standalone.html _site/standalone.html
+
+      - name: Configure Pages (auto-enable if needed)
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
