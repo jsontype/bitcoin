@@ -76,7 +76,7 @@ export default function App() {
     const fngArr = fng?.arr || []
     const livePrice = price?.price ?? (closes.length ? closes[closes.length - 1] : null)
     if (!closes.length && !fngArr.length) return null
-    return computeAnalysis({ closes, fngArr, livePrice, t })
+    return computeAnalysis({ closes, fngArr, livePrice, t, times: klines?.times, fngTimes: fng?.times })
   }, [klines, fng, price, t])
 
   const analysisRef = useRef(analysis)
@@ -257,7 +257,7 @@ export default function App() {
                 <span>{klines?.source || ''}</span>
               </div>
               {klines?.closes?.length ? (
-                <Sparkline data={klines.closes.slice(-120)} color={accent} height={64} />
+                <Sparkline data={klines.closes.slice(-120)} times={klines.times?.slice(-120)} color={accent} height={64} fmt={fmtUsd} />
               ) : (
                 <div className="spark-empty">{t.histLoading}</div>
               )}
@@ -270,9 +270,11 @@ export default function App() {
               {scoreHist.length > 1 ? (
                 <Sparkline
                   data={scoreHist.map((h) => h.s)}
+                  times={scoreHist.map((h) => h.t)}
                   color={gaugeColor}
                   height={48}
                   baseline={0}
+                  fmt={(v) => String(Math.round(v))}
                   refLines={[{ v: 65, color: 'rgba(0,255,156,.25)' }, { v: 45, color: 'rgba(255,176,0,.25)' }]}
                 />
               ) : (

@@ -277,6 +277,14 @@ body {
   padding: 18px;
   backdrop-filter: blur(3px);
 }
+/* 용어 툴팁이 뒤 요소(지표 카드 등)에 가리지 않도록: backdrop-filter 가 만든 스택 컨텍스트 때문에
+   z-index:100 툴팁이 패널 안에 갇힌다. 용어가 있는 패널/카드를 호버·포커스 시 통째로 위로 올려 툴팁이 최상위로 뜨게 한다. */
+.panel:hover,
+.panel:focus-within,
+.ind-card:hover,
+.ind-card:focus-within {
+  z-index: 40;
+}
 .corner {
   position: absolute;
   width: 12px;
@@ -449,6 +457,60 @@ body {
   display: flex;
   align-items: center;
   height: 64px;
+}
+
+/* 인터랙티브 스파크라인: 호버 크로스헤어 + 값 툴팁 + 하단 X축(시간) */
+.spark-plot {
+  position: relative;
+  cursor: crosshair;
+}
+.spark-cross {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+.spark-dot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 7px currentColor;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.spark-tip {
+  position: absolute;
+  top: 1px;
+  z-index: 6;
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  padding: 2px 7px;
+  background: #04110c;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-size: 10px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.spark-tip b {
+  color: var(--text);
+  font-weight: 700;
+}
+.spark-tip span {
+  color: var(--dim);
+}
+.spark-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  color: var(--dim);
 }
 
 /* 배지 */
@@ -933,8 +995,10 @@ body {
   .subtitle {
     font-size: 11px;
   }
-  .clock-time {
-    font-size: 16px;
+  /* 한국어 시계("0시 3분 38초" + "2026. 6. 14.")가 길어 우측으로 삐져나와 가로 오버플로 →
+     카드가 100% 폭을 못 채우는 문제. 폰은 상태바에 시계가 있으므로 모바일에선 숨긴다. */
+  .clock {
+    display: none;
   }
   .panel {
     padding: 14px;

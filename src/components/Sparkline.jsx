@@ -1,8 +1,13 @@
-// 라인 스파크라인 + (MACD용) 히스토그램. 모두 순수 SVG.
-import { useI18n } from '../i18n.js'
+// 라인 스파크라인 + (MACD용) 히스토그램.
+// times(데이터와 같은 길이의 타임스탬프)가 주어지면 "인터랙티브 모드":
+//   - 하단 X축에 시간 라벨(기간이 짧으면 HH:MM, 길면 M/D)
+//   - 마우스/터치 호버 시 수직 크로스헤어 + 해당 지점 값 툴팁
+import { useState } from 'react'
+import { useI18n, LANGS } from '../i18n.js'
 
-export function Sparkline({ data = [], color = '#00ff9c', height = 64, refLines = [], baseline }) {
-  const { t } = useI18n()
+export function Sparkline({ data = [], times = null, color = '#00ff9c', height = 64, refLines = [], baseline, fmt }) {
+  const { t, lang } = useI18n()
+  const [hi, setHi] = useState(null)
   const W = 600
   if (!data || data.length < 2) return <div className="spark-empty">// {t.det.nodata}</div>
   const pad = 3
@@ -15,7 +20,8 @@ export function Sparkline({ data = [], color = '#00ff9c', height = 64, refLines 
   const line = pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ')
   const area = `${pad},${height - pad} ${line} ${(W - pad).toFixed(1)},${height - pad}`
   const [lx, ly] = pts[pts.length - 1]
-  return (
+
+  const svg = (
     <svg className="spark" viewBox={`0 0 ${W} ${height}`} preserveAspectRatio="none">
       {refLines.map((rl, i) => {
         const y = Y(rl.v)
@@ -28,16 +34,69 @@ export function Sparkline({ data = [], color = '#00ff9c', height = 64, refLines 
       </circle>
     </svg>
   )
+
+  const interactive = Array.isArray(times) && times.length === data.length
+  if (!interactive) return svg
+
+  const locale = (LANGS.find((l) => l.code === lang) || LANGS[0]).locale
+  const totalSpan = times[times.length - 1] - times[0]
+  const tickFmt = (ts) =>
+    totalSpan < 36 * 3600 * 1000
+      ? new Date(ts).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
+      : new Date(ts).toLocaleDateString(locale, { month: 'numeric', day: 'numeric' })
+  const fmtVal = fmt || ((v) => (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString() : String(Math.round(v))))
+  const xPct = (i) => ((pad + i * stepX) / W) * 100
+  const yPct = (v) => (Y(v) / height) * 100
+  const onMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left
+    const frac = rect.width ? Math.max(0, Math.min(1, cx / rect.width)) : 0
+    setHi(Math.round(frac * (data.length - 1)))
+  }
+  const mid = Math.floor((data.length - 1) / 2)
+  const tipX = hi != null ? xPct(hi) : 0
+  const tipTransform = tipX < 12 ? 'translateX(0)' : tipX > 88 ? 'translateX(-100%)' : 'translateX(-50%)'
+
+  return (
+    <div className="spark-ix">
+      <div
+        className="spark-plot"
+        onMouseMove={onMove}
+        onMouseLeave={() => setHi(null)}
+        onTouchStart={onMove}
+        onTouchMove={onMove}
+        onTouchEnd={() => setHi(null)}
+      >
+        {svg}
+        {hi != null && (
+          <>
+            <div className="spark-cross" style={{ left: `${tipX}%` }} />
+            <div className="spark-dot" style={{ left: `${tipX}%`, top: `${yPct(data[hi])}%`, color }} />
+            <div className="spark-tip" style={{ left: `${tipX}%`, transform: tipTransform }}>
+              <b>{fmtVal(data[hi])}</b>
+              <span>{tickFmt(times[hi])}</span>
+            </div>
+          </>
+        )}
+      </div>
+      <div className="spark-axis">
+        <span>{tickFmt(times[0])}</span>
+        <span>{tickFmt(times[mid])}</span>
+        <span>{tickFmt(times[times.length - 1])}</span>
+      </div>
+    </div>
+  )
 }
 
-export function Histogram({ data = [], height = 40 }) {
-  const { t } = useI18n()
+export function Histogram({ data = [], times = null, height = 40, fmt }) {
+  const { t, lang } = useI18n()
+  const [hi, setHi] = useState(null)
   const W = 600
   if (!data || data.length < 2) return <div className="spark-empty spark-sm">// {t.det.nodata}</div>
   const maxAbs = Math.max(...data.map((v) => Math.abs(v))) || 1
   const bw = W / data.length
   const mid = height / 2
-  return (
+  const svg = (
     <svg className="spark spark-sm" viewBox={`0 0 ${W} ${height}`} preserveAspectRatio="none">
       <line x1="0" x2={W} y1={mid} y2={mid} stroke="rgba(255,255,255,.15)" strokeWidth="1" />
       {data.map((v, i) => {
@@ -55,5 +114,55 @@ export function Histogram({ data = [], height = 40 }) {
         )
       })}
     </svg>
+  )
+
+  const interactive = Array.isArray(times) && times.length === data.length
+  if (!interactive) return svg
+
+  const locale = (LANGS.find((l) => l.code === lang) || LANGS[0]).locale
+  const totalSpan = times[times.length - 1] - times[0]
+  const tickFmt = (ts) =>
+    totalSpan < 36 * 3600 * 1000
+      ? new Date(ts).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
+      : new Date(ts).toLocaleDateString(locale, { month: 'numeric', day: 'numeric' })
+  const fmtVal = fmt || ((v) => (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString() : String(Math.round(v))))
+  const xPct = (i) => ((i * bw + bw / 2) / W) * 100
+  const onMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left
+    const frac = rect.width ? Math.max(0, Math.min(1, cx / rect.width)) : 0
+    setHi(Math.min(data.length - 1, Math.floor(frac * data.length)))
+  }
+  const mid2 = Math.floor((data.length - 1) / 2)
+  const tipX = hi != null ? xPct(hi) : 0
+  const tipTransform = tipX < 12 ? 'translateX(0)' : tipX > 88 ? 'translateX(-100%)' : 'translateX(-50%)'
+
+  return (
+    <div className="spark-ix">
+      <div
+        className="spark-plot"
+        onMouseMove={onMove}
+        onMouseLeave={() => setHi(null)}
+        onTouchStart={onMove}
+        onTouchMove={onMove}
+        onTouchEnd={() => setHi(null)}
+      >
+        {svg}
+        {hi != null && (
+          <>
+            <div className="spark-cross" style={{ left: `${tipX}%` }} />
+            <div className="spark-tip" style={{ left: `${tipX}%`, transform: tipTransform }}>
+              <b>{fmtVal(data[hi])}</b>
+              <span>{tickFmt(times[hi])}</span>
+            </div>
+          </>
+        )}
+      </div>
+      <div className="spark-axis">
+        <span>{tickFmt(times[0])}</span>
+        <span>{tickFmt(times[mid2])}</span>
+        <span>{tickFmt(times[times.length - 1])}</span>
+      </div>
+    </div>
   )
 }

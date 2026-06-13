@@ -26,12 +26,18 @@ export default function IndicatorCard({ meta, part }) {
       <div className="ind-detail">{part ? part.detail : ''}</div>
 
       {meta.key === 'MACD' && part?.series?.length ? (
-        <Histogram data={part.series} />
+        <Histogram
+          data={part.series}
+          times={part.times}
+          fmt={(v) => (v >= 0 ? '+' : '') + (Math.abs(v) >= 1 ? Math.round(v).toLocaleString() : v.toFixed(2))}
+        />
       ) : part?.series?.length ? (
         <Sparkline
           data={part.series}
+          times={part.times}
           color="var(--accent)"
           height={40}
+          fmt={meta.key === 'RSI' ? (v) => v.toFixed(1) : meta.key === 'FNG' ? (v) => String(Math.round(v)) : undefined}
           refLines={meta.key === 'RSI' ? [{ v: 30, color: 'rgba(0,255,156,.3)' }, { v: 70, color: 'rgba(255,59,92,.3)' }] : []}
         />
       ) : null}

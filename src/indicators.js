@@ -209,29 +209,49 @@ const mayerScore = (m) => {
 // 낙폭: −50%에서 포화하던 것을 완화 → −71%에서 만점. BTC의 깊은 약세장(−70~−85%)과 구분
 const ddScore = (ddPct) => clamp(-ddPct * 1.4, 0, 100)
 
+// 시리즈(앞쪽 null 포함 가능)와 평행 타임스탬프를 함께 필터링해 마지막 n개를 반환.
+// times 가 시리즈와 길이가 다르면(또는 없으면) times: null (차트는 비인터랙티브로 폴백).
+function tailTimed(values, times, n = 120) {
+  const useT = Array.isArray(times) && times.length === values.length
+  const vs = [],
+    ts = []
+  for (let i = 0; i < values.length; i++) {
+    if (values[i] != null && !isNaN(values[i])) {
+      vs.push(values[i])
+      if (useT) ts.push(times[i])
+    }
+  }
+  return { series: vs.slice(-n), times: useT ? ts.slice(-n) : null }
+}
+
 // 모든 지표를 계산하고 0~100 합성 매수 타이밍 점수를 산출한다.
 // 결측 지표는 합성에서 제외하고 가중치를 재정규화(부분 실패 허용).
-export function computeAnalysis({ closes = [], fngArr = [], livePrice = null, t = null }) {
+export function computeAnalysis({ closes = [], fngArr = [], livePrice = null, t = null, times = null, fngTimes = null }) {
   const parts = {}
   const D = t?.det || DET_KO
 
   const rsiSeries = rsiWilder(closes, 14)
   const r = closes.length ? rsiSeries[closes.length - 1] : null
+  const rsiT = tailTimed(rsiSeries, times)
   parts.RSI = {
     score: r == null ? null : rsiScore(r),
     value: r == null ? 'N/A' : r.toFixed(1),
     detail: r == null ? D.nodata : r < 30 ? D.oversold : r > 70 ? D.overbought : D.neutral,
-    series: rsiSeries.filter((v) => v != null).slice(-120),
+    series: rsiT.series,
+    times: rsiT.times,
   }
 
   let macdScore = null,
     macdVal = 'N/A',
     macdDetail = D.nodata,
     macdSeries = [],
+    macdTimes = null,
     macdCur = null
   if (closes.length >= 35) {
     const { histogram: h } = macd(closes, 12, 26, 9)
-    macdSeries = h.filter((v) => v != null).slice(-120)
+    const mt = tailTimed(h, times)
+    macdSeries = mt.series
+    macdTimes = mt.times
     const cur = h[closes.length - 1],
       prev = h[closes.length - 2]
     if (cur != null && prev != null) {
@@ -243,15 +263,17 @@ export function computeAnalysis({ closes = [], fngArr = [], livePrice = null, t 
       macdDetail = (cur > 0 ? D.posZone : D.negZone) + (cur > prev ? D.turnUp : D.falling)
     }
   }
-  parts.MACD = { score: macdScore, value: macdVal, detail: macdDetail, series: macdSeries }
+  parts.MACD = { score: macdScore, value: macdVal, detail: macdDetail, series: macdSeries, times: macdTimes }
 
   const fngScore = fngCompositeScore(fngArr)
   const fngCur = fngArr.length ? fngArr[fngArr.length - 1] : null
+  const fngT = tailTimed(fngArr, fngTimes)
   parts.FNG = {
     score: fngScore,
     value: fngCur == null ? 'N/A' : String(fngCur),
     detail: fngLabel(fngCur, t),
-    series: fngArr.slice(-120),
+    series: fngT.series,
+    times: fngT.times,
   }
 
   const mm = mayerMultiple(closes, livePrice)

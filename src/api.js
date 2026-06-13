@@ -98,10 +98,15 @@ export async function loadKlines() {
     try {
       const j = await fetchJSON(URLS.cgChart, 11000)
       const prices = (j.prices || []).slice(0, -1) // 마지막 진행중(partial-day) point 제거
+      const vols = (j.total_volumes || []).slice(0, -1)
+      // closes/times/volumes 를 "한 번 필터링한 포인트 리스트"에서 함께 파생 → 항상 평행(인덱스 일치) 보장
+      const pts = prices
+        .map((p, i) => ({ t: p[0], close: p[1], volume: vols[i] ? vols[i][1] : null }))
+        .filter((c) => Number.isFinite(c.close))
       const data = {
-        closes: prices.map((p) => p[1]).filter(Number.isFinite),
-        volumes: (j.total_volumes || []).slice(0, -1).map((v) => v[1]),
-        times: prices.map((p) => p[0]),
+        closes: pts.map((c) => c.close),
+        volumes: pts.map((c) => c.volume),
+        times: pts.map((c) => c.t),
         source: 'coingecko',
       }
       saveCache('btc:klines', data)
@@ -121,7 +126,8 @@ export async function loadFng() {
       .map((d) => ({ value: parseInt(d.value, 10), label: d.value_classification, t: Number(d.timestamp) * 1000 }))
       .filter((d) => Number.isFinite(d.value))
     const arr = list.map((d) => d.value).reverse() // 과거→최신
-    const data = { arr, latest: list[0] || null, source: 'alternative.me' }
+    const times = list.map((d) => d.t).reverse() // arr 와 평행한 타임스탬프(ms)
+    const data = { arr, times, latest: list[0] || null, source: 'alternative.me' }
     saveCache('btc:fng', data)
     return { ...data, status: 'live', fetchedAt: Date.now() }
   } catch {
