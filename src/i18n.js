@@ -278,7 +278,7 @@ export const T = {
       DD: { name: '365일 고점 대비 낙폭', desc: '-30% 관심 / -50% 강한 매수' },
       GC_DC: { name: '골든·데드 크로스 추세', desc: '골든크로스 = 추세 매수 우호' },
     },
-    fng: { extremeFear: 'Extreme Fear', fear: 'Fear', neutral: 'Neutral', greed: 'Greed', extremeGreed: 'Extreme Greed' },
+    fng: { extremeFear: '극단적 공포', fear: '공포', neutral: '중립', greed: '탐욕', extremeGreed: '극단적 탐욕' },
     det: {
       nodata: '데이터 부족',
       oversold: '과매도 ⚑',

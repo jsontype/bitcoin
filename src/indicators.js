@@ -163,7 +163,7 @@ export const BANDS = [
 export const bandFor = (score) => BANDS.find((b) => score >= b.min) || BANDS[BANDS.length - 1]
 
 // 번역 폴백(한국어). App이 t를 넘기면 t.fng / t.det 가 우선한다.
-const FNG_KO = { extremeFear: 'Extreme Fear', fear: 'Fear', neutral: 'Neutral', greed: 'Greed', extremeGreed: 'Extreme Greed' }
+const FNG_KO = { extremeFear: '극단적 공포', fear: '공포', neutral: '중립', greed: '탐욕', extremeGreed: '극단적 탐욕' }
 const DET_KO = {
   nodata: '데이터 부족',
   oversold: '과매도 ⚑',
