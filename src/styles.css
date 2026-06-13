@@ -237,6 +237,12 @@ body {
   font-size: 11px;
   color: var(--dim);
 }
+.clock-time-sm {
+  display: none; /* 데스크톱에선 숨김 (모바일에서만 노출) */
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
 
 /* HERO */
 /* 면책 고지 배너 (화면 최상단, 가장 잘 보이는 위치) */
@@ -995,10 +1001,14 @@ body {
   .subtitle {
     font-size: 11px;
   }
-  /* 한국어 시계("0시 3분 38초" + "2026. 6. 14.")가 길어 우측으로 삐져나와 가로 오버플로 →
-     카드가 100% 폭을 못 채우는 문제. 폰은 상태바에 시계가 있으므로 모바일에선 숨긴다. */
-  .clock {
+  /* 모바일: 긴 풀시계(초+날짜)가 우측으로 삐져나와 카드 폭을 깨므로,
+     날짜·초를 빼고 짧은 시각(HH:MM)만 노출한다. */
+  .clock-time,
+  .clock-date {
     display: none;
+  }
+  .clock-time-sm {
+    display: block;
   }
   .panel {
     padding: 14px;

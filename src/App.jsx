@@ -163,6 +163,7 @@ export default function App() {
             </div>
             <div className="clock">
               <span className="clock-time">{now.toLocaleTimeString(locale, { hour12: false })}</span>
+              <span className="clock-time-sm">{`${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`}</span>
               <span className="clock-date">{now.toLocaleDateString(locale)}</span>
             </div>
           </div>
