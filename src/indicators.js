@@ -82,8 +82,9 @@ export function fngCompositeScore(fngArr) {
     return s / m
   }
   let score = 0.5 * (100 - cur) + 0.3 * (100 - meanLast(7)) + 0.2 * (100 - meanLast(30))
-  if (cur <= 25) score += (25 - cur) * 0.6
-  else if (cur >= 75) score -= (cur - 75) * 0.6
+  // 극단 부스트 완화(0.6→0.4): 공포는 RSI/낙폭에도 이미 반영되므로 이중계상 축소
+  if (cur <= 25) score += (25 - cur) * 0.4
+  else if (cur >= 75) score -= (cur - 75) * 0.4
   return Math.max(0, Math.min(100, Math.round(score * 10) / 10))
 }
 
@@ -146,7 +147,9 @@ export function goldenDeathCross(closes) {
 }
 
 // 합성 점수 가중치(합 = 1.00)
-export const WEIGHTS = { RSI: 0.22, MACD: 0.18, FNG: 0.22, Mayer: 0.18, DD: 0.12, GC_DC: 0.08 }
+// 역추세 신호(RSI·FNG)에 과의존하던 것을 줄이고, 추세/모멘텀(MACD·DD·크로스) 비중을 높여
+// "하락장에서도 무조건 매수"로 치우치지 않도록 재보정.
+export const WEIGHTS = { RSI: 0.18, MACD: 0.18, FNG: 0.18, Mayer: 0.18, DD: 0.14, GC_DC: 0.14 }
 
 // 판정 밴드 (점수 높을수록 매수 우호 / color: ok=매수 warn=중립 crit=과열)
 // id 는 i18n 번역 키. label/advice 는 번역이 없을 때의 한국어 폴백.
@@ -190,6 +193,22 @@ export const INDICATOR_META = [
 
 const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x))
 
+// 0~100 부분점수 매핑 (역사적 캘리브레이션 — "평범한 상태=50, 진짜 극단에서만 꼬리값")
+// RSI: 중앙(50)을 50점에 앵커, 기울기 1.7 — 과매도 아닌 중하단 RSI를 과대평가하지 않음
+const rsiScore = (r) => clamp(50 + (50 - r) * 1.7, 0, 100)
+// MACD: 가격대비로 정규화한 기울기(전환)+레벨을 tanh로 연속화 — 거의 0인 히스토는 ~50
+const macdScoreFn = (cur, prev, px) =>
+  clamp(50 + 25 * Math.tanh(((cur - prev) / px) * 600) + 10 * Math.tanh((cur / px) * 600), 0, 100)
+// Mayer: 역사적 평균(~1.4)을 중립(50)에 재보정. ≤0.8 바닥(100) / ≥2.4 과열(→0)
+const mayerScore = (m) => {
+  if (m <= 0.8) return 100
+  if (m <= 1.4) return clamp(50 + ((1.4 - m) / 0.6) * 50, 50, 100)
+  if (m <= 2.4) return clamp(10 + ((2.4 - m) / 1.0) * 40, 10, 50)
+  return clamp(10 - (m - 2.4) * 25, 0, 10)
+}
+// 낙폭: −50%에서 포화하던 것을 완화 → −71%에서 만점. BTC의 깊은 약세장(−70~−85%)과 구분
+const ddScore = (ddPct) => clamp(-ddPct * 1.4, 0, 100)
+
 // 모든 지표를 계산하고 0~100 합성 매수 타이밍 점수를 산출한다.
 // 결측 지표는 합성에서 제외하고 가중치를 재정규화(부분 실패 허용).
 export function computeAnalysis({ closes = [], fngArr = [], livePrice = null, t = null }) {
@@ -199,7 +218,7 @@ export function computeAnalysis({ closes = [], fngArr = [], livePrice = null, t 
   const rsiSeries = rsiWilder(closes, 14)
   const r = closes.length ? rsiSeries[closes.length - 1] : null
   parts.RSI = {
-    score: r == null ? null : clamp(((70 - clamp(r, 30, 70)) / 40) * 100, 0, 100),
+    score: r == null ? null : rsiScore(r),
     value: r == null ? 'N/A' : r.toFixed(1),
     detail: r == null ? D.nodata : r < 30 ? D.oversold : r > 70 ? D.overbought : D.neutral,
     series: rsiSeries.filter((v) => v != null).slice(-120),
@@ -208,16 +227,18 @@ export function computeAnalysis({ closes = [], fngArr = [], livePrice = null, t 
   let macdScore = null,
     macdVal = 'N/A',
     macdDetail = D.nodata,
-    macdSeries = []
+    macdSeries = [],
+    macdCur = null
   if (closes.length >= 35) {
     const { histogram: h } = macd(closes, 12, 26, 9)
     macdSeries = h.filter((v) => v != null).slice(-120)
     const cur = h[closes.length - 1],
       prev = h[closes.length - 2]
     if (cur != null && prev != null) {
-      const base = cur > 0 ? 60 : 40,
-        delta = cur > prev ? 40 : -40
-      macdScore = clamp(base + delta, 0, 100)
+      macdCur = cur
+      // 가격 대비로 정규화해 "기울기(전환)+레벨"을 연속 점수화. 거의 0인 히스토에 만점 주던 4버킷 방식 제거.
+      const px = livePrice && livePrice > 0 ? livePrice : closes[closes.length - 1]
+      macdScore = macdScoreFn(cur, prev, px)
       macdVal = (cur > prev ? '▲' : '▼') + ' ' + (Math.abs(cur) >= 1 ? cur.toFixed(0) : cur.toFixed(2))
       macdDetail = (cur > 0 ? D.posZone : D.negZone) + (cur > prev ? D.turnUp : D.falling)
     }
@@ -235,21 +256,21 @@ export function computeAnalysis({ closes = [], fngArr = [], livePrice = null, t 
 
   const mm = mayerMultiple(closes, livePrice)
   parts.Mayer = {
-    score: mm == null ? null : clamp(((2.4 - mm.mayer) / 1.6) * 100, 0, 100),
+    score: mm == null ? null : mayerScore(mm.mayer),
     value: mm == null ? 'N/A' : mm.mayer.toFixed(2) + '×',
     detail: mm == null ? D.nodata : mm.isFallback ? D.fallback200(mm.usedPeriod) : D.vs200,
   }
 
   const dd = drawdownFromHigh(closes, 365, livePrice)
   parts.DD = {
-    score: dd == null ? null : clamp((-dd.drawdownPct / 50) * 100, 0, 100),
+    score: dd == null ? null : ddScore(dd.drawdownPct),
     value: dd == null ? 'N/A' : dd.drawdownPct.toFixed(1) + '%',
     detail: dd == null ? D.nodata : D.high(dd.rollingHigh.toLocaleString('en-US', { maximumFractionDigits: 0 })),
   }
 
   const gc = goldenDeathCross(closes)
   parts.GC_DC = {
-    score: gc == null ? 50 : gc.event === 'GOLDEN_CROSS' ? 100 : gc.event === 'DEATH_CROSS' ? 0 : gc.crossState === 'GOLDEN' ? 75 : 25,
+    score: gc == null ? 50 : gc.event === 'GOLDEN_CROSS' ? 85 : gc.event === 'DEATH_CROSS' ? 15 : gc.crossState === 'GOLDEN' ? 60 : 35,
     value: gc == null ? 'N/A' : gc.crossState + (gc.event !== 'NONE' ? ' ⚡' : ''),
     detail: gc == null ? D.nodata : `gap ${gc.gapPct.toFixed(1)}%` + (gc.event !== 'NONE' ? ' · ' + gc.event : ''),
   }
@@ -265,11 +286,21 @@ export function computeAnalysis({ closes = [], fngArr = [], livePrice = null, t 
       online++
     }
   }
-  const score = wsum === 0 ? null : Math.round((acc / wsum) * 10) / 10
+  let score = wsum === 0 ? null : Math.round((acc / wsum) * 10) / 10
+
+  // falling-knife 가드: 장기 하락추세(데드크로스)이면서 모멘텀(MACD 히스토)도 아직 음수면
+  // "확인되지 않은 바닥"이므로(떨어지는 칼날) 매수 시급도를 중립(50)쪽으로 20% 감쇠한다.
+  // 가치/심리는 매수를 외쳐도 추세·모멘텀이 바닥을 확인하기 전에는 점수를 깎는다.
+  let knifeGuard = false
+  if (score != null && gc && gc.crossState === 'DEATH' && macdCur != null && macdCur <= 0) {
+    score = Math.round((50 + (score - 50) * 0.8) * 10) / 10
+    knifeGuard = true
+  }
   return {
     score,
     coverage: Math.round(wsum * 100) / 100,
     online,
+    knifeGuard,
     band: score == null ? null : bandFor(score),
     parts,
     livePrice,

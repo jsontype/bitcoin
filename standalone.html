@@ -715,8 +715,8 @@
         const cur = arr[arr.length - 1]
         const meanLast = (k) => { const m = Math.min(k, arr.length); let s = 0; for (let i = arr.length - m; i < arr.length; i++) s += arr[i]; return s / m }
         let score = 0.5 * (100 - cur) + 0.3 * (100 - meanLast(7)) + 0.2 * (100 - meanLast(30))
-        if (cur <= 25) score += (25 - cur) * 0.6
-        else if (cur >= 75) score -= (cur - 75) * 0.6
+        if (cur <= 25) score += (25 - cur) * 0.4
+        else if (cur >= 75) score -= (cur - 75) * 0.4
         return Math.max(0, Math.min(100, Math.round(score * 10) / 10))
       }
       function sma(closes, period) {
@@ -758,7 +758,7 @@
         return { sma50: fast, sma200: slow, crossState: fast > slow ? 'GOLDEN' : 'DEATH', event, gapPct: (fast / slow - 1) * 100, isFallback: N < 200 }
       }
 
-      const WEIGHTS = { RSI: 0.22, MACD: 0.18, FNG: 0.22, Mayer: 0.18, DD: 0.12, GC_DC: 0.08 }
+      const WEIGHTS = { RSI: 0.18, MACD: 0.18, FNG: 0.18, Mayer: 0.18, DD: 0.14, GC_DC: 0.14 }
       const BANDS = [
         { id: 'STRONG_BUY', min: 80, label: 'STRONG BUY', color: 'ok', advice: '과매도+공포+저평가 다중 합류. 분할 매수 적극 구간.' },
         { id: 'ACCUMULATE', min: 65, label: 'ACCUMULATE', color: 'ok', advice: '매수 우호. 분할 적립 권장. 추세 필터와 함께 확인.' },
@@ -781,26 +781,32 @@
       // 모든 지표 + 합성 점수 계산 (t = 현재 언어 번들; 상세 문구 현지화)
       function computeAnalysis({ closes, fngArr, livePrice, t }) {
         const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x))
+        // 역사적 캘리브레이션 매핑 (평범=50, 진짜 극단에서만 꼬리값)
+        const rsiScore = (r) => clamp(50 + (50 - r) * 1.7, 0, 100)
+        const macdScoreFn = (cur, prev, px) => clamp(50 + 25 * Math.tanh(((cur - prev) / px) * 600) + 10 * Math.tanh((cur / px) * 600), 0, 100)
+        const mayerScore = (m) => { if (m <= 0.8) return 100; if (m <= 1.4) return clamp(50 + ((1.4 - m) / 0.6) * 50, 50, 100); if (m <= 2.4) return clamp(10 + ((2.4 - m) / 1.0) * 40, 10, 50); return clamp(10 - (m - 2.4) * 25, 0, 10) }
+        const ddScore = (ddPct) => clamp(-ddPct * 1.4, 0, 100)
         const D = (t && t.det) || T.ko.det
         const parts = {}
 
         const rsiSeries = rsiWilder(closes, 14)
         const r = closes.length ? rsiSeries[closes.length - 1] : null
         parts.RSI = {
-          score: r == null ? null : clamp(((70 - clamp(r, 30, 70)) / 40) * 100, 0, 100),
+          score: r == null ? null : rsiScore(r),
           value: r == null ? 'N/A' : r.toFixed(1),
           detail: r == null ? D.nodata : r < 30 ? D.oversold : r > 70 ? D.overbought : D.neutral,
           series: rsiSeries.filter((v) => v != null).slice(-120),
         }
 
-        let macdScore = null, macdVal = 'N/A', macdDetail = D.nodata, macdSeries = []
+        let macdScore = null, macdVal = 'N/A', macdDetail = D.nodata, macdSeries = [], macdCur = null
         if (closes.length >= 35) {
           const { histogram: h } = macd(closes, 12, 26, 9)
           macdSeries = h.filter((v) => v != null).slice(-120)
           const cur = h[closes.length - 1], prev = h[closes.length - 2]
           if (cur != null && prev != null) {
-            const base = cur > 0 ? 60 : 40, delta = cur > prev ? 40 : -40
-            macdScore = clamp(base + delta, 0, 100)
+            macdCur = cur
+            const px = livePrice && livePrice > 0 ? livePrice : closes[closes.length - 1]
+            macdScore = macdScoreFn(cur, prev, px)
             macdVal = (cur > prev ? '▲' : '▼') + ' ' + (Math.abs(cur) >= 1 ? cur.toFixed(0) : cur.toFixed(2))
             macdDetail = (cur > 0 ? D.posZone : D.negZone) + (cur > prev ? D.turnUp : D.falling)
           }
@@ -813,29 +819,32 @@
 
         const mm = mayerMultiple(closes, livePrice)
         parts.Mayer = {
-          score: mm == null ? null : clamp(((2.4 - mm.mayer) / 1.6) * 100, 0, 100),
+          score: mm == null ? null : mayerScore(mm.mayer),
           value: mm == null ? 'N/A' : mm.mayer.toFixed(2) + '×',
           detail: mm == null ? D.nodata : (mm.isFallback ? D.fallback200(mm.usedPeriod) : D.vs200),
         }
 
         const dd = drawdownFromHigh(closes, 365, livePrice)
         parts.DD = {
-          score: dd == null ? null : clamp((-dd.drawdownPct / 50) * 100, 0, 100),
+          score: dd == null ? null : ddScore(dd.drawdownPct),
           value: dd == null ? 'N/A' : dd.drawdownPct.toFixed(1) + '%',
           detail: dd == null ? D.nodata : D.high(fmtUsd(dd.rollingHigh)),
         }
 
         const gc = goldenDeathCross(closes)
         parts.GC_DC = {
-          score: gc == null ? 50 : gc.event === 'GOLDEN_CROSS' ? 100 : gc.event === 'DEATH_CROSS' ? 0 : gc.crossState === 'GOLDEN' ? 75 : 25,
+          score: gc == null ? 50 : gc.event === 'GOLDEN_CROSS' ? 85 : gc.event === 'DEATH_CROSS' ? 15 : gc.crossState === 'GOLDEN' ? 60 : 35,
           value: gc == null ? 'N/A' : gc.crossState + (gc.event !== 'NONE' ? ' ⚡' : ''),
           detail: gc == null ? D.nodata : `gap ${gc.gapPct.toFixed(1)}%` + (gc.event !== 'NONE' ? ' · ' + gc.event : ''),
         }
 
         let acc = 0, wsum = 0, online = 0
         for (const k in WEIGHTS) { const v = parts[k].score; if (v != null && !isNaN(v)) { acc += v * WEIGHTS[k]; wsum += WEIGHTS[k]; online++ } }
-        const score = wsum === 0 ? null : Math.round((acc / wsum) * 10) / 10
-        return { score, coverage: Math.round(wsum * 100) / 100, online, band: score == null ? null : bandFor(score), parts, livePrice }
+        let score = wsum === 0 ? null : Math.round((acc / wsum) * 10) / 10
+        // falling-knife 가드: 하락추세(데드크로스)+모멘텀(MACD 히스토) 음수 → 확인 안 된 바닥, 중립쪽 20% 감쇠
+        let knifeGuard = false
+        if (score != null && gc && gc.crossState === 'DEATH' && macdCur != null && macdCur <= 0) { score = Math.round((50 + (score - 50) * 0.8) * 10) / 10; knifeGuard = true }
+        return { score, coverage: Math.round(wsum * 100) / 100, online, knifeGuard, band: score == null ? null : bandFor(score), parts, livePrice }
       }
 
       /* =========================================================
