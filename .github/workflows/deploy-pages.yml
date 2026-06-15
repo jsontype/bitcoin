@@ -1,6 +1,7 @@
 name: Deploy demo to GitHub Pages
 
-# standalone.html(자체완결 · CDN React · 빌드 불필요)을 index.html 로 발행한다.
+# Vite 빌드본(브라우저 Babel 제거 → 빠름)을 배포한다.
+# 빌드 실패 시 자체완결 standalone.html 로 자동 폴백하여 라이브가 절대 깨지지 않게 한다.
 # Pages 가 꺼져 있어도 configure-pages 의 enablement:true 가 자동으로 켜준다.
 on:
   push:
@@ -27,10 +28,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Assemble site (standalone demo → index.html)
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build (Vite) — 실패해도 계속(standalone 폴백)
+        id: build
+        continue-on-error: true
+        run: npm install && npm run build
+
+      - name: Assemble site (Vite 빌드본 우선, 실패 시 standalone 폴백)
         run: |
           mkdir -p _site
-          cp standalone.html _site/index.html
+          if [ -f dist/index.html ]; then
+            echo "→ Vite 빌드본 배포"
+            cp -r dist/. _site/
+          else
+            echo "→ 빌드 실패: standalone 폴백 배포"
+            cp standalone.html _site/index.html
+          fi
+          # 보조/SEO 자산은 항상 발행 (빌드본·폴백 공통)
           cp standalone.html _site/standalone.html
           cp sitemap.xml _site/sitemap.xml
           cp robots.txt _site/robots.txt

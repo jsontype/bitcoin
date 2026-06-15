@@ -27,6 +27,23 @@ export const LANGS = [
 
 export const DEFAULT_LANG = 'ko'
 
+// 언어별 <title> (검색결과/탭/소셜에 노출 · hreflang 변형 URL용)
+export const DOC_TITLE = {
+  en: 'Bitcoin Fear & Greed Index & Buy-Timing Score | BTC_SIGNAL',
+  ja: 'ビットコイン 恐怖・強欲指数＆買い時スコア | BTC_SIGNAL',
+  ko: '비트코인 공포·탐욕 지수 · 매수 타이밍 점수 | BTC_SIGNAL',
+  zh: '比特币恐惧与贪婪指数·买入时机评分 | BTC_SIGNAL',
+  'zh-Hant': '比特幣恐懼與貪婪指數·買入時機評分 | BTC_SIGNAL',
+  th: 'ดัชนีความกลัว-ความโลภบิตคอยน์ · คะแนนจังหวะซื้อ | BTC_SIGNAL',
+  es: 'Índice de Miedo y Codicia de Bitcoin · Timing de Compra | BTC_SIGNAL',
+  fr: 'Indice Peur & Avidité Bitcoin · Timing d’Achat | BTC_SIGNAL',
+  de: 'Bitcoin Angst-&-Gier-Index · Kauf-Timing-Score | BTC_SIGNAL',
+  it: 'Indice Paura e Avidità Bitcoin · Timing d’Acquisto | BTC_SIGNAL',
+  pt: 'Índice de Medo e Ganância do Bitcoin · Timing de Compra | BTC_SIGNAL',
+  ru: 'Индекс страха и жадности Bitcoin · Тайминг покупки | BTC_SIGNAL',
+  nl: 'Bitcoin Angst-&-Hebzucht-index · Koop-timing | BTC_SIGNAL',
+}
+
 export const T = {
   // ============================ ENGLISH ============================
   en: {

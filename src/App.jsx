@@ -10,7 +10,7 @@ import SourceBadge from './components/SourceBadge.jsx'
 import Terminal from './components/Terminal.jsx'
 import { Sparkline } from './components/Sparkline.jsx'
 import Term, { TipsContext } from './components/Term.jsx'
-import { LANGS, getT, I18nContext, detectLang } from './i18n.js'
+import { LANGS, getT, I18nContext, detectLang, DOC_TITLE } from './i18n.js'
 
 const THEMES = { green: '#00ff9c', cyan: '#00e5ff', amber: '#ffb000', red: '#ff3b5c' }
 const localeOf = (lang) => (LANGS.find((l) => l.code === lang) || LANGS[0]).locale
@@ -41,6 +41,26 @@ export default function App() {
   useEffect(() => {
     document.documentElement.style.setProperty('--neon', accent)
   }, [accent])
+
+  // 첫 진입 시 ?lang= 가 있으면(공유 링크/hreflang) 그 언어를 우선 적용
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get('lang')
+    if (q && LANGS.some((l) => l.code === q)) setLang(q)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // 언어 변경 시 <html lang> / <title> / meta description 를 현지화 (SEO + 탭/공유)
+  useEffect(() => {
+    document.documentElement.lang = lang
+    document.title = DOC_TITLE[lang] || DOC_TITLE.en
+    let m = document.querySelector('meta[name="description"]')
+    if (!m) {
+      m = document.createElement('meta')
+      m.setAttribute('name', 'description')
+      document.head.appendChild(m)
+    }
+    m.setAttribute('content', t.subtitle)
+  }, [lang, t])
 
   const refresh = useCallback(() => {
     setPrice((p) => (p ? { ...p, status: 'loading' } : p))
@@ -145,7 +165,17 @@ export default function App() {
           <div className="topbar-right">
             <label className="lang-select" title={t.langLabel}>
               <span className="lang-globe" aria-hidden="true">🌐</span>
-              <select value={lang} onChange={(e) => setLang(e.target.value)} aria-label={t.langLabel}>
+              <select
+                value={lang}
+                onChange={(e) => {
+                  const code = e.target.value
+                  setLang(code)
+                  const u = new URL(window.location.href)
+                  u.searchParams.set('lang', code)
+                  window.history.replaceState(null, '', u)
+                }}
+                aria-label={t.langLabel}
+              >
                 {LANGS.map((l) => (
                   <option key={l.code} value={l.code}>
                     {l.label}
