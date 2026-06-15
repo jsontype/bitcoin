@@ -13,6 +13,8 @@ export default function Terminal({ ctx }) {
   const [hist, setHist] = useState([])
   const [hi, setHi] = useState(-1)
   const bodyRef = useRef(null)
+  // 데스크톱(정밀 포인터)에서만 자동 포커스. 터치 기기는 자동 포커스 금지 → 폰에서 키보드가 안 뜸
+  const autoFocusInput = typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia('(pointer: fine)').matches
   const print = (...out) => setLines((p) => [...p, ...out.flat()])
   const bandLabel = (b) => t.bands[b.id]?.label || b.label
   const bandAdvice = (b) => t.bands[b.id]?.advice || b.advice
@@ -151,7 +153,7 @@ export default function Terminal({ ctx }) {
         ))}
         <div className="term-input-row">
           <span className="term-prompt">satoshi@btc:~$</span>
-          <input autoFocus value={input} spellCheck={false} onChange={(e) => setInput(e.target.value)} onKeyDown={onKeyDown} />
+          <input autoFocus={autoFocusInput} value={input} spellCheck={false} onChange={(e) => setInput(e.target.value)} onKeyDown={onKeyDown} />
         </div>
       </div>
     </section>
