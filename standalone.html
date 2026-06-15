@@ -92,6 +92,16 @@
                 "@type": "Question",
                 "name": "BTC_SIGNAL은 무료인가요? 설치가 필요한가요?",
                 "acceptedAnswer": { "@type": "Answer", "text": "완전 무료이며 설치가 필요 없습니다. 브라우저에서 바로 실행되고, 데이터는 CoinGecko·Binance·Alternative.me 공개 API에서 실시간으로 가져옵니다. 13개 언어를 지원합니다. 본 점수는 참고용이며 투자 자문이 아닙니다." }
+              },
+              {
+                "@type": "Question",
+                "name": "비트코인 공포지수 데이터는 어디서 가져오나요? 얼마나 자주 갱신되나요?",
+                "acceptedAnswer": { "@type": "Answer", "text": "공포·탐욕 지수는 Alternative.me, 가격·일봉은 CoinGecko·Binance 공개 API에서 실시간으로 가져옵니다. 화면은 약 1분 주기로 자동 갱신됩니다." }
+              },
+              {
+                "@type": "Question",
+                "name": "공포지수와 매수 타이밍 점수는 무엇이 다른가요?",
+                "acceptedAnswer": { "@type": "Answer", "text": "공포지수는 투자 심리 한 가지 지표(0~100)이고, 매수 타이밍 점수는 공포지수를 포함한 6개 지표(RSI·MACD·마이어 배수·낙폭·골든크로스)를 합성한 종합 점수(0~100)입니다." }
               }
             ]
           }
@@ -347,6 +357,24 @@
       </ul>
       <p>6개 부분점수를 가중 합성해 0~100 점수와 STRONG BUY·ACCUMULATE·NEUTRAL·CAUTION·OVERHEATED 5단계로 표시합니다.</p>
 
+      <h2>공포·탐욕 지수 5단계</h2>
+      <ul>
+        <li><strong>0~25 극단적 공포(Extreme Fear)</strong> — 투매·패닉. 역사적으로 분할 매수 관심 구간</li>
+        <li><strong>25~45 공포(Fear)</strong> — 약세 심리</li>
+        <li><strong>45~55 중립(Neutral)</strong> — 방향성 불분명</li>
+        <li><strong>55~75 탐욕(Greed)</strong> — 과열 초입</li>
+        <li><strong>75~100 극단적 탐욕(Extreme Greed)</strong> — 과열·고점 경계</li>
+      </ul>
+
+      <h2>매수 타이밍 점수 5단계 밴드</h2>
+      <ul>
+        <li><strong>80~100 STRONG BUY</strong> — 과매도+공포+저평가 다중 합류</li>
+        <li><strong>65~80 ACCUMULATE</strong> — 분할 적립 우호</li>
+        <li><strong>45~65 NEUTRAL</strong> — 관망</li>
+        <li><strong>25~45 CAUTION</strong> — 추격 매수 자제</li>
+        <li><strong>0~25 OVERHEATED</strong> — 과열, 신규 매수 금지</li>
+      </ul>
+
       <h2>자주 묻는 질문</h2>
       <dl>
         <dt>공포지수가 낮으면 비트코인을 사야 하나요?</dt>
@@ -358,6 +386,10 @@
         <dd>위 6개 지표를 각각 0~100 부분점수로 환산해 가중 합성합니다. 결과는 0~100이며 5단계 밴드로 표시됩니다.</dd>
         <dt>무료인가요? 설치가 필요한가요?</dt>
         <dd>완전 무료이며 설치가 필요 없습니다. CoinGecko·Binance·Alternative.me 공개 API에서 실시간 데이터를 가져옵니다.</dd>
+        <dt>공포지수 데이터는 어디서 가져오나요? 얼마나 자주 갱신되나요?</dt>
+        <dd>공포·탐욕 지수는 Alternative.me, 가격·일봉은 CoinGecko·Binance 공개 API에서 실시간으로 가져옵니다. 화면은 약 1분 주기로 자동 갱신됩니다.</dd>
+        <dt>공포지수와 매수 타이밍 점수는 무엇이 다른가요?</dt>
+        <dd>공포지수는 심리 한 가지 지표(0~100)이고, 매수 타이밍 점수는 공포지수를 포함한 6개 지표를 합성한 종합 점수(0~100)입니다.</dd>
       </dl>
 
       <p class="seo-disclaimer">⚠ 본 점수는 공개 지표를 합성한 참고 신호이며 투자 자문이 아닙니다. 모든 투자 판단과 책임은 이용자 본인에게 있습니다.</p>
