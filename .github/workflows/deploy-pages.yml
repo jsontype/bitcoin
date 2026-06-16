@@ -1,11 +1,14 @@
 name: Deploy demo to GitHub Pages
 
-# Vite 빌드본(브라우저 Babel 제거 → 빠름)을 배포한다.
-# 빌드 실패 시 자체완결 standalone.html 로 자동 폴백하여 라이브가 절대 깨지지 않게 한다.
+# [transitional] btc 앱(apps/btc)을 GitHub Pages로 배포한다 — 최종 목적지는 Cloudflare Pages.
+# Vite 빌드본(브라우저 Babel 제거 → 빠름)을 배포하고, 빌드 실패 시 자체완결 standalone.html 로 자동 폴백한다.
 # Pages 가 꺼져 있어도 configure-pages 의 enablement:true 가 자동으로 켜준다.
 on:
   push:
     branches: [master]
+    paths:
+      - 'apps/btc/**'
+      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -36,28 +39,29 @@ jobs:
       - name: Build (Vite) — 실패해도 계속(standalone 폴백)
         id: build
         continue-on-error: true
+        working-directory: apps/btc
         run: npm install && npm run build
 
       - name: Assemble site (Vite 빌드본 우선, 실패 시 standalone 폴백)
         run: |
           mkdir -p _site
-          if [ -f dist/index.html ]; then
+          if [ -f apps/btc/dist/index.html ]; then
             echo "→ Vite 빌드본 배포"
-            cp -r dist/. _site/
+            cp -r apps/btc/dist/. _site/
           else
             echo "→ 빌드 실패: standalone 폴백 배포"
-            cp standalone.html _site/index.html
+            cp apps/btc/standalone.html _site/index.html
           fi
           # 보조/SEO 자산은 항상 발행 (빌드본·폴백 공통)
-          cp standalone.html _site/standalone.html
-          cp sitemap.xml _site/sitemap.xml
-          cp robots.txt _site/robots.txt
-          cp og-image.png _site/og-image.png
+          cp apps/btc/standalone.html _site/standalone.html
+          cp apps/btc/sitemap.xml _site/sitemap.xml
+          cp apps/btc/robots.txt _site/robots.txt
+          cp apps/btc/og-image.png _site/og-image.png
           # 커스텀 도메인(btc.broodev.com) + AdSense ads.txt
-          cp CNAME _site/CNAME
-          cp ads.txt _site/ads.txt
+          cp apps/btc/CNAME _site/CNAME
+          cp apps/btc/ads.txt _site/ads.txt
           # AdSense 전용 버전 → /adsense/
-          mkdir -p _site/adsense && cp adsense/index.html _site/adsense/index.html
+          mkdir -p _site/adsense && cp apps/btc/adsense/index.html _site/adsense/index.html
 
       - name: Configure Pages (auto-enable if needed)
         uses: actions/configure-pages@v5
