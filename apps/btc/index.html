@@ -54,7 +54,7 @@
     <meta name="twitter:title" content="비트코인 공포·탐욕 지수 · 매수 타이밍 실시간 | BTC_SIGNAL" />
     <meta name="twitter:description" content="공포·탐욕 지수 포함 6개 지표 실시간 합성 → 비트코인 매수 타이밍 점수(0~100). 무료." />
     <meta name="twitter:image" content="https://btc.broodev.com/og-image.png" />
-    <!-- 구조화 데이터: 웹앱 + FAQ -->
+    <!-- 구조화 데이터: 웹앱 + FAQ (리치 결과) -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -73,12 +73,36 @@
           {
             "@type": "FAQPage",
             "mainEntity": [
-              { "@type": "Question", "name": "비트코인 공포지수란?", "acceptedAnswer": { "@type": "Answer", "text": "공포·탐욕 지수(Fear & Greed Index)는 비트코인 투자자들의 심리를 0~100으로 나타낸 지표입니다. 0에 가까우면 극단적 공포, 100에 가까우면 극단적 탐욕을 뜻하며, 흔히 '남들이 공포에 팔 때가 기회'라는 역발상 신호로 쓰입니다. 데이터 출처는 Alternative.me입니다." } },
-              { "@type": "Question", "name": "공포지수가 낮으면 비트코인을 사야 하나요?", "acceptedAnswer": { "@type": "Answer", "text": "극단적 공포는 역사적으로 분할 매수 기회였던 경우가 많지만, 공포지수 하나만으로 판단하면 '떨어지는 칼날'을 잡을 위험이 있습니다. BTC_SIGNAL은 공포지수에 RSI·MACD·마이어 배수·낙폭·이동평균 크로스를 합성하고, 하락 추세에서는 점수를 보수적으로 낮춥니다." } },
-              { "@type": "Question", "name": "매수 타이밍 점수는 어떻게 계산되나요?", "acceptedAnswer": { "@type": "Answer", "text": "공포·탐욕 지수, RSI(14), MACD(12·26·9), 마이어 배수(가격/200일선), 365일 고점 대비 낙폭, 50/200 골든·데드 크로스 6개 지표를 각각 0~100 부분점수로 환산해 가중 합성합니다. 결과는 0~100이며 5단계로 표시됩니다." } },
-              { "@type": "Question", "name": "BTC_SIGNAL은 무료인가요? 설치가 필요한가요?", "acceptedAnswer": { "@type": "Answer", "text": "완전 무료이며 설치가 필요 없습니다. 브라우저에서 바로 실행되고, 데이터는 CoinGecko·Binance·Alternative.me 공개 API에서 실시간으로 가져옵니다. 13개 언어를 지원합니다. 본 점수는 참고용이며 투자 자문이 아닙니다." } },
-              { "@type": "Question", "name": "비트코인 공포지수 데이터는 어디서 가져오나요? 얼마나 자주 갱신되나요?", "acceptedAnswer": { "@type": "Answer", "text": "공포·탐욕 지수는 Alternative.me, 가격·일봉은 CoinGecko·Binance 공개 API에서 실시간으로 가져옵니다. 화면은 약 1분 주기로 자동 갱신됩니다." } },
-              { "@type": "Question", "name": "공포지수와 매수 타이밍 점수는 무엇이 다른가요?", "acceptedAnswer": { "@type": "Answer", "text": "공포지수는 투자 심리 한 가지 지표(0~100)이고, 매수 타이밍 점수는 공포지수를 포함한 6개 지표(RSI·MACD·마이어 배수·낙폭·골든크로스)를 합성한 종합 점수(0~100)입니다." } }
+              {
+                "@type": "Question",
+                "name": "비트코인 공포지수란?",
+                "acceptedAnswer": { "@type": "Answer", "text": "공포·탐욕 지수(Fear & Greed Index)는 비트코인 투자자들의 심리를 0~100으로 나타낸 지표입니다. 0에 가까우면 극단적 공포, 100에 가까우면 극단적 탐욕을 뜻하며, 흔히 '남들이 공포에 팔 때가 기회'라는 역발상 신호로 쓰입니다. 데이터 출처는 Alternative.me입니다." }
+              },
+              {
+                "@type": "Question",
+                "name": "공포지수가 낮으면 비트코인을 사야 하나요?",
+                "acceptedAnswer": { "@type": "Answer", "text": "극단적 공포(낮은 값)는 역사적으로 분할 매수 기회였던 경우가 많지만, 공포지수 하나만으로 판단하면 '떨어지는 칼날'을 잡을 위험이 있습니다. BTC_SIGNAL은 공포지수에 RSI·MACD·마이어 배수·낙폭·이동평균 크로스를 합성하고, 하락 추세에서는 점수를 보수적으로 낮춰 균형 잡힌 매수 타이밍 점수를 제시합니다." }
+              },
+              {
+                "@type": "Question",
+                "name": "매수 타이밍 점수는 어떻게 계산되나요?",
+                "acceptedAnswer": { "@type": "Answer", "text": "공포·탐욕 지수, RSI(14), MACD(12·26·9), 마이어 배수(가격/200일선), 365일 고점 대비 낙폭, 50/200 골든·데드 크로스 6개 지표를 각각 0~100 부분점수로 환산해 가중 합성합니다. 결과는 0~100이며 STRONG BUY·ACCUMULATE·NEUTRAL·CAUTION·OVERHEATED 5단계로 표시됩니다." }
+              },
+              {
+                "@type": "Question",
+                "name": "BTC_SIGNAL은 무료인가요? 설치가 필요한가요?",
+                "acceptedAnswer": { "@type": "Answer", "text": "완전 무료이며 설치가 필요 없습니다. 브라우저에서 바로 실행되고, 데이터는 CoinGecko·Binance·Alternative.me 공개 API에서 실시간으로 가져옵니다. 13개 언어를 지원합니다. 본 점수는 참고용이며 투자 자문이 아닙니다." }
+              },
+              {
+                "@type": "Question",
+                "name": "비트코인 공포지수 데이터는 어디서 가져오나요? 얼마나 자주 갱신되나요?",
+                "acceptedAnswer": { "@type": "Answer", "text": "공포·탐욕 지수는 Alternative.me, 가격·일봉은 CoinGecko·Binance 공개 API에서 실시간으로 가져옵니다. 화면은 약 1분 주기로 자동 갱신됩니다." }
+              },
+              {
+                "@type": "Question",
+                "name": "공포지수와 매수 타이밍 점수는 무엇이 다른가요?",
+                "acceptedAnswer": { "@type": "Answer", "text": "공포지수는 투자 심리 한 가지 지표(0~100)이고, 매수 타이밍 점수는 공포지수를 포함한 6개 지표(RSI·MACD·마이어 배수·낙폭·골든크로스)를 합성한 종합 점수(0~100)입니다." }
+              }
             ]
           }
         ]
@@ -91,6 +115,220 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Share+Tech+Mono&display=swap"
       rel="stylesheet"
     />
+    <style>
+      :root {
+        --neon: #00ff9c; --bg: #05080a; --bg-soft: #0a1014;
+        --panel: rgba(10,18,22,0.72); --line: rgba(0,255,156,0.18);
+        --text: #c8ffe6; --dim: #4f7a6c;
+        --ok: #00ff9c; --warn: #ffb000; --crit: #ff3b5c;
+        --font: 'JetBrains Mono', ui-monospace, 'Share Tech Mono', monospace;
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; }
+      #root { min-height: 100%; } /* 고정 100%면 앱이 넘쳐 SEO 섹션과 겹침 → min-height */
+      body {
+        background: radial-gradient(1200px 800px at 70% -10%, #0c1a18 0%, var(--bg) 55%) fixed;
+        color: var(--text); font-family: var(--font);
+        -webkit-font-smoothing: antialiased; overflow-x: hidden;
+      }
+      ::selection { background: var(--neon); color: #04110c; }
+      .matrix-rain { position: fixed; inset: 0; z-index: 0; opacity: .16; pointer-events: none; }
+      .scanlines { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,.22) 3px, rgba(0,0,0,0) 4px); mix-blend-mode: multiply; animation: flicker 6s infinite; }
+      .vignette { position: fixed; inset: 0; z-index: 1; pointer-events: none; box-shadow: inset 0 0 220px 40px rgba(0,0,0,.8); }
+      @keyframes flicker { 0%,97%,100%{opacity:.55} 98%{opacity:.35} 99%{opacity:.7} }
+      .boot { position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; justify-content: center; padding: 8vh 8vw; background: var(--bg); cursor: pointer; }
+      .boot-text { margin: 0; font-size: 15px; line-height: 1.7; color: var(--neon); text-shadow: 0 0 8px rgba(0,255,156,.6); }
+      .boot-line { white-space: pre-wrap; }
+      .boot-skip { margin-top: 28px; color: var(--dim); font-size: 12px; letter-spacing: 1px; }
+      .cursor-blink { animation: blink 1s steps(2) infinite; }
+      @keyframes blink { 50% { opacity: 0; } }
+      .app { position: relative; z-index: 2; min-height: 100vh; }
+      .shell { max-width: 1180px; margin: 0 auto; padding: 26px 20px 60px; position: relative; z-index: 2; }
+      .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+      .brand { display: flex; gap: 14px; align-items: center; flex: 1 1 auto; min-width: 0; }
+      .logo { font-size: 26px; color: var(--neon); text-shadow: 0 0 14px var(--neon); letter-spacing: -2px; }
+      .title { margin: 0; font-size: 21px; font-weight: 800; letter-spacing: 1px; color: var(--neon); text-shadow: 0 0 12px rgba(0,255,156,.45); }
+      .title .dim { color: var(--dim); text-shadow: none; font-weight: 500; }
+      .subtitle { margin: 4px 0 0; font-size: 12px; color: var(--dim); }
+      .topbar-right { display: flex; gap: 16px; align-items: center; flex-wrap: nowrap; margin-left: auto; white-space: nowrap; }
+      .sys-status { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); }
+      .sys-status .pulse { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); animation: pulse 1.4s infinite; }
+      .sys-status.status-warn .pulse { background: var(--warn); box-shadow: 0 0 10px var(--warn); }
+      .sys-status.status-crit .pulse { background: var(--crit); box-shadow: 0 0 10px var(--crit); }
+      .sys-status.status-ok { color: var(--ok); } .sys-status.status-warn { color: var(--warn); } .sys-status.status-crit { color: var(--crit); }
+      @keyframes pulse { 50% { opacity: .35; transform: scale(.8); } }
+      .clock { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.2; }
+      .clock-time { font-size: 19px; font-weight: 700; color: var(--text); text-shadow: 0 0 8px rgba(0,255,156,.3); }
+      .clock-date { font-size: 11px; color: var(--dim); }
+      .clock-time-sm { display: none; font-size: 14px; font-weight: 700; color: var(--text); }
+
+      /* HERO */
+      .disclaimer-banner { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 22px; padding: 12px 16px; font-size: 12px; line-height: 1.6; color: #ffd591; background: linear-gradient(180deg, rgba(255,176,0,.12), rgba(255,176,0,.05)); border: 1px solid rgba(255,176,0,.45); border-left: 3px solid var(--warn); border-radius: 5px; }
+      .disclaimer-banner .dz-icon { font-size: 16px; line-height: 1.4; filter: drop-shadow(0 0 6px rgba(255,176,0,.6)); }
+      .disclaimer-banner strong { color: var(--warn); }
+      .hero { display: grid; grid-template-columns: 320px 1fr; gap: 20px; margin-bottom: 22px; }
+      .panel { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 18px; backdrop-filter: blur(3px); }
+      /* 툴팁이 뒤 카드에 가리지 않도록: 용어가 있는 패널/카드를 호버·포커스 시 위로 */
+      .panel:hover, .panel:focus-within, .ind-card:hover, .ind-card:focus-within { z-index: 40; }
+      .corner { position: absolute; width: 12px; height: 12px; border: 2px solid var(--accent, var(--neon)); opacity: .8; }
+      .corner.tl { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+      .corner.tr { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+      .corner.bl { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+      .corner.br { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+      .gauge-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      .gauge-panel.status-crit { animation: cardalert 1.6s infinite; }
+      @keyframes cardalert { 50% { box-shadow: 0 0 26px -8px var(--crit); } }
+      .panel-label { align-self: flex-start; font-size: 10px; letter-spacing: 2px; color: var(--dim); margin-bottom: 6px; }
+      .gauge-big { position: relative; width: 210px; height: 210px; }
+      .gauge-big svg { width: 100%; height: 100%; }
+      .gauge-track { fill: none; stroke: rgba(255,255,255,.07); stroke-width: 10; }
+      .gauge-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dasharray .8s cubic-bezier(.2,.8,.2,1), stroke .4s; }
+      .gauge-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .gauge-score { font-size: 52px; font-weight: 800; line-height: 1; }
+      .gauge-of { font-size: 12px; color: var(--dim); margin-top: 2px; }
+      .verdict { margin-top: 12px; font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+      .verdict-advice { margin-top: 8px; font-size: 11.5px; line-height: 1.5; color: var(--text); opacity: .85; max-width: 260px; }
+      .coverage { margin-top: 10px; font-size: 10px; letter-spacing: 1px; color: var(--dim); }
+
+      .market { display: flex; flex-direction: column; gap: 14px; }
+      .market-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
+      .price-big { font-size: 38px; font-weight: 800; line-height: 1; color: var(--text); text-shadow: 0 0 14px rgba(0,255,156,.25); }
+      .price-sub { display: flex; gap: 14px; align-items: baseline; margin-top: 8px; font-size: 12px; color: var(--dim); flex-wrap: wrap; }
+      .chg.up { color: var(--ok); } .chg.down { color: var(--crit); }
+      .price-meta { text-align: right; font-size: 11px; color: var(--dim); line-height: 1.7; }
+      .spark-wrap { border-top: 1px dashed rgba(255,255,255,.08); padding-top: 12px; }
+      .spark-title { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 1px; color: var(--dim); margin-bottom: 4px; }
+      .spark { width: 100%; height: 64px; display: block; }
+      .spark-sm { height: 40px; }
+      .spark-empty { font-size: 11px; color: var(--dim); display: flex; align-items: center; height: 64px; }
+      .spark-plot { position: relative; cursor: crosshair; }
+      .spark-cross { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,.4); pointer-events: none; }
+      .spark-dot { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 7px currentColor; transform: translate(-50%,-50%); pointer-events: none; }
+      .spark-tip { position: absolute; top: 1px; z-index: 6; display: flex; gap: 6px; align-items: baseline; padding: 2px 7px; background: #04110c; border: 1px solid var(--line); border-radius: 4px; font-size: 10px; white-space: nowrap; pointer-events: none; }
+      .spark-tip b { color: var(--text); font-weight: 700; }
+      .spark-tip span { color: var(--dim); }
+      .spark-axis { display: flex; justify-content: space-between; margin-top: 4px; font-size: 9px; letter-spacing: .5px; color: var(--dim); }
+
+      /* badges */
+      .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 9.5px; letter-spacing: .5px; padding: 2px 7px; border-radius: 3px; border: 1px solid var(--line); color: var(--dim); white-space: nowrap; }
+      .badge .bdot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); }
+      .badge.live { color: var(--ok); border-color: rgba(0,255,156,.4); } .badge.live .bdot { background: var(--ok); box-shadow: 0 0 6px var(--ok); }
+      .badge.fallback { color: var(--warn); border-color: rgba(255,176,0,.4); } .badge.fallback .bdot { background: var(--warn); }
+      .badge.cached { color: var(--dim); } .badge.cached .bdot { background: var(--dim); }
+      .badge.loading { color: #6fd0ff; } .badge.loading .bdot { background: #6fd0ff; animation: blink .8s steps(2) infinite; }
+      .badge.error, .badge.na { color: var(--crit); border-color: rgba(255,59,92,.4); } .badge.error .bdot, .badge.na .bdot { background: var(--crit); animation: blink .8s steps(2) infinite; }
+      .badges-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+      /* indicator grid */
+      .ind-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; margin-bottom: 22px; }
+      .ind-card { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px 14px 12px; transition: transform .15s, box-shadow .2s; }
+      .ind-card:hover { transform: translateY(-2px); box-shadow: 0 0 26px -8px var(--accent, var(--neon)); }
+      .ind-card.status-ok { --accent: var(--ok); } .ind-card.status-warn { --accent: var(--warn); } .ind-card.status-crit { --accent: var(--crit); } .ind-card.status-na { --accent: var(--crit); }
+      .ind-head { display: flex; justify-content: space-between; align-items: baseline; }
+      .ind-short { font-size: 15px; font-weight: 800; letter-spacing: 1px; color: var(--accent, var(--neon)); }
+      .ind-weight { font-size: 10px; color: var(--dim); }
+      .ind-name { font-size: 10.5px; color: var(--dim); margin: 2px 0 10px; }
+      .ind-value { font-size: 26px; font-weight: 800; line-height: 1; }
+      .ind-detail { font-size: 11px; color: var(--dim); margin-top: 5px; min-height: 14px; }
+      .mini-bar { position: relative; height: 8px; margin: 12px 0 4px; background: rgba(255,255,255,.05); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+      .mini-fill { height: 100%; transition: width .6s cubic-bezier(.2,.8,.2,1); box-shadow: 0 0 10px var(--accent, var(--neon)); }
+      .mini-row { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--dim); letter-spacing: .5px; }
+      .ind-desc { font-size: 10px; color: var(--dim); margin-top: 8px; opacity: .8; }
+      .na-flag { color: var(--crit); animation: blink 1s steps(2) infinite; font-weight: 700; }
+
+      /* terminal */
+      .terminal { border: 1px solid var(--line); border-radius: 6px; background: rgba(4,8,9,.86); overflow: hidden; margin-bottom: 20px; box-shadow: 0 0 40px -20px var(--neon); }
+      .term-head { display: flex; align-items: center; gap: 7px; padding: 8px 12px; background: rgba(255,255,255,.03); border-bottom: 1px solid var(--line); }
+      .dot { width: 11px; height: 11px; border-radius: 50%; }
+      .dot.red { background: #ff5f56; } .dot.yellow { background: #ffbd2e; } .dot.green { background: #27c93f; }
+      .term-title { margin-left: 8px; font-size: 12px; color: var(--dim); }
+      .term-body { padding: 12px 14px; height: 230px; overflow-y: auto; font-size: 13px; line-height: 1.55; cursor: text; }
+      .term-line { white-space: pre-wrap; word-break: break-word; color: var(--text); }
+      .term-input-row { display: flex; gap: 8px; align-items: center; }
+      .term-prompt { color: var(--neon); flex-shrink: 0; }
+      .term-input-row input { flex: 1; background: transparent; border: none; outline: none; color: var(--text); font-family: var(--font); font-size: 13px; caret-color: var(--neon); }
+      .term-body::-webkit-scrollbar { width: 8px; }
+      .term-body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+
+      .footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 11px; color: var(--dim); border-top: 1px solid var(--line); padding-top: 16px; }
+      .footer-cmds { display: flex; gap: 8px; flex-wrap: wrap; }
+      .chip { font-family: var(--font); font-size: 11px; color: var(--dim); background: var(--bg-soft); border: 1px solid var(--line); border-radius: 3px; padding: 5px 10px; cursor: pointer; transition: .15s; }
+      .chip:hover { color: var(--neon); border-color: var(--neon); }
+
+      /* ===== 반응형 (태블릿 → 휴대폰) ===== */
+      @media (max-width: 820px) {
+        .shell { padding: 20px 14px 48px; }
+        .hero { grid-template-columns: 1fr; gap: 16px; }
+        .topbar-right { flex-wrap: wrap; }   /* 데스크톱 nowrap 해제 */
+        .verdict-advice { max-width: none; }
+      }
+      @media (max-width: 560px) {
+        .shell { padding: 14px 11px 40px; }
+        .topbar { gap: 12px; }
+        .brand { flex: 1 1 100%; gap: 10px; }
+        .topbar-right { width: 100%; margin-left: 0; justify-content: flex-end; gap: 8px 10px; }
+        .title { font-size: 17px; }
+        .logo { font-size: 22px; }
+        .subtitle { font-size: 11px; }
+        .clock-time, .clock-date { display: none; } /* 모바일: 풀시계(초+날짜) 숨김 */
+        .clock-time-sm { display: block; } /* 짧은 시각(HH:MM)만 노출 → 우측 오버플로 방지 */
+        .panel { padding: 14px; }
+        .gauge-big { width: 168px; height: 168px; }
+        .gauge-score { font-size: 44px; }
+        .verdict { font-size: 19px; }
+        .price-big { font-size: 30px; }
+        .ind-grid { grid-template-columns: 1fr; gap: 12px; }
+        .term-body { height: 200px; }
+        .term-input-row input { font-size: 16px; } /* iOS 포커스 줌 방지 */
+        .term-title { font-size: 11px; }
+        .footer { font-size: 10.5px; }
+        .term > .tip { max-width: min(280px, 84vw); }
+      }
+      @media (max-width: 380px) {
+        .topbar-right { gap: 6px 8px; }
+        .lang-select, .tips-toggle { padding: 5px 8px; font-size: 10px; }
+        .gauge-big { width: 150px; height: 150px; }
+        .gauge-score { font-size: 38px; }
+      }
+
+      /* 용어 설명 토글 */
+      .lang-select { display: flex; align-items: center; gap: 6px; color: var(--dim); border: 1px solid var(--line); border-radius: 4px; padding: 5px 8px 5px 10px; background: var(--panel); cursor: pointer; transition: .15s; }
+      .lang-select:hover { color: var(--text); border-color: var(--neon); }
+      .lang-select .lang-globe { font-size: 13px; line-height: 1; filter: grayscale(.2); }
+      .lang-select select { appearance: none; -webkit-appearance: none; background: transparent; border: none; color: inherit; font-family: var(--font); font-size: 11px; letter-spacing: .5px; cursor: pointer; padding: 0 14px 0 0; outline: none; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: right 4px center, right 0 center; background-size: 4px 4px, 4px 4px; background-repeat: no-repeat; }
+      .lang-select select option { background: var(--bg-soft); color: var(--text); }
+      .lang-select select:focus-visible { outline: 1px solid var(--neon); outline-offset: 2px; }
+      .tips-toggle { display: flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: .5px; color: var(--dim); border: 1px solid var(--line); border-radius: 4px; padding: 7px 10px; cursor: pointer; user-select: none; background: var(--panel); transition: .15s; }
+      .tips-toggle:hover { color: var(--text); border-color: var(--neon); }
+      .tips-toggle input { appearance: none; -webkit-appearance: none; width: 15px; height: 15px; margin: 0; cursor: pointer; position: relative; background: var(--bg); border: 1px solid var(--neon); border-radius: 3px; transition: background .12s; }
+      .tips-toggle input:checked { background: var(--neon); }
+      .tips-toggle input:checked::after { content: ''; position: absolute; left: 4px; top: 1px; width: 3px; height: 7px; border: solid #04110c; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+      .tips-toggle input:focus-visible { outline: 1px solid var(--neon); outline-offset: 2px; }
+      /* 용어 툴팁 */
+      .term { position: relative; cursor: help; outline: none; }
+      .term.u { border-bottom: 1px dotted currentColor; }
+      .term > .tip { position: absolute; top: calc(100% + 9px); left: 0; z-index: 100; min-width: 200px; max-width: 290px; background: #04110c; border: 1px solid var(--neon); border-radius: 5px; box-shadow: 0 0 24px -6px var(--neon); padding: 9px 11px; text-align: left; white-space: normal; opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity .12s, transform .12s; pointer-events: none; }
+      .term > .tip.tip-r { left: auto; right: 0; }
+      .term > .tip::after { content: ''; position: absolute; bottom: 100%; left: 14px; border: 6px solid transparent; border-bottom-color: var(--neon); }
+      .term > .tip.tip-r::after { left: auto; right: 14px; }
+      .term:hover > .tip, .term:focus > .tip, .term:focus-within > .tip { opacity: 1; visibility: visible; transform: translateY(0); }
+      .tip-title { display: block; color: var(--neon); font-weight: 800; font-size: 11.5px; letter-spacing: .3px; margin-bottom: 4px; }
+      .tip-title::before { content: '? '; opacity: .6; }
+      .tip-body { display: block; color: var(--text); font-size: 11px; line-height: 1.55; font-weight: 400; }
+      /* 정적 SEO 본문 (앱 하단) */
+      .seo { position: relative; z-index: 2; max-width: 760px; margin: 0 auto; padding: 30px 20px 64px; background: var(--bg); border-top: 1px solid var(--line); color: var(--dim); font-size: 13px; line-height: 1.7; }
+      .seo h1 { font-size: 18px; color: var(--neon); letter-spacing: .5px; margin: 0 0 10px; text-shadow: 0 0 10px rgba(0,255,156,.3); }
+      .seo h2 { font-size: 14px; color: var(--text); margin: 24px 0 8px; }
+      .seo p { margin: 8px 0; }
+      .seo strong { color: var(--text); }
+      .seo ul { margin: 8px 0; padding-left: 18px; }
+      .seo li { margin: 3px 0; }
+      .seo dl { margin: 8px 0; }
+      .seo dt { color: var(--text); font-weight: 700; margin-top: 12px; }
+      .seo dd { margin: 3px 0 0; }
+      .seo-disclaimer { margin-top: 24px; color: var(--warn); font-size: 12px; }
+      @media (max-width: 560px) { .seo { padding: 22px 14px 48px; } }
+    </style>
   </head>
   <body>
     <div id="root"></div>
@@ -99,14 +337,14 @@
     <section class="seo" aria-label="비트코인 공포·탐욕 지수 안내">
       <h1>비트코인 공포·탐욕 지수 &amp; 매수 타이밍 점수</h1>
       <p>
-        <strong>비트코인 공포지수(공포·탐욕 지수, Fear &amp; Greed Index)</strong>를 포함한 6개 실시간 지표를 합성해 “지금이 매수
-        타이밍인가?”를 0~100 점수로 보여주는 무료 대시보드입니다. 설치 없이 브라우저에서 바로 실행되며 13개 언어를 지원합니다.
+        <strong>비트코인 공포지수(공포·탐욕 지수, Fear &amp; Greed Index)</strong>를 포함한 6개 실시간 지표를 합성해
+        “지금이 매수 타이밍인가?”를 0~100 점수로 보여주는 무료 대시보드입니다. 설치 없이 브라우저에서 바로 실행되며 13개 언어를 지원합니다.
       </p>
 
       <h2>비트코인 공포지수란?</h2>
       <p>
-        공포·탐욕 지수는 비트코인 투자 심리를 0~100으로 나타낸 지표입니다. <strong>0에 가까우면 극단적 공포</strong>, 100에 가까우면
-        극단적 탐욕을 뜻합니다. 흔히 “남들이 공포에 팔 때가 기회”라는 <strong>역발상 신호</strong>로 쓰이며, 데이터 출처는 Alternative.me입니다.
+        공포·탐욕 지수는 비트코인 투자 심리를 0~100으로 나타낸 지표입니다. <strong>0에 가까우면 극단적 공포</strong>,
+        100에 가까우면 극단적 탐욕을 뜻합니다. 흔히 “남들이 공포에 팔 때가 기회”라는 <strong>역발상 신호</strong>로 쓰이며, 데이터 출처는 Alternative.me입니다.
       </p>
 
       <h2>매수 타이밍 점수 — 6개 지표</h2>
@@ -142,8 +380,8 @@
       <dl>
         <dt>공포지수가 낮으면 비트코인을 사야 하나요?</dt>
         <dd>
-          극단적 공포는 역사적으로 분할 매수 기회였던 경우가 많지만, 공포지수 하나만 보면 ‘떨어지는 칼날’을 잡을 위험이 있습니다. BTC_SIGNAL은
-          공포지수에 RSI·MACD·마이어 배수·낙폭·이동평균 크로스를 합성하고, 하락 추세에서는 점수를 보수적으로 낮춥니다.
+          극단적 공포는 역사적으로 분할 매수 기회였던 경우가 많지만, 공포지수 하나만 보면 ‘떨어지는 칼날’을 잡을 위험이 있습니다.
+          BTC_SIGNAL은 공포지수에 RSI·MACD·마이어 배수·낙폭·이동평균 크로스를 합성하고, 하락 추세에서는 점수를 보수적으로 낮춥니다.
         </dd>
         <dt>매수 타이밍 점수는 어떻게 계산되나요?</dt>
         <dd>위 6개 지표를 각각 0~100 부분점수로 환산해 가중 합성합니다. 결과는 0~100이며 5단계 밴드로 표시됩니다.</dd>
@@ -158,6 +396,1307 @@
       <p class="seo-disclaimer">⚠ 본 점수는 공개 지표를 합성한 참고 신호이며 투자 자문이 아닙니다. 모든 투자 판단과 책임은 이용자 본인에게 있습니다.</p>
     </section>
 
-    <script type="module" src="/src/main.jsx"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel" data-presets="react">
+      const { useState, useEffect, useRef, useMemo, useCallback, useContext, createContext } = React
+
+      /* =========================================================
+       *  다국어(i18n): 영어/일본어/한국어/중국어/스페인어/프랑스어
+       * ========================================================= */
+      const LANGS = [
+        { code: 'en', label: 'English', locale: 'en-US' },
+        { code: 'ja', label: '日本語', locale: 'ja-JP' },
+        { code: 'ko', label: '한국어', locale: 'ko-KR' },
+        { code: 'zh', label: '简体中文', locale: 'zh-CN' },
+        { code: 'zh-Hant', label: '繁體中文', locale: 'zh-TW' },
+        { code: 'th', label: 'ไทย', locale: 'th-TH' },
+        { code: 'es', label: 'Español', locale: 'es-ES' },
+        { code: 'fr', label: 'Français', locale: 'fr-FR' },
+        { code: 'de', label: 'Deutsch', locale: 'de-DE' },
+        { code: 'it', label: 'Italiano', locale: 'it-IT' },
+        { code: 'pt', label: 'Português', locale: 'pt-PT' },
+        { code: 'ru', label: 'Русский', locale: 'ru-RU' },
+        { code: 'nl', label: 'Nederlands', locale: 'nl-NL' },
+      ]
+      const DEFAULT_LANG = 'ko'
+      const DOC_TITLE = {
+        en: 'Bitcoin Fear & Greed Index & Buy-Timing Score | BTC_SIGNAL',
+        ja: 'ビットコイン 恐怖・強欲指数＆買い時スコア | BTC_SIGNAL',
+        ko: '비트코인 공포·탐욕 지수 · 매수 타이밍 점수 | BTC_SIGNAL',
+        zh: '比特币恐惧与贪婪指数·买入时机评分 | BTC_SIGNAL',
+        'zh-Hant': '比特幣恐懼與貪婪指數·買入時機評分 | BTC_SIGNAL',
+        th: 'ดัชนีความกลัว-ความโลภบิตคอยน์ · คะแนนจังหวะซื้อ | BTC_SIGNAL',
+        es: 'Índice de Miedo y Codicia de Bitcoin · Timing de Compra | BTC_SIGNAL',
+        fr: 'Indice Peur & Avidité Bitcoin · Timing d’Achat | BTC_SIGNAL',
+        de: 'Bitcoin Angst-&-Gier-Index · Kauf-Timing-Score | BTC_SIGNAL',
+        it: 'Indice Paura e Avidità Bitcoin · Timing d’Acquisto | BTC_SIGNAL',
+        pt: 'Índice de Medo e Ganância do Bitcoin · Timing de Compra | BTC_SIGNAL',
+        ru: 'Индекс страха и жадности Bitcoin · Тайминг покупки | BTC_SIGNAL',
+        nl: 'Bitcoin Angst-&-Hebzucht-index · Koop-timing | BTC_SIGNAL',
+      }
+      const T = {
+        en: {
+          tagline: 'buy-timing terminal', subtitle: '6 live BTC indicators → composite buy-timing score · reference signal only (not financial advice)',
+          tips: 'Glossary', tipsHint: 'Hover over difficult terms for a plain-language explanation', langLabel: 'Language', loading: 'LOADING',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: 'Loading data…', indicatorsOnline: (n) => `${n}/6 indicators online`, higherMoreBuy: 'higher = more buy-favorable', subScore: 'sub-score',
+          stale: 'STALE', vol: 'vol', mcap: 'mcap', priceHistory: (n) => `BTC price (last ${n}d)`, scoreTrend: 'Buy-timing score trend', histLoading: '// loading price history…', trendAccrues: '// score trend builds up over time',
+          footer: '⚠ This score is a reference signal synthesized from public indicators, not financial advice.', dataLabel: 'Data:', refresh: 'refresh', clearHistory: 'clear history',
+          banner: { p1: 'This score is a synthesis of public indicators —', s1: 'for reference only, not investment advice or a buy/sell recommendation.', p2: 'Crypto carries the risk of losing your entire principal, and', s2: 'all investment decisions and their outcomes (gains/losses) are solely your own responsibility.', p3: 'Always do your own research (DYOR).' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: 'Oversold + fear + undervaluation all converge. Strong zone for staged buying.' }, ACCUMULATE: { label: 'ACCUMULATE', advice: 'Buy-favorable. Staged accumulation suggested. Confirm with the trend filter.' }, NEUTRAL: { label: 'NEUTRAL', advice: 'Wait / neutral. No clear edge. Await further signals.' }, CAUTION: { label: 'CAUTION', advice: 'Caution. Greed/overvaluation setting in. Avoid chasing.' }, OVERHEATED: { label: 'OVERHEATED', advice: 'Overheated. Extreme greed / overvalued / near top. No new buys.' } },
+          ind: { RSI: { name: 'Relative Strength Index (Wilder)', desc: 'Oversold (<30) = buy / Overbought (>70) = caution' }, MACD: { name: 'MACD 12·26·9 histogram', desc: 'neg→pos / upturn off the bottom = buy momentum' }, FNG: { name: 'Fear & Greed Index (contrarian)', desc: 'Extreme fear = buy chance / Extreme greed = overheated' }, Mayer: { name: 'Mayer Multiple (price / 200D MA)', desc: '<0.8 strong buy / >2.4 overheated' }, DD: { name: 'Drawdown from 365D high', desc: '-30% interest / -50% strong buy' }, GC_DC: { name: 'Golden/Death cross trend', desc: 'Golden cross = trend buy-favorable' } },
+          fng: { extremeFear: 'Extreme Fear', fear: 'Fear', neutral: 'Neutral', greed: 'Greed', extremeGreed: 'Extreme Greed' },
+          det: { nodata: 'insufficient data', oversold: 'oversold ⚑', overbought: 'overbought', neutral: 'neutral', posZone: '+zone', negZone: '−zone', turnUp: ' · turning up', falling: ' · falling', vs200: 'vs 200D MA', fallback200: (d) => `200D fallback (${d}d)`, high: (v) => `high ${v}` },
+          term: { welcome: '// btc_signal shell — type `help` to start', help: ['commands:', '  score              current buy-timing score + verdict', '  why                what pushes the score up/down (weighted contribution)', '  show <ind>         indicator detail (rsi|macd|fng|mayer|dd|cross)', '  bands              5-tier verdict band table', '  sources            data source status / freshness', '  refresh            refetch everything', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! no analysis data — `refresh`', needData: '  ! no data', scoreCoverage: (o, pct) => `  coverage: ${o}/6 indicators (${pct}% weight)`, whySum: (s) => `  ── total ${s} (higher = more buy-favorable)`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    value: ${v}  (${d})`, showScore: (s, w) => `    sub-score: ${s}  · weight ${w}%`, refreshing: '  ↻ refetching all sources...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. Signals are for reference only.', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — not financial advice'], skip: '[ click / press any key to skip ]', skipTitle: 'Click to skip' },
+          src: { fallback: 'fallback', cached: 'cached', offline: 'offline', loading: 'loading' },
+        },
+        ja: {
+          tagline: '買い時ターミナル', subtitle: 'BTC指標6種をライブ合成 → 買い時スコア · 参考シグナルのみ（投資助言ではありません）',
+          tips: '用語解説', tipsHint: '難しい用語にカーソルを合わせるとやさしい説明が出ます', langLabel: '言語', loading: 'LOADING',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: 'データ読み込み中…', indicatorsOnline: (n) => `${n}/6 指標オンライン`, higherMoreBuy: '高いほど買いに有利', subScore: '部分スコア',
+          stale: 'STALE', vol: '出来高', mcap: '時価総額', priceHistory: (n) => `BTC価格（直近${n}日）`, scoreTrend: '買い時スコアの推移', histLoading: '// 価格履歴を読み込み中…', trendAccrues: '// スコア推移は時間とともに蓄積されます',
+          footer: '⚠ このスコアは公開指標を合成した参考シグナルであり、投資助言ではありません。', dataLabel: 'データ:', refresh: '再取得', clearHistory: '履歴を消去',
+          banner: { p1: 'このスコアは公開指標を合成したもので、', s1: 'あくまで参考用であり、投資助言や売買の推奨ではありません。', p2: '暗号資産は元本を全額失うリスクがあり、', s2: 'すべての投資判断とその結果（損益）はご自身の責任となります。', p3: '必ずご自身で調べてください（DYOR）。' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: '売られすぎ＋恐怖＋割安が重なる局面。分割買いに積極的なゾーン。' }, ACCUMULATE: { label: 'ACCUMULATE', advice: '買いに有利。分割積立を推奨。トレンドフィルターと併せて確認。' }, NEUTRAL: { label: 'NEUTRAL', advice: '様子見／中立。明確な優位なし。追加シグナル待ち。' }, CAUTION: { label: 'CAUTION', advice: '注意。強欲・割高の入口。追いかけ買いは控えめに。' }, OVERHEATED: { label: 'OVERHEATED', advice: '過熱。極端な強欲／割高／天井圏。新規買いは禁止。' } },
+          ind: { RSI: { name: '相対力指数（Wilder）', desc: '売られすぎ(<30)=買い / 買われすぎ(>70)=警戒' }, MACD: { name: 'MACD 12·26·9 ヒストグラム', desc: '陰→陽 / 底からの反転=買いモメンタム' }, FNG: { name: '恐怖・強欲指数（逆張り）', desc: '極端な恐怖=買い機会 / 極端な強欲=過熱' }, Mayer: { name: 'マイヤー倍率（価格 / 200日線）', desc: '<0.8 強い買い / >2.4 過熱' }, DD: { name: '365日高値からの下落率', desc: '-30% 注目 / -50% 強い買い' }, GC_DC: { name: 'ゴールデン/デッドクロス', desc: 'ゴールデンクロス=トレンドが買いに有利' } },
+          fng: { extremeFear: '極端な恐怖', fear: '恐怖', neutral: '中立', greed: '強欲', extremeGreed: '極端な強欲' },
+          det: { nodata: 'データ不足', oversold: '売られすぎ ⚑', overbought: '買われすぎ', neutral: '中立', posZone: '+領域', negZone: '−領域', turnUp: ' · 上昇転換', falling: ' · 下落', vs200: 'vs 200日線', fallback200: (d) => `200日フォールバック(${d}日)`, high: (v) => `高値 ${v}` },
+          term: { welcome: '// btc_signal shell — `help` で開始', help: ['commands:', '  score              現在の買い時スコア + 判定', '  why                スコアを押し上げ/押し下げる要因（加重寄与）', '  show <ind>         指標の詳細 (rsi|macd|fng|mayer|dd|cross)', '  bands              5段階の判定バンド表', '  sources            データソースの状態/鮮度', '  refresh            すべて再取得', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! 分析データなし — `refresh`', needData: '  ! データなし', scoreCoverage: (o, pct) => `  カバレッジ: ${o}/6 指標 (重み${pct}%)`, whySum: (s) => `  ── 合計 ${s}（高いほど買いに有利）`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    値: ${v}  (${d})`, showScore: (s, w) => `    部分スコア: ${s}  · 重み ${w}%`, refreshing: '  ↻ 全ソースを再取得中...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. シグナルは参考用です。', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — 投資助言ではありません'], skip: '[ クリック / 任意のキーでスキップ ]', skipTitle: 'クリックでスキップ' },
+          src: { fallback: 'fallback', cached: 'cached', offline: 'offline', loading: 'loading' },
+        },
+        ko: {
+          tagline: 'buy-timing terminal', subtitle: '실시간 비트코인 지표 6종 → 매수 타이밍 합성 점수 · 신호 참고용(투자자문 아님)',
+          tips: '용어 설명', tipsHint: '어려운 용어에 마우스를 올리면 쉬운 설명이 나옵니다', langLabel: '언어', loading: 'LOADING',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: '데이터 로딩 중…', indicatorsOnline: (n) => `${n}/6 지표 온라인`, higherMoreBuy: '높을수록 매수 우호', subScore: '부분점수',
+          stale: 'STALE', vol: 'vol', mcap: 'mcap', priceHistory: (n) => `BTC 가격 (최근 ${n}일)`, scoreTrend: '매수 타이밍 점수 추이', histLoading: '// 가격 히스토리 로딩…', trendAccrues: '// 점수 추이는 시간이 지나며 쌓입니다',
+          footer: '⚠ 본 점수는 공개 지표를 합성한 참고 신호이며 투자 자문이 아닙니다.', dataLabel: '데이터:', refresh: 'refresh', clearHistory: 'clear history',
+          banner: { p1: '이 점수는 공개 지표를 합성한', s1: '참고 자료일 뿐, 투자 자문이나 매수·매도 권유가 아닙니다.', p2: '암호화폐는 원금 전액 손실 위험이 있으며,', s2: '모든 투자 판단과 그 결과(손익)에 대한 책임은 전적으로 이용자 본인에게 있습니다.', p3: '반드시 스스로 조사하세요(DYOR).' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: '과매도+공포+저평가 다중 합류. 분할 매수 적극 구간.' }, ACCUMULATE: { label: 'ACCUMULATE', advice: '매수 우호. 분할 적립 권장. 추세 필터와 함께 확인.' }, NEUTRAL: { label: 'NEUTRAL', advice: '관망/중립. 뚜렷한 우위 없음. 추가 신호 대기.' }, CAUTION: { label: 'CAUTION', advice: '주의. 탐욕·고평가 진입 초입. 추격 매수 자제.' }, OVERHEATED: { label: 'OVERHEATED', advice: '과열. 극탐욕/고평가/고점 근접. 신규 매수 금지.' } },
+          ind: { RSI: { name: 'Relative Strength Index (Wilder)', desc: '과매도(<30) = 매수 / 과매수(>70) = 경계' }, MACD: { name: 'MACD 12·26·9 히스토그램', desc: '음→양 / 바닥 상향전환 = 매수 모멘텀' }, FNG: { name: '공포·탐욕 지수 (역발상)', desc: '극공포 = 매수 기회 / 극탐욕 = 과열' }, Mayer: { name: 'Mayer Multiple (가격 / 200일선)', desc: '<0.8 강한 매수 / >2.4 과열' }, DD: { name: '365일 고점 대비 낙폭', desc: '-30% 관심 / -50% 강한 매수' }, GC_DC: { name: '골든·데드 크로스 추세', desc: '골든크로스 = 추세 매수 우호' } },
+          fng: { extremeFear: '극단적 공포', fear: '공포', neutral: '중립', greed: '탐욕', extremeGreed: '극단적 탐욕' },
+          det: { nodata: '데이터 부족', oversold: '과매도 ⚑', overbought: '과매수', neutral: '중립', posZone: '+영역', negZone: '−영역', turnUp: ' · 상승전환', falling: ' · 하락', vs200: 'vs 200일선', fallback200: (d) => `200D 폴백(${d}d)`, high: (v) => `고점 ${v}` },
+          term: { welcome: '// btc_signal shell — `help` 입력으로 시작', help: ['commands:', '  score              현재 매수 타이밍 점수 + 판정', '  why                무엇이 점수를 끌어올리/내리는지(가중 기여도)', '  show <ind>         지표 상세 (rsi|macd|fng|mayer|dd|cross)', '  bands              5단계 판정 밴드 표', '  sources            데이터 소스 상태/신선도', '  refresh            전체 재조회', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! 분석 데이터 없음 — `refresh`', needData: '  ! 데이터 없음', scoreCoverage: (o, pct) => `  coverage: ${o}/6 indicators (${pct}% weight)`, whySum: (s) => `  ── 합계 ${s} (높을수록 매수 우호)`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    값: ${v}  (${d})`, showScore: (s, w) => `    부분점수: ${s}  · 가중치 ${w}%`, refreshing: '  ↻ refetching all sources...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. 신호는 참고용입니다.', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — not financial advice'], skip: '[ click / 아무 키나 눌러 건너뛰기 ]', skipTitle: '클릭하면 건너뜁니다' },
+          src: { fallback: 'fallback', cached: 'cached', offline: 'offline', loading: 'loading' },
+        },
+        zh: {
+          tagline: '买入时机终端', subtitle: '6 项实时比特币指标 → 买入时机综合评分 · 仅供参考信号（非投资建议）',
+          tips: '术语说明', tipsHint: '将鼠标悬停在难懂术语上可看到通俗解释', langLabel: '语言', loading: 'LOADING',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: '数据加载中…', indicatorsOnline: (n) => `${n}/6 指标在线`, higherMoreBuy: '分数越高越利于买入', subScore: '分项评分',
+          stale: 'STALE', vol: '成交量', mcap: '市值', priceHistory: (n) => `BTC 价格（近 ${n} 天）`, scoreTrend: '买入时机评分走势', histLoading: '// 价格历史加载中…', trendAccrues: '// 评分走势会随时间累积',
+          footer: '⚠ 本评分是对公开指标的合成参考信号，并非投资建议。', dataLabel: '数据:', refresh: '刷新', clearHistory: '清除记录',
+          banner: { p1: '本评分是对公开指标的合成，', s1: '仅供参考，并非投资建议或买卖推荐。', p2: '加密货币存在本金全部亏损的风险，', s2: '所有投资决策及其结果（盈亏）完全由您本人承担。', p3: '请务必自行研究（DYOR）。' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: '超卖＋恐慌＋低估多重共振。适合积极分批买入的区间。' }, ACCUMULATE: { label: 'ACCUMULATE', advice: '利于买入。建议分批定投，并结合趋势过滤确认。' }, NEUTRAL: { label: 'NEUTRAL', advice: '观望/中性。无明显优势，等待更多信号。' }, CAUTION: { label: 'CAUTION', advice: '谨慎。贪婪/高估初现，避免追高买入。' }, OVERHEATED: { label: 'OVERHEATED', advice: '过热。极度贪婪/高估/接近顶部，禁止新买入。' } },
+          ind: { RSI: { name: '相对强弱指数（Wilder）', desc: '超卖(<30)=买入 / 超买(>70)=警惕' }, MACD: { name: 'MACD 12·26·9 柱状图', desc: '负→正 / 自底部上拐=买入动能' }, FNG: { name: '恐惧与贪婪指数（逆向）', desc: '极度恐惧=买入机会 / 极度贪婪=过热' }, Mayer: { name: 'Mayer 倍数（价格 / 200日均线）', desc: '<0.8 强力买入 / >2.4 过热' }, DD: { name: '相对365日高点的回撤', desc: '-30% 关注 / -50% 强力买入' }, GC_DC: { name: '金叉/死叉趋势', desc: '金叉=趋势利于买入' } },
+          fng: { extremeFear: '极度恐惧', fear: '恐惧', neutral: '中性', greed: '贪婪', extremeGreed: '极度贪婪' },
+          det: { nodata: '数据不足', oversold: '超卖 ⚑', overbought: '超买', neutral: '中性', posZone: '+区域', negZone: '−区域', turnUp: ' · 转涨', falling: ' · 下跌', vs200: 'vs 200日均线', fallback200: (d) => `200日回退(${d}日)`, high: (v) => `高点 ${v}` },
+          term: { welcome: '// btc_signal shell — 输入 `help` 开始', help: ['commands:', '  score              当前买入时机评分 + 判定', '  why                哪些因素拉高/拉低评分（加权贡献）', '  show <ind>         指标详情 (rsi|macd|fng|mayer|dd|cross)', '  bands              五档判定区间表', '  sources            数据源状态/新鲜度', '  refresh            重新获取全部', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! 无分析数据 — `refresh`', needData: '  ! 无数据', scoreCoverage: (o, pct) => `  覆盖: ${o}/6 指标 (权重${pct}%)`, whySum: (s) => `  ── 合计 ${s}（越高越利于买入）`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    值: ${v}  (${d})`, showScore: (s, w) => `    分项评分: ${s}  · 权重 ${w}%`, refreshing: '  ↻ 正在重新获取所有数据源...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. 信号仅供参考。', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — 非投资建议'], skip: '[ 点击 / 按任意键跳过 ]', skipTitle: '点击跳过' },
+          src: { fallback: 'fallback', cached: 'cached', offline: 'offline', loading: 'loading' },
+        },
+        es: {
+          tagline: 'terminal de timing de compra', subtitle: '6 indicadores BTC en vivo → puntuación compuesta de timing de compra · solo señal de referencia (no es asesoría financiera)',
+          tips: 'Glosario', tipsHint: 'Pasa el cursor sobre los términos difíciles para ver una explicación sencilla', langLabel: 'Idioma', loading: 'CARGANDO',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: 'Cargando datos…', indicatorsOnline: (n) => `${n}/6 indicadores en línea`, higherMoreBuy: 'más alto = más favorable a comprar', subScore: 'sub-puntuación',
+          stale: 'STALE', vol: 'vol', mcap: 'cap.', priceHistory: (n) => `Precio BTC (últ. ${n}d)`, scoreTrend: 'Tendencia de la puntuación', histLoading: '// cargando historial de precios…', trendAccrues: '// la tendencia se acumula con el tiempo',
+          footer: '⚠ Esta puntuación es una señal de referencia compuesta de indicadores públicos, no asesoría financiera.', dataLabel: 'Datos:', refresh: 'actualizar', clearHistory: 'borrar historial',
+          banner: { p1: 'Esta puntuación es una síntesis de indicadores públicos:', s1: 'es solo de referencia, no asesoría de inversión ni recomendación de compra/venta.', p2: 'Las criptomonedas conllevan el riesgo de perder todo el capital, y', s2: 'todas las decisiones de inversión y sus resultados (ganancias/pérdidas) son responsabilidad exclusivamente tuya.', p3: 'Investiga siempre por tu cuenta (DYOR).' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: 'Sobreventa + miedo + infravaloración convergen. Zona fuerte para compras escalonadas.' }, ACCUMULATE: { label: 'ACCUMULATE', advice: 'Favorable a comprar. Acumulación escalonada recomendada. Confirma con el filtro de tendencia.' }, NEUTRAL: { label: 'NEUTRAL', advice: 'Esperar / neutral. Sin ventaja clara. Espera más señales.' }, CAUTION: { label: 'CAUTION', advice: 'Precaución. Codicia/sobrevaloración asomando. Evita perseguir el precio.' }, OVERHEATED: { label: 'OVERHEATED', advice: 'Sobrecalentado. Codicia extrema / sobrevalorado / cerca del techo. Sin nuevas compras.' } },
+          ind: { RSI: { name: 'Índice de Fuerza Relativa (Wilder)', desc: 'Sobreventa (<30) = comprar / Sobrecompra (>70) = cautela' }, MACD: { name: 'Histograma MACD 12·26·9', desc: 'neg→pos / giro al alza desde el fondo = momentum de compra' }, FNG: { name: 'Índice de Miedo y Codicia (contrario)', desc: 'Miedo extremo = oportunidad / Codicia extrema = sobrecalentado' }, Mayer: { name: 'Múltiplo de Mayer (precio / MM 200d)', desc: '<0.8 compra fuerte / >2.4 sobrecalentado' }, DD: { name: 'Caída desde el máximo de 365d', desc: '-30% interés / -50% compra fuerte' }, GC_DC: { name: 'Tendencia cruce dorado/de la muerte', desc: 'Cruce dorado = tendencia favorable a comprar' } },
+          fng: { extremeFear: 'Miedo Extremo', fear: 'Miedo', neutral: 'Neutral', greed: 'Codicia', extremeGreed: 'Codicia Extrema' },
+          det: { nodata: 'datos insuficientes', oversold: 'sobreventa ⚑', overbought: 'sobrecompra', neutral: 'neutral', posZone: 'zona +', negZone: 'zona −', turnUp: ' · girando al alza', falling: ' · cayendo', vs200: 'vs MM 200d', fallback200: (d) => `respaldo 200d (${d}d)`, high: (v) => `máx ${v}` },
+          term: { welcome: '// btc_signal shell — escribe `help` para empezar', help: ['commands:', '  score              puntuación de timing de compra actual + veredicto', '  why                qué sube/baja la puntuación (contribución ponderada)', '  show <ind>         detalle del indicador (rsi|macd|fng|mayer|dd|cross)', '  bands              tabla de 5 bandas de veredicto', '  sources            estado/frescura de las fuentes', '  refresh            volver a obtener todo', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! sin datos de análisis — `refresh`', needData: '  ! sin datos', scoreCoverage: (o, pct) => `  cobertura: ${o}/6 indicadores (${pct}% del peso)`, whySum: (s) => `  ── total ${s} (más alto = más favorable a comprar)`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    valor: ${v}  (${d})`, showScore: (s, w) => `    sub-puntuación: ${s}  · peso ${w}%`, refreshing: '  ↻ volviendo a obtener todas las fuentes...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. Las señales son solo de referencia.', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — no es asesoría financiera'], skip: '[ clic / pulsa cualquier tecla para saltar ]', skipTitle: 'Clic para saltar' },
+          src: { fallback: 'fallback', cached: 'en caché', offline: 'sin conexión', loading: 'cargando' },
+        },
+        fr: {
+          tagline: 'terminal de timing d’achat', subtitle: '6 indicateurs BTC en direct → score composite de timing d’achat · signal de référence uniquement (pas un conseil financier)',
+          tips: 'Glossaire', tipsHint: 'Survolez les termes difficiles pour une explication simple', langLabel: 'Langue', loading: 'CHARGEMENT',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: 'Chargement des données…', indicatorsOnline: (n) => `${n}/6 indicateurs en ligne`, higherMoreBuy: 'plus élevé = plus favorable à l’achat', subScore: 'sous-score',
+          stale: 'STALE', vol: 'vol', mcap: 'cap.', priceHistory: (n) => `Prix BTC (${n} derniers j)`, scoreTrend: 'Tendance du score d’achat', histLoading: '// chargement de l’historique des prix…', trendAccrues: '// la tendance s’accumule avec le temps',
+          footer: '⚠ Ce score est un signal de référence synthétisé à partir d’indicateurs publics, pas un conseil financier.', dataLabel: 'Données :', refresh: 'actualiser', clearHistory: 'effacer l’historique',
+          banner: { p1: 'Ce score est une synthèse d’indicateurs publics —', s1: 'à titre de référence uniquement, ce n’est pas un conseil d’investissement ni une recommandation d’achat/vente.', p2: 'La crypto comporte un risque de perte totale du capital, et', s2: 'toutes les décisions d’investissement et leurs résultats (gains/pertes) relèvent de votre seule responsabilité.', p3: 'Faites toujours vos propres recherches (DYOR).' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: 'Survente + peur + sous-évaluation convergent. Zone forte pour des achats échelonnés.' }, ACCUMULATE: { label: 'ACCUMULATE', advice: 'Favorable à l’achat. Accumulation échelonnée conseillée. À confirmer avec le filtre de tendance.' }, NEUTRAL: { label: 'NEUTRAL', advice: 'Attente / neutre. Pas d’avantage net. Attendez d’autres signaux.' }, CAUTION: { label: 'CAUTION', advice: 'Prudence. Avidité/survalorisation qui s’installe. Évitez de courir après le prix.' }, OVERHEATED: { label: 'OVERHEATED', advice: 'Surchauffe. Avidité extrême / survalorisé / proche du sommet. Pas de nouveaux achats.' } },
+          ind: { RSI: { name: 'Indice de Force Relative (Wilder)', desc: 'Survente (<30) = achat / Surachat (>70) = prudence' }, MACD: { name: 'Histogramme MACD 12·26·9', desc: 'nég→pos / retournement haussier au creux = momentum d’achat' }, FNG: { name: 'Indice Peur & Avidité (à contre-courant)', desc: 'Peur extrême = occasion / Avidité extrême = surchauffe' }, Mayer: { name: 'Multiple de Mayer (prix / MM 200j)', desc: '<0.8 achat fort / >2.4 surchauffe' }, DD: { name: 'Repli depuis le plus haut sur 365j', desc: '-30% intérêt / -50% achat fort' }, GC_DC: { name: 'Tendance croix dorée/de la mort', desc: 'Croix dorée = tendance favorable à l’achat' } },
+          fng: { extremeFear: 'Peur Extrême', fear: 'Peur', neutral: 'Neutre', greed: 'Avidité', extremeGreed: 'Avidité Extrême' },
+          det: { nodata: 'données insuffisantes', oversold: 'survente ⚑', overbought: 'surachat', neutral: 'neutre', posZone: 'zone +', negZone: 'zone −', turnUp: ' · retournement haussier', falling: ' · baisse', vs200: 'vs MM 200j', fallback200: (d) => `repli 200j (${d}j)`, high: (v) => `haut ${v}` },
+          term: { welcome: '// btc_signal shell — tapez `help` pour commencer', help: ['commands:', '  score              score de timing d’achat actuel + verdict', '  why                ce qui fait monter/descendre le score (contribution pondérée)', '  show <ind>         détail de l’indicateur (rsi|macd|fng|mayer|dd|cross)', '  bands              tableau des 5 bandes de verdict', '  sources            état/fraîcheur des sources', '  refresh            tout récupérer à nouveau', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! aucune donnée d’analyse — `refresh`', needData: '  ! aucune donnée', scoreCoverage: (o, pct) => `  couverture : ${o}/6 indicateurs (${pct}% du poids)`, whySum: (s) => `  ── total ${s} (plus élevé = plus favorable à l’achat)`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    valeur : ${v}  (${d})`, showScore: (s, w) => `    sous-score : ${s}  · poids ${w}%`, refreshing: '  ↻ récupération de toutes les sources...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. Les signaux sont indicatifs uniquement.', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — pas un conseil financier'], skip: '[ clic / appuyez sur une touche pour passer ]', skipTitle: 'Cliquer pour passer' },
+          src: { fallback: 'fallback', cached: 'en cache', offline: 'hors ligne', loading: 'chargement' },
+        },
+        'zh-Hant': {
+          tagline: '買入時機終端', subtitle: '6 項即時比特幣指標 → 買入時機綜合評分 · 僅供參考訊號（非投資建議）',
+          tips: '術語說明', tipsHint: '將滑鼠移到難懂術語上可看到淺白解釋', langLabel: '語言', loading: 'LOADING',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: '資料載入中…', indicatorsOnline: (n) => `${n}/6 指標在線`, higherMoreBuy: '分數越高越有利買入', subScore: '分項評分',
+          stale: 'STALE', vol: '成交量', mcap: '市值', priceHistory: (n) => `BTC 價格（近 ${n} 天）`, scoreTrend: '買入時機評分走勢', histLoading: '// 價格歷史載入中…', trendAccrues: '// 評分走勢會隨時間累積',
+          footer: '⚠ 本評分是對公開指標的合成參考訊號，並非投資建議。', dataLabel: '資料:', refresh: '重新整理', clearHistory: '清除紀錄',
+          banner: { p1: '本評分是對公開指標的合成，', s1: '僅供參考，並非投資建議或買賣推薦。', p2: '加密貨幣存在本金全部虧損的風險，', s2: '所有投資決策及其結果（盈虧）完全由您本人承擔。', p3: '請務必自行研究（DYOR）。' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: '超賣＋恐慌＋低估多重共振。適合積極分批買入的區間。' }, ACCUMULATE: { label: 'ACCUMULATE', advice: '有利買入。建議分批定投，並結合趨勢過濾確認。' }, NEUTRAL: { label: 'NEUTRAL', advice: '觀望/中性。無明顯優勢，等待更多訊號。' }, CAUTION: { label: 'CAUTION', advice: '謹慎。貪婪/高估初現，避免追高買入。' }, OVERHEATED: { label: 'OVERHEATED', advice: '過熱。極度貪婪/高估/接近頂部，禁止新買入。' } },
+          ind: { RSI: { name: '相對強弱指數（Wilder）', desc: '超賣(<30)=買入 / 超買(>70)=警惕' }, MACD: { name: 'MACD 12·26·9 柱狀圖', desc: '負→正 / 自底部上拐=買入動能' }, FNG: { name: '恐懼與貪婪指數（逆向）', desc: '極度恐懼=買入機會 / 極度貪婪=過熱' }, Mayer: { name: 'Mayer 倍數（價格 / 200日均線）', desc: '<0.8 強力買入 / >2.4 過熱' }, DD: { name: '相對365日高點的回撤', desc: '-30% 關注 / -50% 強力買入' }, GC_DC: { name: '黃金/死亡交叉趨勢', desc: '黃金交叉=趨勢有利買入' } },
+          fng: { extremeFear: '極度恐懼', fear: '恐懼', neutral: '中性', greed: '貪婪', extremeGreed: '極度貪婪' },
+          det: { nodata: '資料不足', oversold: '超賣 ⚑', overbought: '超買', neutral: '中性', posZone: '+區域', negZone: '−區域', turnUp: ' · 轉漲', falling: ' · 下跌', vs200: 'vs 200日均線', fallback200: (d) => `200日回退(${d}日)`, high: (v) => `高點 ${v}` },
+          term: { welcome: '// btc_signal shell — 輸入 `help` 開始', help: ['commands:', '  score              目前買入時機評分 + 判定', '  why                哪些因素拉高/拉低評分（加權貢獻）', '  show <ind>         指標詳情 (rsi|macd|fng|mayer|dd|cross)', '  bands              五檔判定區間表', '  sources            資料來源狀態/新鮮度', '  refresh            重新取得全部', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! 無分析資料 — `refresh`', needData: '  ! 無資料', scoreCoverage: (o, pct) => `  覆蓋: ${o}/6 指標 (權重${pct}%)`, whySum: (s) => `  ── 合計 ${s}（越高越有利買入）`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    值: ${v}  (${d})`, showScore: (s, w) => `    分項評分: ${s}  · 權重 ${w}%`, refreshing: '  ↻ 正在重新取得所有資料來源...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. 訊號僅供參考。', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — 非投資建議'], skip: '[ 點擊 / 按任意鍵跳過 ]', skipTitle: '點擊跳過' },
+          src: { fallback: 'fallback', cached: 'cached', offline: 'offline', loading: 'loading' },
+        },
+        th: {
+          tagline: 'เทอร์มินัลจับจังหวะซื้อ', subtitle: 'ตัวชี้วัด BTC สด 6 ตัว → คะแนนจังหวะซื้อรวม · เป็นสัญญาณอ้างอิงเท่านั้น (ไม่ใช่คำแนะนำการลงทุน)',
+          tips: 'อภิธานศัพท์', tipsHint: 'วางเมาส์เหนือคำศัพท์ยาก ๆ เพื่อดูคำอธิบายง่าย ๆ', langLabel: 'ภาษา', loading: 'กำลังโหลด',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: 'กำลังโหลดข้อมูล…', indicatorsOnline: (n) => `ตัวชี้วัดออนไลน์ ${n}/6`, higherMoreBuy: 'ยิ่งสูงยิ่งเอื้อต่อการซื้อ', subScore: 'คะแนนย่อย',
+          stale: 'STALE', vol: 'ปริมาณ', mcap: 'มูลค่าตลาด', priceHistory: (n) => `ราคา BTC (${n} วันล่าสุด)`, scoreTrend: 'แนวโน้มคะแนนจังหวะซื้อ', histLoading: '// กำลังโหลดประวัติราคา…', trendAccrues: '// แนวโน้มจะสะสมเมื่อเวลาผ่านไป',
+          footer: '⚠ คะแนนนี้เป็นสัญญาณอ้างอิงที่สังเคราะห์จากตัวชี้วัดสาธารณะ ไม่ใช่คำแนะนำการลงทุน', dataLabel: 'ข้อมูล:', refresh: 'รีเฟรช', clearHistory: 'ล้างประวัติ',
+          banner: { p1: 'คะแนนนี้เป็นการสังเคราะห์ตัวชี้วัดสาธารณะ —', s1: 'ใช้เพื่ออ้างอิงเท่านั้น ไม่ใช่คำแนะนำการลงทุนหรือการชี้นำให้ซื้อ/ขาย', p2: 'คริปโทมีความเสี่ยงที่จะสูญเสียเงินต้นทั้งหมด และ', s2: 'การตัดสินใจลงทุนทั้งหมดและผลที่ตามมา (กำไร/ขาดทุน) เป็นความรับผิดชอบของคุณเองทั้งสิ้น', p3: 'ศึกษาด้วยตนเองเสมอ (DYOR)' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: 'ขายมากเกิน + ความกลัว + ราคาต่ำกว่ามูลค่ามาบรรจบกัน เป็นโซนที่เหมาะกับการทยอยซื้อ' }, ACCUMULATE: { label: 'ACCUMULATE', advice: 'เอื้อต่อการซื้อ แนะนำให้ทยอยสะสม และยืนยันด้วยตัวกรองแนวโน้ม' }, NEUTRAL: { label: 'NEUTRAL', advice: 'รอดู/เป็นกลาง ไม่มีความได้เปรียบชัดเจน รอสัญญาณเพิ่มเติม' }, CAUTION: { label: 'CAUTION', advice: 'ระวัง ความโลภ/ราคาสูงเกินเริ่มก่อตัว หลีกเลี่ยงการไล่ราคา' }, OVERHEATED: { label: 'OVERHEATED', advice: 'ร้อนแรงเกินไป โลภสุดขีด/ราคาสูงเกิน/ใกล้จุดสูงสุด ห้ามซื้อเพิ่ม' } },
+          ind: { RSI: { name: 'ดัชนีกำลังสัมพัทธ์ (Wilder)', desc: 'ขายมากเกิน (<30) = ซื้อ / ซื้อมากเกิน (>70) = ระวัง' }, MACD: { name: 'ฮิสโทแกรม MACD 12·26·9', desc: 'ลบ→บวก / กลับตัวขึ้นจากก้น = โมเมนตัมซื้อ' }, FNG: { name: 'ดัชนีความกลัว-ความโลภ (สวนทาง)', desc: 'กลัวสุดขีด = โอกาสซื้อ / โลภสุดขีด = ร้อนแรงเกิน' }, Mayer: { name: 'Mayer Multiple (ราคา / MA 200 วัน)', desc: '<0.8 ซื้อแรง / >2.4 ร้อนแรงเกิน' }, DD: { name: 'การลดลงจากจุดสูงสุด 365 วัน', desc: '-30% น่าสนใจ / -50% ซื้อแรง' }, GC_DC: { name: 'แนวโน้ม Golden/Death Cross', desc: 'Golden cross = แนวโน้มเอื้อต่อการซื้อ' } },
+          fng: { extremeFear: 'กลัวสุดขีด', fear: 'กลัว', neutral: 'เป็นกลาง', greed: 'โลภ', extremeGreed: 'โลภสุดขีด' },
+          det: { nodata: 'ข้อมูลไม่พอ', oversold: 'ขายมากเกิน ⚑', overbought: 'ซื้อมากเกิน', neutral: 'เป็นกลาง', posZone: 'โซน +', negZone: 'โซน −', turnUp: ' · กลับตัวขึ้น', falling: ' · ลดลง', vs200: 'เทียบ MA 200 วัน', fallback200: (d) => `สำรอง 200 วัน (${d}วัน)`, high: (v) => `สูงสุด ${v}` },
+          term: { welcome: '// btc_signal shell — พิมพ์ `help` เพื่อเริ่ม', help: ['commands:', '  score              คะแนนจังหวะซื้อปัจจุบัน + คำตัดสิน', '  why                อะไรดันคะแนนขึ้น/ลง (สัดส่วนถ่วงน้ำหนัก)', '  show <ind>         รายละเอียดตัวชี้วัด (rsi|macd|fng|mayer|dd|cross)', '  bands              ตารางแถบคำตัดสิน 5 ระดับ', '  sources            สถานะ/ความสดของแหล่งข้อมูล', '  refresh            ดึงข้อมูลใหม่ทั้งหมด', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! ไม่มีข้อมูลวิเคราะห์ — `refresh`', needData: '  ! ไม่มีข้อมูล', scoreCoverage: (o, pct) => `  ความครอบคลุม: ${o}/6 ตัวชี้วัด (น้ำหนัก ${pct}%)`, whySum: (s) => `  ── รวม ${s} (ยิ่งสูงยิ่งเอื้อต่อการซื้อ)`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    ค่า: ${v}  (${d})`, showScore: (s, w) => `    คะแนนย่อย: ${s}  · น้ำหนัก ${w}%`, refreshing: '  ↻ กำลังดึงข้อมูลทุกแหล่งใหม่...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. สัญญาณใช้เพื่ออ้างอิงเท่านั้น', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — ไม่ใช่คำแนะนำการลงทุน'], skip: '[ คลิก / กดปุ่มใดก็ได้เพื่อข้าม ]', skipTitle: 'คลิกเพื่อข้าม' },
+          src: { fallback: 'fallback', cached: 'cached', offline: 'ออฟไลน์', loading: 'กำลังโหลด' },
+        },
+        de: {
+          tagline: 'Kauf-Timing-Terminal', subtitle: '6 Live-BTC-Indikatoren → zusammengesetzter Kauf-Timing-Score · nur Referenzsignal (keine Finanzberatung)',
+          tips: 'Glossar', tipsHint: 'Fahre über schwierige Begriffe für eine einfache Erklärung', langLabel: 'Sprache', loading: 'LÄDT',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: 'Daten werden geladen…', indicatorsOnline: (n) => `${n}/6 Indikatoren online`, higherMoreBuy: 'höher = kaufgünstiger', subScore: 'Teil-Score',
+          stale: 'STALE', vol: 'Vol.', mcap: 'MCap', priceHistory: (n) => `BTC-Preis (letzte ${n} T)`, scoreTrend: 'Verlauf des Kauf-Timing-Scores', histLoading: '// Preisverlauf wird geladen…', trendAccrues: '// Verlauf baut sich mit der Zeit auf',
+          footer: '⚠ Dieser Score ist ein aus öffentlichen Indikatoren zusammengesetztes Referenzsignal, keine Finanzberatung.', dataLabel: 'Daten:', refresh: 'aktualisieren', clearHistory: 'Verlauf löschen',
+          banner: { p1: 'Dieser Score ist eine Synthese öffentlicher Indikatoren —', s1: 'nur zur Orientierung, keine Anlageberatung oder Kauf-/Verkaufsempfehlung.', p2: 'Krypto birgt das Risiko eines Totalverlusts des Kapitals, und', s2: 'alle Anlageentscheidungen und deren Ergebnisse (Gewinne/Verluste) liegen allein in Ihrer Verantwortung.', p3: 'Mach immer deine eigene Recherche (DYOR).' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: 'Überverkauft + Angst + Unterbewertung treffen zusammen. Starke Zone für gestaffelte Käufe.' }, ACCUMULATE: { label: 'ACCUMULATE', advice: 'Kaufgünstig. Gestaffeltes Ansparen empfohlen. Mit dem Trendfilter bestätigen.' }, NEUTRAL: { label: 'NEUTRAL', advice: 'Abwarten / neutral. Kein klarer Vorteil. Auf weitere Signale warten.' }, CAUTION: { label: 'CAUTION', advice: 'Vorsicht. Gier/Überbewertung setzt ein. Dem Preis nicht hinterherjagen.' }, OVERHEATED: { label: 'OVERHEATED', advice: 'Überhitzt. Extreme Gier / überbewertet / nahe am Top. Keine neuen Käufe.' } },
+          ind: { RSI: { name: 'Relative-Stärke-Index (Wilder)', desc: 'Überverkauft (<30) = Kauf / Überkauft (>70) = Vorsicht' }, MACD: { name: 'MACD 12·26·9 Histogramm', desc: 'neg→pos / Aufwärtswende vom Boden = Kaufmomentum' }, FNG: { name: 'Angst-&-Gier-Index (antizyklisch)', desc: 'Extreme Angst = Kaufchance / Extreme Gier = überhitzt' }, Mayer: { name: 'Mayer Multiple (Preis / 200T-MA)', desc: '<0,8 starker Kauf / >2,4 überhitzt' }, DD: { name: 'Rückgang vom 365T-Hoch', desc: '-30% Interesse / -50% starker Kauf' }, GC_DC: { name: 'Golden/Death-Cross-Trend', desc: 'Golden Cross = Trend kaufgünstig' } },
+          fng: { extremeFear: 'Extreme Angst', fear: 'Angst', neutral: 'Neutral', greed: 'Gier', extremeGreed: 'Extreme Gier' },
+          det: { nodata: 'unzureichende Daten', oversold: 'überverkauft ⚑', overbought: 'überkauft', neutral: 'neutral', posZone: '+Zone', negZone: '−Zone', turnUp: ' · Aufwärtswende', falling: ' · fallend', vs200: 'vs 200T-MA', fallback200: (d) => `200T-Fallback (${d}T)`, high: (v) => `Hoch ${v}` },
+          term: { welcome: '// btc_signal shell — `help` eingeben zum Start', help: ['commands:', '  score              aktueller Kauf-Timing-Score + Urteil', '  why                was den Score hebt/senkt (gewichteter Beitrag)', '  show <ind>         Indikator-Detail (rsi|macd|fng|mayer|dd|cross)', '  bands              Tabelle der 5 Urteilsstufen', '  sources            Status/Aktualität der Quellen', '  refresh            alles neu laden', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! keine Analysedaten — `refresh`', needData: '  ! keine Daten', scoreCoverage: (o, pct) => `  Abdeckung: ${o}/6 Indikatoren (${pct}% Gewicht)`, whySum: (s) => `  ── gesamt ${s} (höher = kaufgünstiger)`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    Wert: ${v}  (${d})`, showScore: (s, w) => `    Teil-Score: ${s}  · Gewicht ${w}%`, refreshing: '  ↻ alle Quellen werden neu geladen...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. Signale dienen nur als Referenz.', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — keine Finanzberatung'], skip: '[ Klick / beliebige Taste zum Überspringen ]', skipTitle: 'Zum Überspringen klicken' },
+          src: { fallback: 'fallback', cached: 'zwischengespeichert', offline: 'offline', loading: 'lädt' },
+        },
+        it: {
+          tagline: 'terminale di timing d’acquisto', subtitle: '6 indicatori BTC in tempo reale → punteggio composito di timing d’acquisto · solo segnale di riferimento (non è consulenza finanziaria)',
+          tips: 'Glossario', tipsHint: 'Passa il mouse sui termini difficili per una spiegazione semplice', langLabel: 'Lingua', loading: 'CARICAMENTO',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: 'Caricamento dati…', indicatorsOnline: (n) => `${n}/6 indicatori online`, higherMoreBuy: 'più alto = più favorevole all’acquisto', subScore: 'sotto-punteggio',
+          stale: 'STALE', vol: 'vol', mcap: 'cap.', priceHistory: (n) => `Prezzo BTC (ultimi ${n}g)`, scoreTrend: 'Andamento del punteggio', histLoading: '// caricamento dello storico prezzi…', trendAccrues: '// l’andamento si accumula nel tempo',
+          footer: '⚠ Questo punteggio è un segnale di riferimento sintetizzato da indicatori pubblici, non consulenza finanziaria.', dataLabel: 'Dati:', refresh: 'aggiorna', clearHistory: 'cancella cronologia',
+          banner: { p1: 'Questo punteggio è una sintesi di indicatori pubblici —', s1: 'solo a titolo di riferimento, non è consulenza d’investimento né raccomandazione di acquisto/vendita.', p2: 'Le criptovalute comportano il rischio di perdere l’intero capitale, e', s2: 'tutte le decisioni d’investimento e i loro esiti (profitti/perdite) sono esclusivamente responsabilità tua.', p3: 'Fai sempre le tue ricerche (DYOR).' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: 'Ipervenduto + paura + sottovalutazione convergono. Zona forte per acquisti scaglionati.' }, ACCUMULATE: { label: 'ACCUMULATE', advice: 'Favorevole all’acquisto. Accumulo scaglionato consigliato. Conferma con il filtro di tendenza.' }, NEUTRAL: { label: 'NEUTRAL', advice: 'Attesa / neutrale. Nessun vantaggio chiaro. Attendi altri segnali.' }, CAUTION: { label: 'CAUTION', advice: 'Cautela. Avidità/sopravvalutazione in arrivo. Evita di inseguire il prezzo.' }, OVERHEATED: { label: 'OVERHEATED', advice: 'Surriscaldato. Avidità estrema / sopravvalutato / vicino al picco. Nessun nuovo acquisto.' } },
+          ind: { RSI: { name: 'Indice di Forza Relativa (Wilder)', desc: 'Ipervenduto (<30) = acquisto / Ipercomprato (>70) = cautela' }, MACD: { name: 'Istogramma MACD 12·26·9', desc: 'neg→pos / svolta al rialzo dal fondo = momentum d’acquisto' }, FNG: { name: 'Indice Paura e Avidità (contrarian)', desc: 'Paura estrema = occasione / Avidità estrema = surriscaldato' }, Mayer: { name: 'Multiplo di Mayer (prezzo / MM 200g)', desc: '<0,8 acquisto forte / >2,4 surriscaldato' }, DD: { name: 'Ribasso dal massimo a 365g', desc: '-30% interesse / -50% acquisto forte' }, GC_DC: { name: 'Tendenza Golden/Death Cross', desc: 'Golden cross = tendenza favorevole all’acquisto' } },
+          fng: { extremeFear: 'Paura Estrema', fear: 'Paura', neutral: 'Neutrale', greed: 'Avidità', extremeGreed: 'Avidità Estrema' },
+          det: { nodata: 'dati insufficienti', oversold: 'ipervenduto ⚑', overbought: 'ipercomprato', neutral: 'neutrale', posZone: 'zona +', negZone: 'zona −', turnUp: ' · svolta al rialzo', falling: ' · in calo', vs200: 'vs MM 200g', fallback200: (d) => `ripiego 200g (${d}g)`, high: (v) => `max ${v}` },
+          term: { welcome: '// btc_signal shell — digita `help` per iniziare', help: ['commands:', '  score              punteggio di timing d’acquisto attuale + verdetto', '  why                cosa alza/abbassa il punteggio (contributo ponderato)', '  show <ind>         dettaglio indicatore (rsi|macd|fng|mayer|dd|cross)', '  bands              tabella delle 5 fasce di verdetto', '  sources            stato/freschezza delle fonti', '  refresh            ricarica tutto', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! nessun dato di analisi — `refresh`', needData: '  ! nessun dato', scoreCoverage: (o, pct) => `  copertura: ${o}/6 indicatori (${pct}% del peso)`, whySum: (s) => `  ── totale ${s} (più alto = più favorevole all’acquisto)`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    valore: ${v}  (${d})`, showScore: (s, w) => `    sotto-punteggio: ${s}  · peso ${w}%`, refreshing: '  ↻ ricarico tutte le fonti...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. I segnali sono solo di riferimento.', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — non è consulenza finanziaria'], skip: '[ clic / premi un tasto per saltare ]', skipTitle: 'Clic per saltare' },
+          src: { fallback: 'fallback', cached: 'in cache', offline: 'offline', loading: 'caricamento' },
+        },
+        pt: {
+          tagline: 'terminal de timing de compra', subtitle: '6 indicadores BTC ao vivo → pontuação composta de timing de compra · apenas sinal de referência (não é aconselhamento financeiro)',
+          tips: 'Glossário', tipsHint: 'Passe o cursor sobre os termos difíceis para uma explicação simples', langLabel: 'Idioma', loading: 'A CARREGAR',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: 'A carregar dados…', indicatorsOnline: (n) => `${n}/6 indicadores online`, higherMoreBuy: 'mais alto = mais favorável à compra', subScore: 'subpontuação',
+          stale: 'STALE', vol: 'vol', mcap: 'cap.', priceHistory: (n) => `Preço BTC (últ. ${n}d)`, scoreTrend: 'Tendência da pontuação', histLoading: '// a carregar histórico de preços…', trendAccrues: '// a tendência acumula-se com o tempo',
+          footer: '⚠ Esta pontuação é um sinal de referência sintetizado de indicadores públicos, não é aconselhamento financeiro.', dataLabel: 'Dados:', refresh: 'atualizar', clearHistory: 'limpar histórico',
+          banner: { p1: 'Esta pontuação é uma síntese de indicadores públicos —', s1: 'apenas para referência, não é aconselhamento de investimento nem recomendação de compra/venda.', p2: 'As criptomoedas têm o risco de perda total do capital, e', s2: 'todas as decisões de investimento e os seus resultados (ganhos/perdas) são da sua exclusiva responsabilidade.', p3: 'Faça sempre a sua própria pesquisa (DYOR).' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: 'Sobrevendido + medo + subvalorização convergem. Zona forte para compras escalonadas.' }, ACCUMULATE: { label: 'ACCUMULATE', advice: 'Favorável à compra. Acumulação escalonada recomendada. Confirme com o filtro de tendência.' }, NEUTRAL: { label: 'NEUTRAL', advice: 'Aguardar / neutro. Sem vantagem clara. Aguarde mais sinais.' }, CAUTION: { label: 'CAUTION', advice: 'Cautela. Ganância/sobrevalorização a surgir. Evite perseguir o preço.' }, OVERHEATED: { label: 'OVERHEATED', advice: 'Sobreaquecido. Ganância extrema / sobrevalorizado / perto do topo. Sem novas compras.' } },
+          ind: { RSI: { name: 'Índice de Força Relativa (Wilder)', desc: 'Sobrevendido (<30) = compra / Sobrecomprado (>70) = cautela' }, MACD: { name: 'Histograma MACD 12·26·9', desc: 'neg→pos / viragem em alta no fundo = momentum de compra' }, FNG: { name: 'Índice de Medo e Ganância (contrário)', desc: 'Medo extremo = oportunidade / Ganância extrema = sobreaquecido' }, Mayer: { name: 'Múltiplo de Mayer (preço / MM 200d)', desc: '<0,8 compra forte / >2,4 sobreaquecido' }, DD: { name: 'Queda desde o máximo de 365d', desc: '-30% interesse / -50% compra forte' }, GC_DC: { name: 'Tendência cruzamento dourado/da morte', desc: 'Cruzamento dourado = tendência favorável à compra' } },
+          fng: { extremeFear: 'Medo Extremo', fear: 'Medo', neutral: 'Neutro', greed: 'Ganância', extremeGreed: 'Ganância Extrema' },
+          det: { nodata: 'dados insuficientes', oversold: 'sobrevendido ⚑', overbought: 'sobrecomprado', neutral: 'neutro', posZone: 'zona +', negZone: 'zona −', turnUp: ' · viragem em alta', falling: ' · a cair', vs200: 'vs MM 200d', fallback200: (d) => `recurso 200d (${d}d)`, high: (v) => `máx ${v}` },
+          term: { welcome: '// btc_signal shell — escreva `help` para começar', help: ['commands:', '  score              pontuação de timing de compra atual + veredicto', '  why                o que sobe/desce a pontuação (contribuição ponderada)', '  show <ind>         detalhe do indicador (rsi|macd|fng|mayer|dd|cross)', '  bands              tabela de 5 faixas de veredicto', '  sources            estado/frescura das fontes', '  refresh            obter tudo de novo', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! sem dados de análise — `refresh`', needData: '  ! sem dados', scoreCoverage: (o, pct) => `  cobertura: ${o}/6 indicadores (${pct}% do peso)`, whySum: (s) => `  ── total ${s} (mais alto = mais favorável à compra)`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    valor: ${v}  (${d})`, showScore: (s, w) => `    subpontuação: ${s}  · peso ${w}%`, refreshing: '  ↻ a obter todas as fontes de novo...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. Os sinais são apenas de referência.', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — não é aconselhamento financeiro'], skip: '[ clique / prima qualquer tecla para saltar ]', skipTitle: 'Clique para saltar' },
+          src: { fallback: 'fallback', cached: 'em cache', offline: 'offline', loading: 'a carregar' },
+        },
+        ru: {
+          tagline: 'терминал тайминга покупки', subtitle: '6 живых индикаторов BTC → сводная оценка тайминга покупки · только справочный сигнал (не финансовая консультация)',
+          tips: 'Глоссарий', tipsHint: 'Наведите курсор на сложные термины для простого объяснения', langLabel: 'Язык', loading: 'ЗАГРУЗКА',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: 'Загрузка данных…', indicatorsOnline: (n) => `${n}/6 индикаторов онлайн`, higherMoreBuy: 'выше = выгоднее для покупки', subScore: 'частичная оценка',
+          stale: 'STALE', vol: 'объём', mcap: 'кап.', priceHistory: (n) => `Цена BTC (посл. ${n}д)`, scoreTrend: 'Динамика оценки', histLoading: '// загрузка истории цен…', trendAccrues: '// динамика накапливается со временем',
+          footer: '⚠ Эта оценка — справочный сигнал, синтезированный из публичных индикаторов, а не финансовая консультация.', dataLabel: 'Данные:', refresh: 'обновить', clearHistory: 'очистить историю',
+          banner: { p1: 'Эта оценка — синтез публичных индикаторов:', s1: 'только для справки, это не инвестиционная рекомендация и не призыв покупать/продавать.', p2: 'Криптовалюта несёт риск полной потери капитала, и', s2: 'все инвестиционные решения и их результаты (прибыль/убытки) — исключительно ваша ответственность.', p3: 'Всегда проводите собственное исследование (DYOR).' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: 'Перепроданность + страх + недооценка сходятся. Сильная зона для поэтапных покупок.' }, ACCUMULATE: { label: 'ACCUMULATE', advice: 'Выгодно для покупки. Рекомендуется поэтапное накопление. Подтвердите трендовым фильтром.' }, NEUTRAL: { label: 'NEUTRAL', advice: 'Ожидание / нейтрально. Явного преимущества нет. Ждите новых сигналов.' }, CAUTION: { label: 'CAUTION', advice: 'Осторожно. Появляются жадность/переоценка. Не гонитесь за ценой.' }, OVERHEATED: { label: 'OVERHEATED', advice: 'Перегрев. Крайняя жадность / переоценка / близко к вершине. Новых покупок нет.' } },
+          ind: { RSI: { name: 'Индекс относительной силы (Wilder)', desc: 'Перепроданность (<30) = покупка / Перекупленность (>70) = осторожно' }, MACD: { name: 'Гистограмма MACD 12·26·9', desc: 'минус→плюс / разворот вверх от дна = импульс покупки' }, FNG: { name: 'Индекс страха и жадности (контрарный)', desc: 'Крайний страх = шанс купить / Крайняя жадность = перегрев' }, Mayer: { name: 'Множитель Майера (цена / 200д СС)', desc: '<0,8 сильная покупка / >2,4 перегрев' }, DD: { name: 'Просадка от 365-дн. максимума', desc: '-30% интерес / -50% сильная покупка' }, GC_DC: { name: 'Тренд золотого/мёртвого креста', desc: 'Золотой крест = тренд выгоден для покупки' } },
+          fng: { extremeFear: 'Крайний страх', fear: 'Страх', neutral: 'Нейтрально', greed: 'Жадность', extremeGreed: 'Крайняя жадность' },
+          det: { nodata: 'недостаточно данных', oversold: 'перепродан ⚑', overbought: 'перекуплен', neutral: 'нейтрально', posZone: '+зона', negZone: '−зона', turnUp: ' · разворот вверх', falling: ' · падение', vs200: 'к 200д СС', fallback200: (d) => `резерв 200д (${d}д)`, high: (v) => `макс ${v}` },
+          term: { welcome: '// btc_signal shell — введите `help` для начала', help: ['commands:', '  score              текущая оценка тайминга покупки + вердикт', '  why                что повышает/понижает оценку (взвешенный вклад)', '  show <ind>         детали индикатора (rsi|macd|fng|mayer|dd|cross)', '  bands              таблица из 5 полос вердикта', '  sources            статус/свежесть источников', '  refresh            перезагрузить всё', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! нет данных анализа — `refresh`', needData: '  ! нет данных', scoreCoverage: (o, pct) => `  охват: ${o}/6 индикаторов (вес ${pct}%)`, whySum: (s) => `  ── итого ${s} (выше = выгоднее для покупки)`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    значение: ${v}  (${d})`, showScore: (s, w) => `    частичная оценка: ${s}  · вес ${w}%`, refreshing: '  ↻ перезагрузка всех источников...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. Сигналы только для справки.', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — не финансовая консультация'], skip: '[ клик / любая клавиша для пропуска ]', skipTitle: 'Нажмите, чтобы пропустить' },
+          src: { fallback: 'fallback', cached: 'из кэша', offline: 'офлайн', loading: 'загрузка' },
+        },
+        nl: {
+          tagline: 'koop-timing-terminal', subtitle: '6 live BTC-indicatoren → samengestelde koop-timing-score · alleen referentiesignaal (geen financieel advies)',
+          tips: 'Woordenlijst', tipsHint: 'Beweeg over moeilijke termen voor een eenvoudige uitleg', langLabel: 'Taal', loading: 'LADEN',
+          buyTimingScore: 'BUY TIMING SCORE', dataLoading: 'Gegevens laden…', indicatorsOnline: (n) => `${n}/6 indicatoren online`, higherMoreBuy: 'hoger = gunstiger om te kopen', subScore: 'deelscore',
+          stale: 'STALE', vol: 'vol', mcap: 'mcap', priceHistory: (n) => `BTC-prijs (laatste ${n}d)`, scoreTrend: 'Trend van de koop-timing-score', histLoading: '// prijsgeschiedenis laden…', trendAccrues: '// de trend bouwt op in de loop van de tijd',
+          footer: '⚠ Deze score is een referentiesignaal samengesteld uit openbare indicatoren, geen financieel advies.', dataLabel: 'Data:', refresh: 'vernieuwen', clearHistory: 'geschiedenis wissen',
+          banner: { p1: 'Deze score is een synthese van openbare indicatoren —', s1: 'alleen ter referentie, geen beleggingsadvies of koop-/verkoopaanbeveling.', p2: 'Crypto draagt het risico van volledig verlies van je inleg, en', s2: 'alle beleggingsbeslissingen en de uitkomsten daarvan (winst/verlies) zijn uitsluitend je eigen verantwoordelijkheid.', p3: 'Doe altijd je eigen onderzoek (DYOR).' },
+          bands: { STRONG_BUY: { label: 'STRONG BUY', advice: 'Oververkocht + angst + onderwaardering komen samen. Sterke zone voor gefaseerd kopen.' }, ACCUMULATE: { label: 'ACCUMULATE', advice: 'Gunstig om te kopen. Gefaseerd opbouwen aanbevolen. Bevestig met het trendfilter.' }, NEUTRAL: { label: 'NEUTRAL', advice: 'Afwachten / neutraal. Geen duidelijk voordeel. Wacht op meer signalen.' }, CAUTION: { label: 'CAUTION', advice: 'Voorzichtig. Hebzucht/overwaardering komt op. Jaag de prijs niet achterna.' }, OVERHEATED: { label: 'OVERHEATED', advice: 'Oververhit. Extreme hebzucht / overgewaardeerd / dicht bij de top. Geen nieuwe aankopen.' } },
+          ind: { RSI: { name: 'Relative Strength Index (Wilder)', desc: 'Oververkocht (<30) = kopen / Overkocht (>70) = voorzichtig' }, MACD: { name: 'MACD 12·26·9 histogram', desc: 'neg→pos / ommekeer omhoog vanaf de bodem = koopmomentum' }, FNG: { name: 'Angst-&-Hebzucht-index (contrair)', desc: 'Extreme angst = koopkans / Extreme hebzucht = oververhit' }, Mayer: { name: 'Mayer Multiple (prijs / 200d MA)', desc: '<0,8 sterk kopen / >2,4 oververhit' }, DD: { name: 'Daling vanaf 365d-top', desc: '-30% interesse / -50% sterk kopen' }, GC_DC: { name: 'Golden/Death cross-trend', desc: 'Golden cross = trend gunstig om te kopen' } },
+          fng: { extremeFear: 'Extreme Angst', fear: 'Angst', neutral: 'Neutraal', greed: 'Hebzucht', extremeGreed: 'Extreme Hebzucht' },
+          det: { nodata: 'onvoldoende gegevens', oversold: 'oververkocht ⚑', overbought: 'overkocht', neutral: 'neutraal', posZone: '+zone', negZone: '−zone', turnUp: ' · ommekeer omhoog', falling: ' · dalend', vs200: 'vs 200d MA', fallback200: (d) => `terugval 200d (${d}d)`, high: (v) => `top ${v}` },
+          term: { welcome: '// btc_signal shell — typ `help` om te beginnen', help: ['commands:', '  score              huidige koop-timing-score + oordeel', '  why                wat de score omhoog/omlaag duwt (gewogen bijdrage)', '  show <ind>         indicatordetail (rsi|macd|fng|mayer|dd|cross)', '  bands              tabel met 5 oordeelsbanden', '  sources            status/versheid van bronnen', '  refresh            alles opnieuw ophalen', '  theme <green|cyan|amber|red> · matrix <on|off>', '  clear · help · whoami'], needRefresh: '  ! geen analysegegevens — `refresh`', needData: '  ! geen gegevens', scoreCoverage: (o, pct) => `  dekking: ${o}/6 indicatoren (${pct}% gewicht)`, whySum: (s) => `  ── totaal ${s} (hoger = gunstiger om te kopen)`, showUsage: '  ! show rsi|macd|fng|mayer|dd|cross', showVal: (v, d) => `    waarde: ${v}  (${d})`, showScore: (s, w) => `    deelscore: ${s}  · gewicht ${w}%`, refreshing: '  ↻ alle bronnen opnieuw ophalen...', themeOk: (n) => `  ✓ theme → ${n}`, themeErr: '  ! theme: green | cyan | amber | red', matrixMsg: (on) => `  ✓ matrix ${on ? 'ON' : 'OFF'}`, whoami: '  satoshi // HODL responsibly. DYOR. Signalen zijn alleen ter referentie.', notFound: (n) => `  command not found: ${n} — \`help\`` },
+          boot: { lines: ['> initializing btc_signal_terminal v1.0 ...', '> linking market feeds: coingecko / binance / alternative.me', '> establishing secure uplink ............ [ OK ]', '> loading indicator engine: rsi · macd · mayer · drawdown · f&g', '> computing buy-timing composite ........ [ OK ]', '> ACCESS GRANTED. // signal only — geen financieel advies'], skip: '[ klik / druk op een toets om over te slaan ]', skipTitle: 'Klik om over te slaan' },
+          src: { fallback: 'fallback', cached: 'gecachet', offline: 'offline', loading: 'laden' },
+        },
+      }
+      const getT = (lang) => T[lang] || T[DEFAULT_LANG]
+      const localeOf = (lang) => (LANGS.find((l) => l.code === lang) || LANGS[0]).locale
+      // 브라우저 언어 자동 감지(저장값 없을 때 첫 진입 초기값). 매칭 실패 시 영어 폴백.
+      const detectLang = () => {
+        try {
+          const supported = LANGS.map((l) => l.code)
+          const cands = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language]
+          for (const raw of cands) {
+            const lc = String(raw || '').toLowerCase(), base = lc.split('-')[0]
+            if (base === 'zh') {
+              if (/hant|tw|hk|mo/.test(lc) && supported.includes('zh-Hant')) return 'zh-Hant'
+              if (supported.includes('zh')) return 'zh'
+            }
+            if (supported.includes(base)) return base
+          }
+        } catch {}
+        return 'en'
+      }
+      const I18nContext = createContext({ lang: DEFAULT_LANG, t: T[DEFAULT_LANG] })
+      const useI18n = () => useContext(I18nContext)
+
+      /* 용어 사전(툴팁): 언어별. GLOSSARY[lang][key] = { title, body } */
+      const GLOSSARY = {
+        en: {
+          score: { title: 'Buy-Timing Score', body: 'A 0–100 score made by combining the 6 indicators below. Higher means "a relatively OK time to buy"; lower means "overheated, risky to buy." It is not a prediction, just a composite reference.' },
+          RSI: { title: 'RSI · Relative Strength Index', body: 'Shows on a 0–100 scale whether the price rose or fell too fast recently. Below 30 = "fell too much (oversold)", so a bounce is expected — worth watching to buy. Above 70 = "rose too much (overbought)" — be careful.' },
+          MACD: { title: 'MACD · Trend Momentum', body: 'Uses the gap between a short and a long moving average to gauge whether upward "force" is strengthening or weakening. When the bars turn up from negative, it is read as a bounce starting from the bottom.' },
+          FNG: { title: 'Fear & Greed Index', body: 'Measures on a 0–100 scale whether investors are scared (fear) or greedy (greed). Near 0 everyone is panic-selling — often the cheap buying chance (contrarian). Near 100 means overheated.' },
+          Mayer: { title: 'Mayer Multiple', body: 'How many times the current price is versus the "200-day average price." Below 1 = cheaper than average; below 0.8 = historically a bottom zone (strong buy); above 2.4 = overheated/expensive.' },
+          DD: { title: 'Drawdown · Drop from the High', body: 'How many % the price is down from the highest point of the last year. -50% means it halved from the top. The bigger the drop, the more it is seen as a fear phase and a staged-buying chance.' },
+          GC_DC: { title: 'Golden / Death Cross', body: 'When the short average (50d) crosses above the long average (200d) it is a golden cross (uptrend starts); crossing below is a death cross (downtrend). It shows whether the big trend points up or down.' },
+          mcap: { title: 'Market Cap', body: 'The total market value of the coin. Calculated as current price × coins in circulation. It shows how big the coin is in the market.' },
+          vol: { title: 'Volume (24h)', body: 'The total amount traded over the last 24 hours. The higher it is, the more active the interest and trading.' },
+          chg24: { title: '24h Change', body: 'How many % the price rose (green) or fell (red) compared with a day ago.' },
+          stale: { title: 'STALE · Old Data', body: 'A flag meaning the fetched data is too old to be fresh. Hit refresh (↻) to update to the latest.' },
+          coverage: { title: 'Indicator Coverage', body: 'How many of the 6 indicators are actually live when computing the score. 6/6 means all are used; if some are missing, the score is recomputed from the rest.' },
+          src_live: { title: 'Status: live', body: 'Means the data was just fetched fresh from the real server.' },
+          src_fallback: { title: 'Status: fallback', body: 'The primary server failed, so the data was fetched from a backup (alternate) server instead.' },
+          src_cached: { title: 'Status: cached', body: 'The server could not be reached briefly, so the last saved data is shown temporarily.' },
+          src_offline: { title: 'Status: offline', body: 'Could not fetch data. Check your internet or the server status and refresh.' },
+        },
+        ja: {
+          score: { title: '買い時スコア', body: '下の6つの指標をまとめて作る0〜100点。高いほど「今は比較的買ってよい」、低いほど「過熱して買うには不利」という意味。未来を当てる予言ではなく、あくまで参考用の総合点だよ。' },
+          RSI: { title: 'RSI・相対力指数', body: '最近の価格が上がりすぎ/下がりすぎかを0〜100で表す値。30より低いと「下がりすぎ(売られすぎ)」で反発が期待でき買い注目、70より高いと「上がりすぎ(買われすぎ)」で注意。' },
+          MACD: { title: 'MACD・トレンドの勢い', body: '短期平均線と長期平均線の差で、価格が上がる「力」が強まるか弱まるかを見る。棒がマイナスから上に折れると、底からの反発開始のサインと読む。' },
+          FNG: { title: '恐怖・強欲指数', body: '投資家が今こわがっている(恐怖)か欲をかいている(強欲)かを0〜100で測ったもの。0に近いとみんな怖がって売っている時で、逆にそこが安く買えるチャンスのことが多い(逆張り)。100に近いと過熱。' },
+          Mayer: { title: 'マイヤー倍率', body: '今の価格が「200日平均価格」の何倍かを示す値。1より小さいと平均より安い、0.8以下なら歴史的に底値圏(強い買い)、2.4以上は割高な過熱とみる。' },
+          DD: { title: '下落率・高値からの下げ', body: '直近1年の最高値から今、何%下がったか。-50%なら天井から半値。大きく下がるほど恐怖局面で、分割買いのチャンスとみる指標。' },
+          GC_DC: { title: 'ゴールデン/デッドクロス', body: '短期平均線(50日)が長期平均線(200日)を上に抜けるとゴールデンクロス(上昇トレンド開始)、下に抜けるとデッドクロス(下落トレンド)。大きな流れが上向きか下向きかを見る。' },
+          mcap: { title: '時価総額', body: 'コイン全体の市場価値。現在価格 × 流通枚数で計算する。そのコインが市場でどれくらい大きいかを表す。' },
+          vol: { title: '出来高(24時間)', body: '直近24時間で売買された総額。多いほど人々の関心と取引が活発という意味。' },
+          chg24: { title: '24時間変動率', body: '1日前と比べて価格が何%上がった(緑)・下がった(赤)かを表す。' },
+          stale: { title: 'STALE・古いデータ', body: '取得したデータが古くて新鮮でないという表示。更新(↻)すると最新になる。' },
+          coverage: { title: '指標カバレッジ', body: 'スコア計算時に6つの指標のうち何個が実際に生きているか。6/6なら全反映、欠けると残りだけで再計算する。' },
+          src_live: { title: '状態: live', body: '今まさに実際のサーバーから取得した最新データという意味。' },
+          src_fallback: { title: '状態: fallback', body: '1番目のサーバーが使えず、予備(別)のサーバーから代わりに取得したという意味。' },
+          src_cached: { title: '状態: cached', body: '一時的にサーバーへ接続できず、保存しておいた直前のデータを仮表示中。' },
+          src_offline: { title: '状態: offline', body: 'データを取得できなかった。ネットやサーバー状態を確認して更新してね。' },
+        },
+        ko: {
+          score: { title: '매수 타이밍 점수', body: '아래 6개 지표를 한데 모아 만든 0~100점이야. 점수가 높을수록 "지금 사기 괜찮은 편", 낮을수록 "과열돼서 사기엔 부담"이라는 뜻. 미래를 맞히는 예언이 아니라 참고용 종합 점수야.' },
+          RSI: { title: 'RSI · 상대강도지수', body: '최근 가격이 너무 빨리 올랐는지/떨어졌는지를 0~100으로 나타낸 값이야. 30보다 낮으면 "너무 많이 떨어졌다(과매도)"라 반등이 기대돼 매수 관심, 70보다 높으면 "너무 올랐다(과매수)"라 조심해야 해.' },
+          MACD: { title: 'MACD · 추세 모멘텀', body: '단기 평균선과 장기 평균선의 차이로, 가격이 오르는 "힘"이 세지는지 약해지는지를 봐. 막대가 마이너스에서 위로 꺾이면 바닥에서 반등이 시작된다는 신호로 읽어.' },
+          FNG: { title: '공포·탐욕 지수', body: '투자자들이 지금 무서워하는지(공포) 욕심내는지(탐욕)를 0~100으로 잰 거야. 0에 가까우면 다들 겁먹고 파는 중인데, 오히려 그때가 싸게 살 기회인 경우가 많아(역발상). 100에 가까우면 과열이야.' },
+          Mayer: { title: 'Mayer Multiple · 마이어 배수', body: '지금 가격이 "200일 평균 가격"의 몇 배인지 나타낸 값이야. 1보다 작으면 평균보다 싸다는 뜻, 0.8 아래면 역사적으로 바닥권(강한 매수), 2.4 위면 너무 비싼 과열로 봐.' },
+          DD: { title: '낙폭 · 고점 대비 하락률', body: '최근 1년 최고가에서 지금 몇 % 떨어졌는지야. -50%면 최고점에서 반토막 났다는 뜻. 많이 떨어졌을수록 공포 국면이라 분할 매수 기회로 보는 지표야.' },
+          GC_DC: { title: '골든/데드 크로스', body: '단기 평균선(50일)이 장기 평균선(200일)을 위로 뚫으면 골든크로스(상승 추세 시작), 아래로 뚫으면 데드크로스(하락 추세)야. 큰 추세가 위쪽인지 아래쪽인지 보는 거야.' },
+          mcap: { title: '시가총액(시총)', body: '코인 전체의 시장 가치야. 현재 가격 × 시중에 풀린 코인 수로 계산해. 그 코인이 시장에서 얼마나 큰지 보여줘.' },
+          vol: { title: '거래량 (24시간)', body: '최근 24시간 동안 사고팔린 총 금액이야. 많을수록 사람들의 관심과 거래가 활발하다는 뜻.' },
+          chg24: { title: '24시간 변동률', body: '하루 전과 비교해 가격이 몇 % 올랐는지(초록)·내렸는지(빨강)를 나타내.' },
+          stale: { title: 'STALE · 오래된 데이터', body: '받아온 데이터가 너무 오래돼서 신선하지 않다는 표시야. 새로고침(↻)하면 최신으로 갱신돼.' },
+          coverage: { title: '지표 커버리지', body: '점수를 계산할 때 6개 지표 중 몇 개가 실제로 살아있는지를 뜻해. 6/6이면 전부 반영, 일부가 빠지면 남은 것들로만 점수를 다시 계산해.' },
+          src_live: { title: '데이터 상태: live', body: '방금 실제 서버에서 받아온 최신 데이터라는 뜻이야.' },
+          src_fallback: { title: '데이터 상태: fallback', body: '1순위 서버가 안 돼서 예비(다른) 서버에서 대신 받아왔다는 뜻이야.' },
+          src_cached: { title: '데이터 상태: cached', body: '잠시 서버를 못 불러와서, 저장해 둔 직전 데이터를 임시로 보여주는 중이야.' },
+          src_offline: { title: '데이터 상태: offline', body: '데이터를 못 받아왔어. 인터넷이나 서버 상태를 확인하고 새로고침해봐.' },
+        },
+        zh: {
+          score: { title: '买入时机评分', body: '把下面6个指标合在一起算出的0~100分。分数越高表示"现在买入相对还行"，越低表示"过热、买入有压力"。它不是预测未来，只是一个参考用的综合分。' },
+          RSI: { title: 'RSI·相对强弱指数', body: '用0~100表示最近价格是否涨得/跌得太快。低于30="跌太多(超卖)"，有望反弹，可关注买入；高于70="涨太多(超买)"，要小心。' },
+          MACD: { title: 'MACD·趋势动能', body: '用短期均线和长期均线之差，看上涨的"力量"在增强还是减弱。柱子从负值往上拐时，读作从底部开始反弹的信号。' },
+          FNG: { title: '恐惧与贪婪指数', body: '用0~100衡量投资者现在是害怕(恐惧)还是贪婪。接近0时大家都在恐慌抛售，反而常常是便宜买入的机会(逆向)；接近100则是过热。' },
+          Mayer: { title: 'Mayer倍数', body: '现在价格是"200日平均价"的几倍。小于1表示比平均便宜，0.8以下在历史上属于底部区(强力买入)，2.4以上视为过贵的过热。' },
+          DD: { title: '回撤·相对高点跌幅', body: '从最近一年的最高价到现在跌了百分之几。-50%表示从顶部腰斩。跌得越多越属于恐慌阶段，被视为分批买入的机会。' },
+          GC_DC: { title: '金叉/死叉', body: '短期均线(50日)上穿长期均线(200日)为金叉(上升趋势开始)，下穿为死叉(下降趋势)。用来看大趋势是向上还是向下。' },
+          mcap: { title: '市值', body: '整个币的市场价值。用当前价格 × 流通数量计算。它显示这个币在市场中有多大。' },
+          vol: { title: '成交量(24小时)', body: '最近24小时内买卖的总金额。越大表示人们的关注和交易越活跃。' },
+          chg24: { title: '24小时涨跌幅', body: '与一天前相比价格涨了(绿)/跌了(红)百分之几。' },
+          stale: { title: 'STALE·过期数据', body: '表示取到的数据太旧、不够新鲜。点刷新(↻)即可更新到最新。' },
+          coverage: { title: '指标覆盖率', body: '计算评分时6个指标中实际有几个在线。6/6表示全部计入；若有缺失，则用其余指标重新计算。' },
+          src_live: { title: '状态: live', body: '表示刚刚从真实服务器取到的最新数据。' },
+          src_fallback: { title: '状态: fallback', body: '首选服务器不可用，改从备用(其他)服务器取到的数据。' },
+          src_cached: { title: '状态: cached', body: '短暂无法访问服务器，暂时显示之前保存的数据。' },
+          src_offline: { title: '状态: offline', body: '未能取到数据。请检查网络或服务器状态后刷新。' },
+        },
+        es: {
+          score: { title: 'Puntuación de Timing de Compra', body: 'Una puntuación de 0 a 100 que combina los 6 indicadores de abajo. Más alta significa "momento relativamente OK para comprar"; más baja, "sobrecalentado, arriesgado comprar". No predice el futuro: es solo una referencia compuesta.' },
+          RSI: { title: 'RSI · Índice de Fuerza Relativa', body: 'Muestra de 0 a 100 si el precio subió o bajó demasiado rápido. Por debajo de 30 = "cayó demasiado (sobreventa)", se espera rebote — interés de compra. Por encima de 70 = "subió demasiado (sobrecompra)" — cuidado.' },
+          MACD: { title: 'MACD · Momentum de Tendencia', body: 'Usa la diferencia entre una media corta y una larga para ver si la "fuerza" alcista se refuerza o se debilita. Cuando las barras giran al alza desde lo negativo, se lee como un rebote desde el fondo.' },
+          FNG: { title: 'Índice de Miedo y Codicia', body: 'Mide de 0 a 100 si los inversores tienen miedo o codicia. Cerca de 0 todos venden con pánico — a menudo la oportunidad barata de compra (contrario). Cerca de 100 está sobrecalentado.' },
+          Mayer: { title: 'Múltiplo de Mayer', body: 'Cuántas veces está el precio actual respecto al "precio medio de 200 días". Por debajo de 1 = más barato que la media; por debajo de 0.8 = zona de suelo histórica (compra fuerte); por encima de 2.4 = sobrecalentado/caro.' },
+          DD: { title: 'Caída · Bajada desde el Máximo', body: 'Cuántos % ha caído el precio desde el máximo del último año. -50% significa que se redujo a la mitad desde el techo. Cuanto mayor la caída, más se ve como fase de miedo y oportunidad de compra escalonada.' },
+          GC_DC: { title: 'Cruce Dorado / de la Muerte', body: 'Cuando la media corta (50d) cruza por encima de la larga (200d) es cruce dorado (empieza tendencia alcista); por debajo es cruce de la muerte (bajista). Indica si la gran tendencia apunta arriba o abajo.' },
+          mcap: { title: 'Capitalización de Mercado', body: 'El valor total de la moneda en el mercado. Se calcula como precio actual × monedas en circulación. Muestra cuán grande es la moneda en el mercado.' },
+          vol: { title: 'Volumen (24h)', body: 'El importe total negociado en las últimas 24 horas. Cuanto mayor, más activo el interés y la negociación.' },
+          chg24: { title: 'Cambio 24h', body: 'Cuántos % subió (verde) o bajó (rojo) el precio respecto a hace un día.' },
+          stale: { title: 'STALE · Datos Antiguos', body: 'Una marca que indica que los datos son demasiado antiguos para estar frescos. Pulsa actualizar (↻) para ponerlos al día.' },
+          coverage: { title: 'Cobertura de Indicadores', body: 'Cuántos de los 6 indicadores están realmente en línea al calcular la puntuación. 6/6 = todos usados; si faltan algunos, se recalcula con el resto.' },
+          src_live: { title: 'Estado: live', body: 'Significa que los datos se acaban de obtener frescos del servidor real.' },
+          src_fallback: { title: 'Estado: fallback', body: 'El servidor principal falló, así que los datos se obtuvieron de un servidor de respaldo (alternativo).' },
+          src_cached: { title: 'Estado: cached', body: 'No se pudo acceder al servidor un momento, así que se muestran temporalmente los últimos datos guardados.' },
+          src_offline: { title: 'Estado: offline', body: 'No se pudieron obtener datos. Revisa tu internet o el estado del servidor y actualiza.' },
+        },
+        fr: {
+          score: { title: 'Score de Timing d’Achat', body: 'Un score de 0 à 100 combinant les 6 indicateurs ci-dessous. Plus haut = "moment relativement correct pour acheter" ; plus bas = "surchauffe, risqué d’acheter". Ce n’est pas une prédiction, juste une référence composite.' },
+          RSI: { title: 'RSI · Indice de Force Relative', body: 'Indique de 0 à 100 si le prix est monté ou descendu trop vite. Sous 30 = "trop baissé (survente)", un rebond est attendu — intérêt à l’achat. Au-dessus de 70 = "trop monté (surachat)" — prudence.' },
+          MACD: { title: 'MACD · Momentum de Tendance', body: 'Utilise l’écart entre une moyenne courte et une longue pour voir si la "force" haussière se renforce ou faiblit. Quand les barres remontent depuis le négatif, on lit un rebond depuis le creux.' },
+          FNG: { title: 'Indice Peur & Avidité', body: 'Mesure de 0 à 100 si les investisseurs ont peur ou sont avides. Près de 0, tout le monde vend dans la panique — souvent l’occasion d’acheter pas cher (à contre-courant). Près de 100, c’est la surchauffe.' },
+          Mayer: { title: 'Multiple de Mayer', body: 'Combien de fois le prix actuel vaut le "prix moyen sur 200 jours". Sous 1 = moins cher que la moyenne ; sous 0.8 = zone de plancher historique (achat fort) ; au-dessus de 2.4 = surchauffe/cher.' },
+          DD: { title: 'Repli · Baisse depuis le Sommet', body: 'De combien de % le prix a baissé depuis le plus haut de l’année. -50% = divisé par deux depuis le sommet. Plus la baisse est forte, plus c’est vu comme une phase de peur et une occasion d’achat échelonné.' },
+          GC_DC: { title: 'Croix Dorée / de la Mort', body: 'Quand la moyenne courte (50j) passe au-dessus de la longue (200j), c’est une croix dorée (début de tendance haussière) ; en dessous, une croix de la mort (baissière). Montre si la grande tendance pointe vers le haut ou le bas.' },
+          mcap: { title: 'Capitalisation', body: 'La valeur totale de la pièce sur le marché. Calculée comme prix actuel × pièces en circulation. Montre la taille de la pièce sur le marché.' },
+          vol: { title: 'Volume (24h)', body: 'Le montant total échangé sur les dernières 24 heures. Plus il est élevé, plus l’intérêt et les échanges sont actifs.' },
+          chg24: { title: 'Variation 24h', body: 'De combien de % le prix a monté (vert) ou baissé (rouge) par rapport à la veille.' },
+          stale: { title: 'STALE · Données Anciennes', body: 'Un indicateur signalant que les données récupérées sont trop anciennes. Appuyez sur actualiser (↻) pour les mettre à jour.' },
+          coverage: { title: 'Couverture des Indicateurs', body: 'Combien des 6 indicateurs sont réellement en ligne lors du calcul du score. 6/6 = tous utilisés ; s’il en manque, le score est recalculé avec le reste.' },
+          src_live: { title: 'État : live', body: 'Signifie que les données viennent d’être récupérées fraîches depuis le vrai serveur.' },
+          src_fallback: { title: 'État : fallback', body: 'Le serveur principal a échoué, les données ont donc été récupérées depuis un serveur de secours (alternatif).' },
+          src_cached: { title: 'État : cached', body: 'Le serveur était brièvement injoignable, on affiche temporairement les dernières données enregistrées.' },
+          src_offline: { title: 'État : offline', body: 'Impossible de récupérer les données. Vérifiez votre connexion ou l’état du serveur et actualisez.' },
+        },
+        'zh-Hant': {
+          score: { title: '買入時機評分', body: '把下面6個指標合在一起算出的0~100分。分數越高表示「現在買入相對還行」，越低表示「過熱、買入有壓力」。它不是預測未來，只是一個參考用的綜合分。' },
+          RSI: { title: 'RSI·相對強弱指數', body: '用0~100表示最近價格是否漲得/跌得太快。低於30=「跌太多(超賣)」，有望反彈，可關注買入；高於70=「漲太多(超買)」，要小心。' },
+          MACD: { title: 'MACD·趨勢動能', body: '用短期均線和長期均線之差，看上漲的「力量」在增強還是減弱。柱子從負值往上拐時，讀作從底部開始反彈的訊號。' },
+          FNG: { title: '恐懼與貪婪指數', body: '用0~100衡量投資者現在是害怕(恐懼)還是貪婪。接近0時大家都在恐慌拋售，反而常常是便宜買入的機會(逆向)；接近100則是過熱。' },
+          Mayer: { title: 'Mayer倍數', body: '現在價格是「200日平均價」的幾倍。小於1表示比平均便宜，0.8以下在歷史上屬於底部區(強力買入)，2.4以上視為過貴的過熱。' },
+          DD: { title: '回撤·相對高點跌幅', body: '從最近一年的最高價到現在跌了百分之幾。-50%表示從頂部腰斬。跌得越多越屬於恐慌階段，被視為分批買入的機會。' },
+          GC_DC: { title: '黃金/死亡交叉', body: '短期均線(50日)上穿長期均線(200日)為黃金交叉(上升趨勢開始)，下穿為死亡交叉(下降趨勢)。用來看大趨勢是向上還是向下。' },
+          mcap: { title: '市值', body: '整個幣的市場價值。用目前價格 × 流通數量計算。它顯示這個幣在市場中有多大。' },
+          vol: { title: '成交量(24小時)', body: '最近24小時內買賣的總金額。越大表示人們的關注和交易越活躍。' },
+          chg24: { title: '24小時漲跌幅', body: '與一天前相比價格漲了(綠)/跌了(紅)百分之幾。' },
+          stale: { title: 'STALE·過期資料', body: '表示取到的資料太舊、不夠新鮮。點重新整理(↻)即可更新到最新。' },
+          coverage: { title: '指標覆蓋率', body: '計算評分時6個指標中實際有幾個在線。6/6表示全部計入；若有缺失，則用其餘指標重新計算。' },
+          src_live: { title: '狀態: live', body: '表示剛剛從真實伺服器取到的最新資料。' },
+          src_fallback: { title: '狀態: fallback', body: '首選伺服器不可用，改從備用(其他)伺服器取到的資料。' },
+          src_cached: { title: '狀態: cached', body: '短暫無法存取伺服器，暫時顯示之前儲存的資料。' },
+          src_offline: { title: '狀態: offline', body: '未能取到資料。請檢查網路或伺服器狀態後重新整理。' },
+        },
+        th: {
+          score: { title: 'คะแนนจังหวะซื้อ', body: 'คะแนน 0~100 ที่ได้จากการรวมตัวชี้วัด 6 ตัวด้านล่าง ยิ่งสูงแปลว่า "ตอนนี้ซื้อค่อนข้างโอเค" ยิ่งต่ำแปลว่า "ร้อนแรงเกิน เสี่ยงที่จะซื้อ" ไม่ใช่การทำนายอนาคต เป็นเพียงคะแนนอ้างอิงรวม' },
+          RSI: { title: 'RSI · ดัชนีกำลังสัมพัทธ์', body: 'แสดงเป็น 0~100 ว่าราคาขึ้น/ลงเร็วเกินไปหรือไม่ ต่ำกว่า 30 = "ลงมากเกิน (ขายมากเกิน)" คาดว่าจะเด้ง น่าสนใจซื้อ; สูงกว่า 70 = "ขึ้นมากเกิน (ซื้อมากเกิน)" ต้องระวัง' },
+          MACD: { title: 'MACD · โมเมนตัมแนวโน้ม', body: 'ใช้ส่วนต่างของเส้นเฉลี่ยสั้นกับยาว ดูว่าแรงขาขึ้นกำลังแรงขึ้นหรืออ่อนลง เมื่อแท่งกลับตัวขึ้นจากค่าลบ อ่านว่าเป็นการเด้งจากก้น' },
+          FNG: { title: 'ดัชนีความกลัว-ความโลภ', body: 'วัด 0~100 ว่านักลงทุนตอนนี้กลัวหรือโลภ ใกล้ 0 ทุกคนเทขายด้วยความตื่นตระหนก ซึ่งมักเป็นโอกาสซื้อถูก (สวนทาง); ใกล้ 100 คือร้อนแรงเกิน' },
+          Mayer: { title: 'Mayer Multiple', body: 'ราคาปัจจุบันเป็นกี่เท่าของ "ราคาเฉลี่ย 200 วัน" ต่ำกว่า 1 = ถูกกว่าค่าเฉลี่ย; ต่ำกว่า 0.8 = โซนก้นในอดีต (ซื้อแรง); สูงกว่า 2.4 = ร้อนแรง/แพงเกิน' },
+          DD: { title: 'การลดลง · ตกจากจุดสูงสุด', body: 'ราคาลดลงกี่ % จากจุดสูงสุดในรอบปี -50% หมายถึงลดครึ่งจากยอด ยิ่งลงมากยิ่งถือเป็นช่วงความกลัวและโอกาสทยอยซื้อ' },
+          GC_DC: { title: 'Golden / Death Cross', body: 'เมื่อเส้นเฉลี่ยสั้น (50 วัน) ตัดขึ้นเหนือเส้นยาว (200 วัน) คือ golden cross (แนวโน้มขาขึ้นเริ่ม); ตัดลงคือ death cross (ขาลง) บอกว่าแนวโน้มใหญ่ชี้ขึ้นหรือลง' },
+          mcap: { title: 'มูลค่าตลาด', body: 'มูลค่ารวมของเหรียญในตลาด คำนวณจากราคาปัจจุบัน × จำนวนเหรียญหมุนเวียน แสดงว่าเหรียญนี้ใหญ่แค่ไหนในตลาด' },
+          vol: { title: 'ปริมาณซื้อขาย (24ชม.)', body: 'จำนวนเงินรวมที่ซื้อขายใน 24 ชั่วโมงล่าสุด ยิ่งมากยิ่งแสดงว่าความสนใจและการซื้อขายคึกคัก' },
+          chg24: { title: 'เปลี่ยนแปลง 24ชม.', body: 'ราคาขึ้น (เขียว) หรือลง (แดง) กี่ % เทียบกับเมื่อวาน' },
+          stale: { title: 'STALE · ข้อมูลเก่า', body: 'เครื่องหมายบอกว่าข้อมูลที่ดึงมาเก่าเกินไป ไม่สดแล้ว กดรีเฟรช (↻) เพื่ออัปเดตล่าสุด' },
+          coverage: { title: 'ความครอบคลุมตัวชี้วัด', body: 'ตอนคำนวณคะแนน มีตัวชี้วัดกี่ตัวจาก 6 ที่ออนไลน์จริง 6/6 = ใช้ครบ; ถ้าขาดบางตัว จะคำนวณใหม่จากที่เหลือ' },
+          src_live: { title: 'สถานะ: live', body: 'หมายถึงข้อมูลเพิ่งดึงสดจากเซิร์ฟเวอร์จริง' },
+          src_fallback: { title: 'สถานะ: fallback', body: 'เซิร์ฟเวอร์หลักล้มเหลว จึงดึงข้อมูลจากเซิร์ฟเวอร์สำรอง (อื่น) แทน' },
+          src_cached: { title: 'สถานะ: cached', body: 'เข้าเซิร์ฟเวอร์ไม่ได้ชั่วครู่ จึงแสดงข้อมูลล่าสุดที่บันทึกไว้ชั่วคราว' },
+          src_offline: { title: 'สถานะ: offline', body: 'ดึงข้อมูลไม่ได้ ตรวจสอบอินเทอร์เน็ตหรือสถานะเซิร์ฟเวอร์แล้วรีเฟรช' },
+        },
+        de: {
+          score: { title: 'Kauf-Timing-Score', body: 'Ein Wert von 0–100 aus der Kombination der 6 Indikatoren unten. Höher heißt „relativ okayer Zeitpunkt zum Kaufen“, niedriger „überhitzt, riskant zu kaufen“. Keine Vorhersage, nur eine zusammengesetzte Referenz.' },
+          RSI: { title: 'RSI · Relative-Stärke-Index', body: 'Zeigt auf einer Skala 0–100, ob der Preis zu schnell gestiegen/gefallen ist. Unter 30 = „zu stark gefallen (überverkauft)“, Erholung erwartet — kaufenswert. Über 70 = „zu stark gestiegen (überkauft)“ — Vorsicht.' },
+          MACD: { title: 'MACD · Trend-Momentum', body: 'Nutzt den Abstand zwischen einem kurzen und einem langen Durchschnitt, um zu sehen, ob die Aufwärtskraft zu- oder abnimmt. Drehen die Balken aus dem Negativen nach oben, gilt das als Erholung vom Boden.' },
+          FNG: { title: 'Angst-&-Gier-Index', body: 'Misst auf 0–100, ob Anleger ängstlich oder gierig sind. Nahe 0 verkaufen alle panisch — oft die günstige Kaufchance (antizyklisch). Nahe 100 ist überhitzt.' },
+          Mayer: { title: 'Mayer Multiple', body: 'Das Wievielfache der Preis gegenüber dem „200-Tage-Durchschnittspreis“ beträgt. Unter 1 = günstiger als der Schnitt; unter 0,8 = historische Bodenzone (starker Kauf); über 2,4 = überhitzt/teuer.' },
+          DD: { title: 'Rückgang · Abstand vom Hoch', body: 'Um wie viel % der Preis vom Jahreshoch gefallen ist. -50% = halbiert seit dem Top. Je größer der Rückgang, desto eher eine Angstphase und Chance für gestaffelte Käufe.' },
+          GC_DC: { title: 'Golden / Death Cross', body: 'Kreuzt der kurze Schnitt (50T) den langen (200T) nach oben, ist es ein Golden Cross (Aufwärtstrend beginnt); nach unten ein Death Cross (Abwärtstrend). Zeigt, ob der große Trend auf- oder abwärts weist.' },
+          mcap: { title: 'Marktkapitalisierung', body: 'Der gesamte Marktwert der Münze. Berechnet als aktueller Preis × im Umlauf befindliche Münzen. Zeigt, wie groß die Münze am Markt ist.' },
+          vol: { title: 'Volumen (24h)', body: 'Der in den letzten 24 Stunden gehandelte Gesamtbetrag. Je höher, desto aktiver Interesse und Handel.' },
+          chg24: { title: '24h-Veränderung', body: 'Um wie viel % der Preis gegenüber gestern gestiegen (grün) oder gefallen (rot) ist.' },
+          stale: { title: 'STALE · Alte Daten', body: 'Markierung, dass die abgerufenen Daten zu alt sind. Auf Aktualisieren (↻) tippen, um zu aktualisieren.' },
+          coverage: { title: 'Indikator-Abdeckung', body: 'Wie viele der 6 Indikatoren bei der Score-Berechnung tatsächlich online sind. 6/6 = alle genutzt; fehlen welche, wird mit dem Rest neu gerechnet.' },
+          src_live: { title: 'Status: live', body: 'Bedeutet, die Daten wurden gerade frisch vom echten Server abgerufen.' },
+          src_fallback: { title: 'Status: fallback', body: 'Der Hauptserver fiel aus, daher wurden die Daten von einem Ersatzserver (alternativ) geholt.' },
+          src_cached: { title: 'Status: cached', body: 'Der Server war kurz nicht erreichbar, daher werden vorübergehend die zuletzt gespeicherten Daten gezeigt.' },
+          src_offline: { title: 'Status: offline', body: 'Daten konnten nicht abgerufen werden. Internet oder Serverstatus prüfen und aktualisieren.' },
+        },
+        it: {
+          score: { title: 'Punteggio di Timing d’Acquisto', body: 'Un punteggio 0–100 che combina i 6 indicatori sotto. Più alto significa „momento relativamente OK per comprare“; più basso „surriscaldato, rischioso comprare“. Non è una previsione, solo un riferimento composito.' },
+          RSI: { title: 'RSI · Indice di Forza Relativa', body: 'Mostra su scala 0–100 se il prezzo è salito o sceso troppo in fretta. Sotto 30 = „sceso troppo (ipervenduto)“, ci si attende un rimbalzo — interessante da comprare. Sopra 70 = „salito troppo (ipercomprato)“ — cautela.' },
+          MACD: { title: 'MACD · Momentum di Tendenza', body: 'Usa la distanza tra una media breve e una lunga per vedere se la „forza“ rialzista cresce o cala. Quando le barre svoltano verso l’alto dal negativo, si legge come un rimbalzo dal fondo.' },
+          FNG: { title: 'Indice Paura e Avidità', body: 'Misura su 0–100 se gli investitori hanno paura o avidità. Vicino a 0 tutti vendono nel panico — spesso l’occasione di comprare a buon mercato (contrarian). Vicino a 100 è surriscaldato.' },
+          Mayer: { title: 'Multiplo di Mayer', body: 'Quante volte il prezzo attuale vale rispetto al „prezzo medio a 200 giorni“. Sotto 1 = più conveniente della media; sotto 0,8 = zona di fondo storica (acquisto forte); sopra 2,4 = surriscaldato/caro.' },
+          DD: { title: 'Ribasso · Calo dal Massimo', body: 'Di quanti % il prezzo è sceso dal massimo dell’ultimo anno. -50% = dimezzato dal picco. Più ampio il calo, più è visto come fase di paura e occasione di acquisto scaglionato.' },
+          GC_DC: { title: 'Golden / Death Cross', body: 'Quando la media breve (50g) incrocia sopra la lunga (200g) è un golden cross (inizio trend rialzista); sotto è un death cross (ribassista). Mostra se il grande trend punta in alto o in basso.' },
+          mcap: { title: 'Capitalizzazione', body: 'Il valore di mercato totale della moneta. Calcolato come prezzo attuale × monete in circolazione. Mostra quanto è grande la moneta sul mercato.' },
+          vol: { title: 'Volume (24h)', body: 'L’importo totale scambiato nelle ultime 24 ore. Più è alto, più sono attivi l’interesse e gli scambi.' },
+          chg24: { title: 'Variazione 24h', body: 'Di quanti % il prezzo è salito (verde) o sceso (rosso) rispetto a un giorno fa.' },
+          stale: { title: 'STALE · Dati Vecchi', body: 'Un contrassegno che indica che i dati recuperati sono troppo vecchi. Premi aggiorna (↻) per portarli all’ultima versione.' },
+          coverage: { title: 'Copertura Indicatori', body: 'Quanti dei 6 indicatori sono davvero online nel calcolo del punteggio. 6/6 = tutti usati; se ne mancano, si ricalcola con i restanti.' },
+          src_live: { title: 'Stato: live', body: 'Significa che i dati sono appena stati recuperati freschi dal server reale.' },
+          src_fallback: { title: 'Stato: fallback', body: 'Il server principale è fallito, quindi i dati sono stati presi da un server di riserva (alternativo).' },
+          src_cached: { title: 'Stato: cached', body: 'Il server è stato irraggiungibile per un momento, quindi si mostrano temporaneamente gli ultimi dati salvati.' },
+          src_offline: { title: 'Stato: offline', body: 'Impossibile recuperare i dati. Controlla la connessione o lo stato del server e aggiorna.' },
+        },
+        pt: {
+          score: { title: 'Pontuação de Timing de Compra', body: 'Uma pontuação de 0–100 que combina os 6 indicadores abaixo. Mais alta significa "momento relativamente OK para comprar"; mais baixa, "sobreaquecido, arriscado comprar". Não prevê o futuro: é apenas uma referência composta.' },
+          RSI: { title: 'RSI · Índice de Força Relativa', body: 'Mostra de 0 a 100 se o preço subiu ou caiu rápido demais. Abaixo de 30 = "caiu demais (sobrevendido)", espera-se ressalto — interesse de compra. Acima de 70 = "subiu demais (sobrecomprado)" — cuidado.' },
+          MACD: { title: 'MACD · Momentum de Tendência', body: 'Usa a diferença entre uma média curta e uma longa para ver se a "força" de alta aumenta ou diminui. Quando as barras viram para cima a partir do negativo, lê-se como um ressalto a partir do fundo.' },
+          FNG: { title: 'Índice de Medo e Ganância', body: 'Mede de 0 a 100 se os investidores têm medo ou ganância. Perto de 0 todos vendem em pânico — muitas vezes a oportunidade barata de compra (contrário). Perto de 100 está sobreaquecido.' },
+          Mayer: { title: 'Múltiplo de Mayer', body: 'Quantas vezes o preço atual está em relação ao "preço médio de 200 dias". Abaixo de 1 = mais barato que a média; abaixo de 0,8 = zona de fundo histórica (compra forte); acima de 2,4 = sobreaquecido/caro.' },
+          DD: { title: 'Queda · Baixa desde o Máximo', body: 'Quantos % o preço caiu desde o máximo do último ano. -50% = reduziu a metade desde o topo. Quanto maior a queda, mais é visto como fase de medo e oportunidade de compra escalonada.' },
+          GC_DC: { title: 'Cruzamento Dourado / da Morte', body: 'Quando a média curta (50d) cruza acima da longa (200d) é um cruzamento dourado (começa tendência de alta); abaixo é cruzamento da morte (de baixa). Indica se a grande tendência aponta para cima ou para baixo.' },
+          mcap: { title: 'Capitalização de Mercado', body: 'O valor de mercado total da moeda. Calculado como preço atual × moedas em circulação. Mostra o tamanho da moeda no mercado.' },
+          vol: { title: 'Volume (24h)', body: 'O montante total negociado nas últimas 24 horas. Quanto maior, mais ativo o interesse e a negociação.' },
+          chg24: { title: 'Variação 24h', body: 'Quantos % o preço subiu (verde) ou caiu (vermelho) em relação a um dia atrás.' },
+          stale: { title: 'STALE · Dados Antigos', body: 'Uma marca que indica que os dados obtidos estão demasiado antigos. Carregue em atualizar (↻) para os pôr em dia.' },
+          coverage: { title: 'Cobertura de Indicadores', body: 'Quantos dos 6 indicadores estão realmente online ao calcular a pontuação. 6/6 = todos usados; se faltarem alguns, recalcula-se com os restantes.' },
+          src_live: { title: 'Estado: live', body: 'Significa que os dados acabaram de ser obtidos frescos do servidor real.' },
+          src_fallback: { title: 'Estado: fallback', body: 'O servidor principal falhou, por isso os dados foram obtidos de um servidor de reserva (alternativo).' },
+          src_cached: { title: 'Estado: cached', body: 'O servidor ficou um momento inacessível, por isso mostram-se temporariamente os últimos dados guardados.' },
+          src_offline: { title: 'Estado: offline', body: 'Não foi possível obter dados. Verifique a internet ou o estado do servidor e atualize.' },
+        },
+        ru: {
+          score: { title: 'Оценка тайминга покупки', body: 'Оценка 0–100, составленная из 6 индикаторов ниже. Выше — «относительно неплохое время для покупки», ниже — «перегрев, рискованно покупать». Это не прогноз будущего, а лишь сводный ориентир.' },
+          RSI: { title: 'RSI · Индекс относительной силы', body: 'Показывает по шкале 0–100, не слишком ли быстро вырос/упал курс. Ниже 30 = «слишком упал (перепроданность)», ожидается отскок — интересно покупать. Выше 70 = «слишком вырос (перекупленность)» — осторожно.' },
+          MACD: { title: 'MACD · Импульс тренда', body: 'Использует разрыв между короткой и длинной средними, чтобы оценить, усиливается ли восходящая «сила». Когда столбцы разворачиваются вверх из минуса, это читается как отскок от дна.' },
+          FNG: { title: 'Индекс страха и жадности', body: 'Измеряет по шкале 0–100, испуганы инвесторы или жадны. Около 0 все панически продают — часто это дешёвый шанс купить (контрарно). Около 100 — перегрев.' },
+          Mayer: { title: 'Множитель Майера', body: 'Во сколько раз текущая цена больше «средней цены за 200 дней». Меньше 1 = дешевле среднего; ниже 0,8 = историческая зона дна (сильная покупка); выше 2,4 = перегрев/дорого.' },
+          DD: { title: 'Просадка · Падение от максимума', body: 'На сколько % цена упала от годового максимума. -50% = вдвое от вершины. Чем больше падение, тем больше это фаза страха и шанс поэтапной покупки.' },
+          GC_DC: { title: 'Золотой / мёртвый крест', body: 'Когда короткая средняя (50д) пересекает длинную (200д) вверх — золотой крест (начало восходящего тренда); вниз — мёртвый крест (нисходящий). Показывает, куда смотрит крупный тренд.' },
+          mcap: { title: 'Рыночная капитализация', body: 'Общая рыночная стоимость монеты. Считается как текущая цена × монеты в обращении. Показывает, насколько велика монета на рынке.' },
+          vol: { title: 'Объём (24ч)', body: 'Общая сумма торгов за последние 24 часа. Чем выше, тем активнее интерес и торговля.' },
+          chg24: { title: 'Изменение за 24ч', body: 'На сколько % цена выросла (зелёный) или упала (красный) по сравнению с прошлым днём.' },
+          stale: { title: 'STALE · Старые данные', body: 'Метка о том, что полученные данные слишком старые. Нажмите обновить (↻), чтобы обновить до свежих.' },
+          coverage: { title: 'Покрытие индикаторов', body: 'Сколько из 6 индикаторов реально онлайн при расчёте оценки. 6/6 = используются все; если каких-то нет, пересчёт по оставшимся.' },
+          src_live: { title: 'Статус: live', body: 'Значит, данные только что получены свежими с реального сервера.' },
+          src_fallback: { title: 'Статус: fallback', body: 'Основной сервер не сработал, поэтому данные получены с резервного (альтернативного) сервера.' },
+          src_cached: { title: 'Статус: cached', body: 'Сервер был ненадолго недоступен, поэтому временно показываются последние сохранённые данные.' },
+          src_offline: { title: 'Статус: offline', body: 'Не удалось получить данные. Проверьте интернет или состояние сервера и обновите.' },
+        },
+        nl: {
+          score: { title: 'Koop-timing-score', body: 'Een score van 0–100 door de 6 indicatoren hieronder te combineren. Hoger betekent „relatief oké moment om te kopen“, lager „oververhit, riskant om te kopen“. Geen voorspelling, slechts een samengestelde referentie.' },
+          RSI: { title: 'RSI · Relative Strength Index', body: 'Toont op een schaal van 0–100 of de prijs te snel is gestegen/gedaald. Onder 30 = „te veel gedaald (oververkocht)“, herstel verwacht — interessant om te kopen. Boven 70 = „te veel gestegen (overkocht)“ — voorzichtig.' },
+          MACD: { title: 'MACD · Trendmomentum', body: 'Gebruikt het verschil tussen een kort en een lang gemiddelde om te zien of de opwaartse „kracht“ toe- of afneemt. Draaien de staven vanuit het negatieve omhoog, dan wordt dat gelezen als herstel vanaf de bodem.' },
+          FNG: { title: 'Angst-&-Hebzucht-index', body: 'Meet op 0–100 of beleggers angstig of hebzuchtig zijn. Bij bijna 0 verkoopt iedereen in paniek — vaak de goedkope koopkans (contrair). Bij bijna 100 is het oververhit.' },
+          Mayer: { title: 'Mayer Multiple', body: 'Hoeveel keer de huidige prijs is ten opzichte van de „200-daagse gemiddelde prijs“. Onder 1 = goedkoper dan gemiddeld; onder 0,8 = historische bodemzone (sterk kopen); boven 2,4 = oververhit/duur.' },
+          DD: { title: 'Daling · Val vanaf de Top', body: 'Hoeveel % de prijs is gedaald vanaf de top van het afgelopen jaar. -50% = gehalveerd sinds de top. Hoe groter de daling, hoe meer het als angstfase en kans op gefaseerd kopen wordt gezien.' },
+          GC_DC: { title: 'Golden / Death Cross', body: 'Als het korte gemiddelde (50d) boven het lange (200d) kruist, is het een golden cross (opwaartse trend begint); eronder een death cross (neerwaarts). Toont of de grote trend omhoog of omlaag wijst.' },
+          mcap: { title: 'Marktkapitalisatie', body: 'De totale marktwaarde van de munt. Berekend als huidige prijs × munten in omloop. Toont hoe groot de munt op de markt is.' },
+          vol: { title: 'Volume (24u)', body: 'Het totale bedrag dat in de laatste 24 uur is verhandeld. Hoe hoger, hoe actiever de interesse en handel.' },
+          chg24: { title: '24u-verandering', body: 'Hoeveel % de prijs is gestegen (groen) of gedaald (rood) ten opzichte van een dag geleden.' },
+          stale: { title: 'STALE · Oude Gegevens', body: 'Een markering dat de opgehaalde gegevens te oud zijn. Klik op vernieuwen (↻) om bij te werken naar de nieuwste.' },
+          coverage: { title: 'Indicatordekking', body: 'Hoeveel van de 6 indicatoren echt online zijn bij het berekenen van de score. 6/6 = allemaal gebruikt; ontbreken er enkele, dan wordt herberekend met de rest.' },
+          src_live: { title: 'Status: live', body: 'Betekent dat de gegevens net vers van de echte server zijn opgehaald.' },
+          src_fallback: { title: 'Status: fallback', body: 'De primaire server faalde, dus de gegevens zijn opgehaald van een back-upserver (alternatief).' },
+          src_cached: { title: 'Status: cached', body: 'De server was even onbereikbaar, dus de laatst opgeslagen gegevens worden tijdelijk getoond.' },
+          src_offline: { title: 'Status: offline', body: 'Kon geen gegevens ophalen. Controleer je internet of de serverstatus en vernieuw.' },
+        },
+      }
+      const TipsContext = createContext(true)
+      function Term({ k, children, align = 'left', underline = true }) {
+        const tips = useContext(TipsContext)
+        const { lang } = useI18n()
+        const g = (GLOSSARY[lang] || GLOSSARY.en)[k]
+        if (!tips || !g) return children ?? (g ? g.title : null)
+        return (
+          <span className={`term${underline ? ' u' : ''}`} tabIndex={0}>
+            {children ?? g.title}
+            <span className={`tip${align === 'right' ? ' tip-r' : ''}`} role="tooltip">
+              <span className="tip-title">{g.title}</span>
+              <span className="tip-body">{g.body}</span>
+            </span>
+          </span>
+        )
+      }
+      const SRC_TIP = { live: 'src_live', fallback: 'src_fallback', cached: 'src_cached', error: 'src_offline' }
+
+      /* =========================================================
+       *  지표 엔진 (워크플로 검증 공식: RSI Wilder, MACD SMA-seed,
+       *  Mayer, Drawdown, Golden/Death Cross, F&G 합성)
+       * ========================================================= */
+      function rsiWilder(closes, period = 14) {
+        const n = closes.length, rsi = new Array(n).fill(null)
+        if (n < period + 1) return rsi
+        let gainSum = 0, lossSum = 0
+        for (let i = 1; i <= period; i++) { const d = closes[i] - closes[i - 1]; if (d > 0) gainSum += d; else lossSum += -d }
+        let avgGain = gainSum / period, avgLoss = lossSum / period
+        rsi[period] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss)
+        for (let i = period + 1; i < n; i++) {
+          const d = closes[i] - closes[i - 1], gain = d > 0 ? d : 0, loss = d < 0 ? -d : 0
+          avgGain = (avgGain * (period - 1) + gain) / period
+          avgLoss = (avgLoss * (period - 1) + loss) / period
+          rsi[i] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss)
+        }
+        return rsi
+      }
+      function ema(values, period) {
+        const out = new Array(values.length).fill(null)
+        if (values.length < period) return out
+        const alpha = 2 / (period + 1)
+        let seed = 0; for (let i = 0; i < period; i++) seed += values[i]
+        let prev = seed / period; out[period - 1] = prev
+        for (let i = period; i < values.length; i++) { prev = values[i] * alpha + prev * (1 - alpha); out[i] = prev }
+        return out
+      }
+      function macd(closes, fast = 12, slow = 26, signalP = 9) {
+        const n = closes.length, emaFast = ema(closes, fast), emaSlow = ema(closes, slow)
+        const macdLine = new Array(n).fill(null)
+        for (let i = 0; i < n; i++) if (emaFast[i] != null && emaSlow[i] != null) macdLine[i] = emaFast[i] - emaSlow[i]
+        const firstValid = macdLine.findIndex((v) => v != null)
+        const signal = new Array(n).fill(null), histogram = new Array(n).fill(null)
+        if (firstValid !== -1) {
+          const sig = ema(macdLine.slice(firstValid), signalP)
+          for (let j = 0; j < sig.length; j++) if (sig[j] != null) { const idx = firstValid + j; signal[idx] = sig[j]; histogram[idx] = macdLine[idx] - sig[j] }
+        }
+        return { macdLine, signal, histogram }
+      }
+      function fngCompositeScore(fngArr) {
+        const arr = (fngArr || []).map(Number).filter((v) => !isNaN(v))
+        if (arr.length === 0) return null
+        const cur = arr[arr.length - 1]
+        const meanLast = (k) => { const m = Math.min(k, arr.length); let s = 0; for (let i = arr.length - m; i < arr.length; i++) s += arr[i]; return s / m }
+        let score = 0.5 * (100 - cur) + 0.3 * (100 - meanLast(7)) + 0.2 * (100 - meanLast(30))
+        if (cur <= 25) score += (25 - cur) * 0.4
+        else if (cur >= 75) score -= (cur - 75) * 0.4
+        return Math.max(0, Math.min(100, Math.round(score * 10) / 10))
+      }
+      function sma(closes, period) {
+        if (!Array.isArray(closes) || closes.length === 0) return null
+        const p = Math.min(period, closes.length); let sum = 0
+        for (let i = closes.length - p; i < closes.length; i++) sum += closes[i]
+        return sum / p
+      }
+      function mayerMultiple(closes, livePrice) {
+        const ma = sma(closes, 200); if (ma == null || ma === 0) return null
+        const price = typeof livePrice === 'number' && livePrice > 0 ? livePrice : closes[closes.length - 1]
+        return { mayer: price / ma, sma200: ma, usedPeriod: Math.min(200, closes.length), isFallback: closes.length < 200, price }
+      }
+      function drawdownFromHigh(closes, windowDays = 365, livePrice) {
+        if (!Array.isArray(closes) || closes.length === 0) return null
+        const N = closes.length, w = Math.min(windowDays, N); let high = -Infinity
+        for (let i = N - w; i < N; i++) if (closes[i] > high) high = closes[i]
+        const price = typeof livePrice === 'number' && livePrice > 0 ? livePrice : closes[N - 1]
+        if (!(high > 0)) return null
+        return { rollingHigh: high, windowUsed: w, isFallback: N < windowDays, drawdownPct: Math.min(0, (price / high - 1) * 100) }
+      }
+      function smaAt(closes, period, endIdx) {
+        if (endIdx + 1 < period) return null; let sum = 0
+        for (let i = endIdx - period + 1; i <= endIdx; i++) sum += closes[i]
+        return sum / period
+      }
+      function goldenDeathCross(closes) {
+        const N = closes.length; if (N < 50) return null
+        const fast = smaAt(closes, Math.min(50, N), N - 1), slow = smaAt(closes, Math.min(200, N), N - 1)
+        if (fast == null || slow == null) return null
+        let event = 'NONE'
+        if (N >= 201) {
+          const fp = smaAt(closes, 50, N - 2), sp = smaAt(closes, 200, N - 2)
+          if (fp != null && sp != null) {
+            if (fp <= sp && fast > slow) event = 'GOLDEN_CROSS'
+            else if (fp >= sp && fast < slow) event = 'DEATH_CROSS'
+          }
+        }
+        return { sma50: fast, sma200: slow, crossState: fast > slow ? 'GOLDEN' : 'DEATH', event, gapPct: (fast / slow - 1) * 100, isFallback: N < 200 }
+      }
+
+      const WEIGHTS = { RSI: 0.18, MACD: 0.18, FNG: 0.18, Mayer: 0.18, DD: 0.14, GC_DC: 0.14 }
+      const BANDS = [
+        { id: 'STRONG_BUY', min: 80, label: 'STRONG BUY', color: 'ok', advice: '과매도+공포+저평가 다중 합류. 분할 매수 적극 구간.' },
+        { id: 'ACCUMULATE', min: 65, label: 'ACCUMULATE', color: 'ok', advice: '매수 우호. 분할 적립 권장. 추세 필터와 함께 확인.' },
+        { id: 'NEUTRAL', min: 45, label: 'NEUTRAL', color: 'warn', advice: '관망/중립. 뚜렷한 우위 없음. 추가 신호 대기.' },
+        { id: 'CAUTION', min: 25, label: 'CAUTION', color: 'warn', advice: '주의. 탐욕·고평가 진입 초입. 추격 매수 자제.' },
+        { id: 'OVERHEATED', min: 0, label: 'OVERHEATED', color: 'crit', advice: '과열. 극탐욕/고평가/고점 근접. 신규 매수 금지.' },
+      ]
+      const bandFor = (score) => BANDS.find((b) => score >= b.min) || BANDS[BANDS.length - 1]
+      const fngLabel = (v, t) => { const f = (t && t.fng) || T.ko.fng; return v == null ? '—' : v <= 25 ? f.extremeFear : v <= 45 ? f.fear : v < 55 ? f.neutral : v < 75 ? f.greed : f.extremeGreed }
+
+      const INDICATOR_META = [
+        { key: 'RSI', short: 'RSI·14', name: 'Relative Strength Index (Wilder)', desc: '과매도(<30) = 매수 / 과매수(>70) = 경계' },
+        { key: 'MACD', short: 'MACD', name: 'MACD 12·26·9 히스토그램', desc: '음→양 / 바닥 상향전환 = 매수 모멘텀' },
+        { key: 'FNG', short: 'F&G', name: '공포·탐욕 지수 (역발상)', desc: '극공포 = 매수 기회 / 극탐욕 = 과열' },
+        { key: 'Mayer', short: 'MAYER', name: 'Mayer Multiple (가격 / 200일선)', desc: '<0.8 강한 매수 / >2.4 과열' },
+        { key: 'DD', short: 'DD·365', name: '365일 고점 대비 낙폭', desc: '-30% 관심 / -50% 강한 매수' },
+        { key: 'GC_DC', short: '50/200', name: '골든·데드 크로스 추세', desc: '골든크로스 = 추세 매수 우호' },
+      ]
+
+      // 모든 지표 + 합성 점수 계산 (t = 현재 언어 번들; 상세 문구 현지화)
+      function computeAnalysis({ closes, fngArr, livePrice, t, times = null, fngTimes = null }) {
+        const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x))
+        // 역사적 캘리브레이션 매핑 (평범=50, 진짜 극단에서만 꼬리값)
+        const rsiScore = (r) => clamp(50 + (50 - r) * 1.7, 0, 100)
+        const macdScoreFn = (cur, prev, px) => clamp(50 + 25 * Math.tanh(((cur - prev) / px) * 600) + 10 * Math.tanh((cur / px) * 600), 0, 100)
+        const mayerScore = (m) => { if (m <= 0.8) return 100; if (m <= 1.4) return clamp(50 + ((1.4 - m) / 0.6) * 50, 50, 100); if (m <= 2.4) return clamp(10 + ((2.4 - m) / 1.0) * 40, 10, 50); return clamp(10 - (m - 2.4) * 25, 0, 10) }
+        const ddScore = (ddPct) => clamp(-ddPct * 1.4, 0, 100)
+        // 시리즈(앞쪽 null 가능)와 평행 타임스탬프를 함께 필터링해 마지막 n개 반환
+        const tailTimed = (values, ts2, n = 120) => {
+          const useT = Array.isArray(ts2) && ts2.length === values.length
+          const vs = [], tt = []
+          for (let i = 0; i < values.length; i++) { if (values[i] != null && !isNaN(values[i])) { vs.push(values[i]); if (useT) tt.push(ts2[i]) } }
+          return { series: vs.slice(-n), times: useT ? tt.slice(-n) : null }
+        }
+        const D = (t && t.det) || T.ko.det
+        const parts = {}
+
+        const rsiSeries = rsiWilder(closes, 14)
+        const r = closes.length ? rsiSeries[closes.length - 1] : null
+        const rsiT = tailTimed(rsiSeries, times)
+        parts.RSI = {
+          score: r == null ? null : rsiScore(r),
+          value: r == null ? 'N/A' : r.toFixed(1),
+          detail: r == null ? D.nodata : r < 30 ? D.oversold : r > 70 ? D.overbought : D.neutral,
+          series: rsiT.series, times: rsiT.times,
+        }
+
+        let macdScore = null, macdVal = 'N/A', macdDetail = D.nodata, macdSeries = [], macdTimes = null, macdCur = null
+        if (closes.length >= 35) {
+          const { histogram: h } = macd(closes, 12, 26, 9)
+          const mt = tailTimed(h, times); macdSeries = mt.series; macdTimes = mt.times
+          const cur = h[closes.length - 1], prev = h[closes.length - 2]
+          if (cur != null && prev != null) {
+            macdCur = cur
+            const px = livePrice && livePrice > 0 ? livePrice : closes[closes.length - 1]
+            macdScore = macdScoreFn(cur, prev, px)
+            macdVal = (cur > prev ? '▲' : '▼') + ' ' + (Math.abs(cur) >= 1 ? cur.toFixed(0) : cur.toFixed(2))
+            macdDetail = (cur > 0 ? D.posZone : D.negZone) + (cur > prev ? D.turnUp : D.falling)
+          }
+        }
+        parts.MACD = { score: macdScore, value: macdVal, detail: macdDetail, series: macdSeries, times: macdTimes }
+
+        const fngScore = fngCompositeScore(fngArr)
+        const fngCur = fngArr.length ? fngArr[fngArr.length - 1] : null
+        const fngT = tailTimed(fngArr, fngTimes)
+        parts.FNG = { score: fngScore, value: fngCur == null ? 'N/A' : String(fngCur), detail: fngLabel(fngCur, t), series: fngT.series, times: fngT.times }
+
+        const mm = mayerMultiple(closes, livePrice)
+        parts.Mayer = {
+          score: mm == null ? null : mayerScore(mm.mayer),
+          value: mm == null ? 'N/A' : mm.mayer.toFixed(2) + '×',
+          detail: mm == null ? D.nodata : (mm.isFallback ? D.fallback200(mm.usedPeriod) : D.vs200),
+        }
+
+        const dd = drawdownFromHigh(closes, 365, livePrice)
+        parts.DD = {
+          score: dd == null ? null : ddScore(dd.drawdownPct),
+          value: dd == null ? 'N/A' : dd.drawdownPct.toFixed(1) + '%',
+          detail: dd == null ? D.nodata : D.high(fmtUsd(dd.rollingHigh)),
+        }
+
+        const gc = goldenDeathCross(closes)
+        parts.GC_DC = {
+          score: gc == null ? 50 : gc.event === 'GOLDEN_CROSS' ? 85 : gc.event === 'DEATH_CROSS' ? 15 : gc.crossState === 'GOLDEN' ? 60 : 35,
+          value: gc == null ? 'N/A' : gc.crossState + (gc.event !== 'NONE' ? ' ⚡' : ''),
+          detail: gc == null ? D.nodata : `gap ${gc.gapPct.toFixed(1)}%` + (gc.event !== 'NONE' ? ' · ' + gc.event : ''),
+        }
+
+        let acc = 0, wsum = 0, online = 0
+        for (const k in WEIGHTS) { const v = parts[k].score; if (v != null && !isNaN(v)) { acc += v * WEIGHTS[k]; wsum += WEIGHTS[k]; online++ } }
+        let score = wsum === 0 ? null : Math.round((acc / wsum) * 10) / 10
+        // falling-knife 가드: 하락추세(데드크로스)+모멘텀(MACD 히스토) 음수 → 확인 안 된 바닥, 중립쪽 20% 감쇠
+        let knifeGuard = false
+        if (score != null && gc && gc.crossState === 'DEATH' && macdCur != null && macdCur <= 0) { score = Math.round((50 + (score - 50) * 0.8) * 10) / 10; knifeGuard = true }
+        return { score, coverage: Math.round(wsum * 100) / 100, online, knifeGuard, band: score == null ? null : bandFor(score), parts, livePrice }
+      }
+
+      /* =========================================================
+       *  포맷 헬퍼
+       * ========================================================= */
+      const fmtUsd = (n, d = 0) => n == null ? '—' : '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d })
+      const fmtPct = (n) => n == null ? '—' : (n >= 0 ? '+' : '') + Number(n).toFixed(2) + '%'
+      const fmtCompact = (n) => n == null ? '—' : '$' + new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(n)
+      const ago = (ts) => { if (!ts) return '—'; const s = Math.floor((Date.now() - ts) / 1000); if (s < 60) return s + 's'; if (s < 3600) return Math.floor(s / 60) + 'm'; if (s < 86400) return Math.floor(s / 3600) + 'h'; return Math.floor(s / 86400) + 'd' }
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+      /* =========================================================
+       *  데이터 페치 (CoinGecko / Binance / Alternative.me, CORS OK)
+       * ========================================================= */
+      const URLS = {
+        cgPrice: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true&include_market_cap=true&include_24hr_vol=true',
+        bnTicker: 'https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT',
+        bnKlines: 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=1000',
+        cgChart: 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=365&interval=daily',
+        fng: 'https://api.alternative.me/fng/?limit=90',
+      }
+      async function fetchJSON(url, timeout = 9000) {
+        const ctrl = new AbortController()
+        const t = setTimeout(() => ctrl.abort(), timeout)
+        try {
+          const res = await fetch(url, { signal: ctrl.signal })
+          if (!res.ok) { const e = new Error('HTTP ' + res.status); e.status = res.status; throw e }
+          return await res.json()
+        } finally { clearTimeout(t) }
+      }
+      async function withRetry(fn, retries = 2) {
+        let last
+        for (let a = 0; a <= retries; a++) {
+          try { return await fn() }
+          catch (e) { last = e; if (e.status === 429 || e.status === 418) throw e; if (a < retries) await sleep(500 * (a + 1) + Math.random() * 300) }
+        }
+        throw last
+      }
+      const saveCache = (key, data) => { try { localStorage.setItem(key, JSON.stringify({ data, fetchedAt: Date.now() })) } catch {} }
+      const loadCache = (key) => { try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : null } catch { return null } }
+
+      async function loadPrice() {
+        try {
+          const j = await withRetry(() => fetchJSON(URLS.cgPrice, 8000))
+          const b = j.bitcoin
+          const data = { price: b.usd, change24hPct: b.usd_24h_change, marketCap: b.usd_market_cap, vol24h: b.usd_24h_vol, source: 'coingecko' }
+          saveCache('btc:price', data); return { ...data, status: 'live', fetchedAt: Date.now() }
+        } catch {
+          try {
+            const t = await fetchJSON(URLS.bnTicker, 8000)
+            const data = { price: +t.lastPrice, change24hPct: +t.priceChangePercent, marketCap: null, vol24h: +t.quoteVolume, source: 'binance' }
+            saveCache('btc:price', data); return { ...data, status: 'fallback', fetchedAt: Date.now() }
+          } catch {
+            const c = loadCache('btc:price'); if (c) return { ...c.data, status: 'cached', fetchedAt: c.fetchedAt }
+            return { status: 'error', fetchedAt: null }
+          }
+        }
+      }
+      async function loadKlines() {
+        try {
+          const rows = await withRetry(() => fetchJSON(URLS.bnKlines, 11000))
+          const candles = rows.map((r) => ({ t: r[0], open: +r[1], high: +r[2], low: +r[3], close: +r[4], volume: +r[5] })).filter((c) => Number.isFinite(c.close))
+          const data = { closes: candles.map((c) => c.close), volumes: candles.map((c) => c.volume), times: candles.map((c) => c.t), source: 'binance' }
+          saveCache('btc:klines', data); return { ...data, status: 'live', fetchedAt: Date.now() }
+        } catch {
+          try {
+            const j = await fetchJSON(URLS.cgChart, 11000)
+            const prices = (j.prices || []).slice(0, -1) // 마지막 진행중(partial-day) point 제거
+            const vols = (j.total_volumes || []).slice(0, -1)
+            // closes/times/volumes 를 한 번 필터링한 포인트 리스트에서 함께 파생 → 항상 평행
+            const pts = prices.map((p, i) => ({ t: p[0], close: p[1], volume: vols[i] ? vols[i][1] : null })).filter((c) => Number.isFinite(c.close))
+            const data = { closes: pts.map((c) => c.close), volumes: pts.map((c) => c.volume), times: pts.map((c) => c.t), source: 'coingecko' }
+            saveCache('btc:klines', data); return { ...data, status: 'fallback', fetchedAt: Date.now() }
+          } catch {
+            const c = loadCache('btc:klines'); if (c) return { ...c.data, status: 'cached', fetchedAt: c.fetchedAt }
+            return { status: 'error', fetchedAt: null }
+          }
+        }
+      }
+      async function loadFng() {
+        try {
+          const j = await withRetry(() => fetchJSON(URLS.fng, 8000))
+          const list = (j.data || []).map((d) => ({ value: parseInt(d.value, 10), label: d.value_classification, t: Number(d.timestamp) * 1000 })).filter((d) => Number.isFinite(d.value))
+          const arr = list.map((d) => d.value).reverse() // 과거→최신
+          const times = list.map((d) => d.t).reverse() // arr 와 평행한 타임스탬프(ms)
+          const latest = list[0] || null
+          const data = { arr, times, latest, source: 'alternative.me' }
+          saveCache('btc:fng', data); return { ...data, status: 'live', fetchedAt: Date.now() }
+        } catch {
+          const c = loadCache('btc:fng'); if (c) return { ...c.data, status: 'cached', fetchedAt: c.fetchedAt }
+          return { status: 'error', fetchedAt: null }
+        }
+      }
+
+      /* =========================================================
+       *  배경 매트릭스
+       * ========================================================= */
+      function MatrixRain({ enabled, accent }) {
+        const ref = useRef(null), raf = useRef(0)
+        useEffect(() => {
+          if (!enabled) return
+          const canvas = ref.current; if (!canvas) return
+          const ctx = canvas.getContext('2d')
+          const glyphs = '₿0123456789ABCDEF↑↓<>/\\{}[]=$#@サトシ'.split('')
+          const fontSize = 14; let drops = []
+          const resize = () => { canvas.width = innerWidth; canvas.height = innerHeight; drops = new Array(Math.floor(canvas.width / fontSize)).fill(0).map(() => Math.random() * -50) }
+          resize(); addEventListener('resize', resize)
+          let last = 0
+          const draw = (ts) => {
+            raf.current = requestAnimationFrame(draw)
+            if (ts - last < 55) return; last = ts
+            ctx.fillStyle = 'rgba(5,8,10,0.18)'; ctx.fillRect(0, 0, canvas.width, canvas.height)
+            ctx.font = fontSize + "px 'Share Tech Mono', monospace"
+            for (let i = 0; i < drops.length; i++) {
+              const ch = glyphs[(Math.random() * glyphs.length) | 0], y = drops[i] * fontSize
+              ctx.fillStyle = Math.random() > 0.975 ? '#fff' : accent
+              ctx.fillText(ch, i * fontSize, y)
+              if (y > canvas.height && Math.random() > 0.975) drops[i] = 0
+              drops[i] += 1
+            }
+          }
+          raf.current = requestAnimationFrame(draw)
+          return () => { cancelAnimationFrame(raf.current); removeEventListener('resize', resize) }
+        }, [enabled, accent])
+        return enabled ? <canvas ref={ref} className="matrix-rain" aria-hidden="true" /> : null
+      }
+
+      /* =========================================================
+       *  부팅 시퀀스
+       * ========================================================= */
+      const BOOT_LINES = [
+        '> initializing btc_signal_terminal v1.0 ...',
+        '> linking market feeds: coingecko / binance / alternative.me',
+        '> establishing secure uplink ............ [ OK ]',
+        '> loading indicator engine: rsi · macd · mayer · drawdown · f&g',
+        '> computing buy-timing composite ........ [ OK ]',
+        '> ACCESS GRANTED. // signal only — not financial advice',
+      ]
+      function BootSequence({ onDone, t }) {
+        const LINES = (t && t.boot && t.boot.lines) || BOOT_LINES
+        const [rendered, setRendered] = useState([]); const [current, setCurrent] = useState(''); const done = useRef(false)
+        useEffect(() => {
+          let line = 0, char = 0, timer
+          const tick = () => {
+            if (line >= LINES.length) { if (!done.current) { done.current = true; timer = setTimeout(onDone, 450) } return }
+            const target = LINES[line]
+            if (char <= target.length) { setCurrent(target.slice(0, char)); char++; timer = setTimeout(tick, 10 + Math.random() * 18) }
+            else { setRendered((p) => [...p, target]); setCurrent(''); line++; char = 0; timer = setTimeout(tick, 80) }
+          }
+          tick(); return () => clearTimeout(timer)
+        }, [onDone, LINES])
+        return (
+          <div className="boot" onClick={onDone} title={(t && t.boot && t.boot.skipTitle) || '클릭하면 건너뜁니다'}>
+            <pre className="boot-text">
+              {rendered.map((l, i) => <div key={i} className="boot-line">{l}</div>)}
+              {current && <div className="boot-line">{current}<span className="cursor-blink">█</span></div>}
+            </pre>
+            <div className="boot-skip">{(t && t.boot && t.boot.skip) || '[ click / 아무 키나 눌러 건너뛰기 ]'}</div>
+          </div>
+        )
+      }
+
+      /* =========================================================
+       *  스파크라인 / 히스토그램
+       * ========================================================= */
+      function Sparkline({ data = [], times = null, color = '#00ff9c', height = 64, refLines = [], baseline, fmt }) {
+        const { t, lang } = useI18n()
+        const [hi, setHi] = useState(null)
+        const W = 600
+        if (!data || data.length < 2) return <div className="spark-empty">// {t.det.nodata}</div>
+        const pad = 3, max = Math.max(...data), min = Math.min(...data, baseline != null ? baseline : Infinity)
+        const span = max - min || 1, stepX = (W - pad * 2) / (data.length - 1)
+        const Y = (v) => height - pad - ((v - min) / span) * (height - pad * 2)
+        const pts = data.map((v, i) => [pad + i * stepX, Y(v)])
+        const line = pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ')
+        const area = `${pad},${height - pad} ${line} ${(W - pad).toFixed(1)},${height - pad}`
+        const [lx, ly] = pts[pts.length - 1]
+        const svg = (
+          <svg className="spark" viewBox={`0 0 ${W} ${height}`} preserveAspectRatio="none">
+            {refLines.map((rl, i) => { const y = Y(rl.v); return <line key={i} x1="0" x2={W} y1={y} y2={y} stroke={rl.color || 'rgba(255,255,255,.15)'} strokeWidth="1" strokeDasharray="4 4" /> })}
+            <polygon points={area} fill={color} opacity="0.12" />
+            <polyline points={line} fill="none" stroke={color} strokeWidth="1.6" />
+            <circle cx={lx} cy={ly} r="2.8" fill={color}><animate attributeName="opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite" /></circle>
+          </svg>
+        )
+        const interactive = Array.isArray(times) && times.length === data.length
+        if (!interactive) return svg
+        const locale = (LANGS.find((l) => l.code === lang) || LANGS[0]).locale
+        const totalSpan = times[times.length - 1] - times[0]
+        const tickFmt = (ts) => totalSpan < 36 * 3600 * 1000
+          ? new Date(ts).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
+          : new Date(ts).toLocaleDateString(locale, { month: 'numeric', day: 'numeric' })
+        const fmtVal = fmt || ((v) => (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString() : String(Math.round(v))))
+        const xPct = (i) => ((pad + i * stepX) / W) * 100
+        const yPct = (v) => (Y(v) / height) * 100
+        const onMove = (e) => {
+          const rect = e.currentTarget.getBoundingClientRect()
+          const cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left
+          const frac = rect.width ? Math.max(0, Math.min(1, cx / rect.width)) : 0
+          setHi(Math.round(frac * (data.length - 1)))
+        }
+        const mid = Math.floor((data.length - 1) / 2)
+        const tipX = hi != null ? xPct(hi) : 0
+        const tipTransform = tipX < 12 ? 'translateX(0)' : tipX > 88 ? 'translateX(-100%)' : 'translateX(-50%)'
+        return (
+          <div className="spark-ix">
+            <div className="spark-plot" onMouseMove={onMove} onMouseLeave={() => setHi(null)} onTouchStart={onMove} onTouchMove={onMove} onTouchEnd={() => setHi(null)}>
+              {svg}
+              {hi != null && (
+                <>
+                  <div className="spark-cross" style={{ left: `${tipX}%` }} />
+                  <div className="spark-dot" style={{ left: `${tipX}%`, top: `${yPct(data[hi])}%`, color }} />
+                  <div className="spark-tip" style={{ left: `${tipX}%`, transform: tipTransform }}>
+                    <b>{fmtVal(data[hi])}</b><span>{tickFmt(times[hi])}</span>
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="spark-axis"><span>{tickFmt(times[0])}</span><span>{tickFmt(times[mid])}</span><span>{tickFmt(times[times.length - 1])}</span></div>
+          </div>
+        )
+      }
+      function Histogram({ data = [], times = null, height = 40, fmt }) {
+        const { t, lang } = useI18n()
+        const [hi, setHi] = useState(null)
+        const W = 600
+        if (!data || data.length < 2) return <div className="spark-empty spark-sm">// {t.det.nodata}</div>
+        const maxAbs = Math.max(...data.map((v) => Math.abs(v))) || 1
+        const bw = W / data.length, mid = height / 2
+        const svg = (
+          <svg className="spark spark-sm" viewBox={`0 0 ${W} ${height}`} preserveAspectRatio="none">
+            <line x1="0" x2={W} y1={mid} y2={mid} stroke="rgba(255,255,255,.15)" strokeWidth="1" />
+            {data.map((v, i) => { const h = (Math.abs(v) / maxAbs) * (mid - 2); return <rect key={i} x={i * bw} y={v >= 0 ? mid - h : mid} width={Math.max(1, bw - 0.5)} height={h} fill={v >= 0 ? 'var(--ok)' : 'var(--crit)'} opacity="0.85" /> })}
+          </svg>
+        )
+        const interactive = Array.isArray(times) && times.length === data.length
+        if (!interactive) return svg
+        const locale = (LANGS.find((l) => l.code === lang) || LANGS[0]).locale
+        const totalSpan = times[times.length - 1] - times[0]
+        const tickFmt = (ts) => totalSpan < 36 * 3600 * 1000
+          ? new Date(ts).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
+          : new Date(ts).toLocaleDateString(locale, { month: 'numeric', day: 'numeric' })
+        const fmtVal = fmt || ((v) => (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString() : String(Math.round(v))))
+        const xPct = (i) => ((i * bw + bw / 2) / W) * 100
+        const onMove = (e) => {
+          const rect = e.currentTarget.getBoundingClientRect()
+          const cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left
+          const frac = rect.width ? Math.max(0, Math.min(1, cx / rect.width)) : 0
+          setHi(Math.min(data.length - 1, Math.floor(frac * data.length)))
+        }
+        const mid2 = Math.floor((data.length - 1) / 2)
+        const tipX = hi != null ? xPct(hi) : 0
+        const tipTransform = tipX < 12 ? 'translateX(0)' : tipX > 88 ? 'translateX(-100%)' : 'translateX(-50%)'
+        return (
+          <div className="spark-ix">
+            <div className="spark-plot" onMouseMove={onMove} onMouseLeave={() => setHi(null)} onTouchStart={onMove} onTouchMove={onMove} onTouchEnd={() => setHi(null)}>
+              {svg}
+              {hi != null && (<>
+                <div className="spark-cross" style={{ left: `${tipX}%` }} />
+                <div className="spark-tip" style={{ left: `${tipX}%`, transform: tipTransform }}><b>{fmtVal(data[hi])}</b><span>{tickFmt(times[hi])}</span></div>
+              </>)}
+            </div>
+            <div className="spark-axis"><span>{tickFmt(times[0])}</span><span>{tickFmt(times[mid2])}</span><span>{tickFmt(times[times.length - 1])}</span></div>
+          </div>
+        )
+      }
+
+      /* =========================================================
+       *  소스 상태 배지
+       * ========================================================= */
+      function SourceBadge({ label, src }) {
+        const { t } = useI18n()
+        const st = src?.status || 'loading'
+        const txt = st === 'live' ? src.source : st === 'fallback' ? src.source + ' (' + t.src.fallback + ')' : st === 'cached' ? t.src.cached + ' ' + ago(src.fetchedAt) : st === 'error' ? t.src.offline : t.src.loading
+        return (
+          <Term k={SRC_TIP[st]} align="right" underline={false}>
+            <span className={`badge ${st}`}><span className="bdot" />{label}: {txt}</span>
+          </Term>
+        )
+      }
+
+      /* =========================================================
+       *  지표 카드
+       * ========================================================= */
+      function IndicatorCard({ meta, part }) {
+        const { t } = useI18n()
+        const ti = t.ind[meta.key] || { name: meta.name, desc: meta.desc }
+        const s = part?.score
+        const status = s == null ? 'na' : (bandFor(s).color)
+        return (
+          <article className={`ind-card status-${status}`}>
+            <span className="corner tl" /><span className="corner br" />
+            <div className="ind-head">
+              <Term k={meta.key}><span className="ind-short">{meta.short}</span></Term>
+              <span className="ind-weight">w {Math.round(WEIGHTS[meta.key] * 100)}%</span>
+            </div>
+            <div className="ind-name">{ti.name}</div>
+            <div className="ind-value" style={{ color: 'var(--accent)' }}>{part ? part.value : '…'}</div>
+            <div className="ind-detail">{part ? part.detail : ''}</div>
+            {meta.key === 'MACD' && part?.series?.length ? <Histogram data={part.series} times={part.times} fmt={(v) => (v >= 0 ? '+' : '') + (Math.abs(v) >= 1 ? Math.round(v).toLocaleString() : v.toFixed(2))} /> :
+              part?.series?.length ? <Sparkline data={part.series} times={part.times} color="var(--accent)" height={40} fmt={meta.key === 'RSI' ? (v) => v.toFixed(1) : meta.key === 'FNG' ? (v) => String(Math.round(v)) : undefined} refLines={meta.key === 'RSI' ? [{ v: 30, color: 'rgba(0,255,156,.3)' }, { v: 70, color: 'rgba(255,59,92,.3)' }] : []} /> : null}
+            <div className="mini-bar"><div className="mini-fill" style={{ width: `${s == null ? 0 : s}%`, background: 'var(--accent)' }} /></div>
+            <div className="mini-row"><span>{s == null ? <span className="na-flag">N/A · OFFLINE</span> : t.subScore}</span><span>{s == null ? '' : s.toFixed(0) + ' / 100'}</span></div>
+            <div className="ind-desc">{ti.desc}</div>
+          </article>
+        )
+      }
+
+      /* =========================================================
+       *  내장 터미널
+       * ========================================================= */
+      const SHOW_MAP = { rsi: 'RSI', macd: 'MACD', fng: 'FNG', mayer: 'Mayer', dd: 'DD', cross: 'GC_DC' }
+      function Terminal({ ctx }) {
+        const { t } = useI18n()
+        const tt = t.term
+        const [lines, setLines] = useState([tt.welcome])
+        const [input, setInput] = useState(''); const [hist, setHist] = useState([]); const [hi, setHi] = useState(-1)
+        const bodyRef = useRef(null)
+        // 데스크톱(정밀 포인터)에서만 자동 포커스 → 폰(터치)에선 키보드가 안 뜸
+        const autoFocusInput = !!window.matchMedia && window.matchMedia('(pointer: fine)').matches
+        const print = (...out) => setLines((p) => [...p, ...out.flat()])
+        const bandLabel = (b) => (t.bands[b.id] ? t.bands[b.id].label : b.label)
+        const bandAdvice = (b) => (t.bands[b.id] ? t.bands[b.id].advice : b.advice)
+        useEffect(() => { const el = bodyRef.current; if (el) el.scrollTop = el.scrollHeight }, [lines])
+        function run(raw) {
+          const cmd = raw.trim(); if (!cmd) return
+          print(`satoshi@btc:~$ ${cmd}`); setHist((h) => [...h, cmd]); setHi(-1)
+          const [name, ...args] = cmd.split(/\s+/)
+          const a = ctx.analysisRef.current
+          switch (name.toLowerCase()) {
+            case 'help': print(tt.help); break
+            case 'score':
+              if (!a || a.score == null) { print(tt.needRefresh); break }
+              print(`  BUY TIMING SCORE: ${a.score.toFixed(1)} / 100   [${bandLabel(a.band)}]`, `  ${bandAdvice(a.band)}`, tt.scoreCoverage(a.online, Math.round(a.coverage * 100)))
+              break
+            case 'why': {
+              if (!a || a.score == null) { print(tt.needData); break }
+              const contribs = Object.keys(WEIGHTS).map((k) => ({ k, v: a.parts[k].score, w: WEIGHTS[k] })).filter((c) => c.v != null)
+              const wsum = contribs.reduce((s, c) => s + c.w, 0)
+              contribs.map((c) => ({ ...c, contr: (c.v * c.w) / wsum })).sort((x, y) => y.contr - x.contr)
+                .forEach((c) => print(`  ${c.k.padEnd(6)} score ${c.v.toFixed(0).padStart(3)} ×${c.w.toFixed(2)} → ${c.contr >= 0 ? '+' : ''}${c.contr.toFixed(1)}`))
+              print(tt.whySum(a.score.toFixed(1)))
+              break
+            }
+            case 'show': {
+              const key = SHOW_MAP[(args[0] || '').toLowerCase()]
+              if (!key || !a) { print(tt.showUsage); break }
+              const m = INDICATOR_META.find((x) => x.key === key), p = a.parts[key]
+              const ti = t.ind[key] || { name: m.name, desc: m.desc }
+              print(`  ${m.short} — ${ti.name}`, tt.showVal(p.value, p.detail), tt.showScore(p.score == null ? 'N/A' : p.score.toFixed(1) + '/100', Math.round(WEIGHTS[key] * 100)), `    ${ti.desc}`)
+              break
+            }
+            case 'bands':
+              BANDS.forEach((b) => print(`  ${String(b.min).padStart(3)}~  ${bandLabel(b).padEnd(11)} ${bandAdvice(b)}`))
+              break
+            case 'sources': {
+              const f = (s, label) => `  ${label.padEnd(7)} ${s ? (s.status + (s.source ? ' · ' + s.source : '') + (s.fetchedAt ? ' · ' + ago(s.fetchedAt) + ' ago' : '')) : 'n/a'}`
+              print(f(ctx.price, 'price'), f(ctx.klines, 'klines'), f(ctx.fng, 'fng'))
+              break
+            }
+            case 'refresh': print(tt.refreshing); ctx.api.refresh(); break
+            case 'theme': { const ok = ctx.api.theme(args[0]); print(ok ? tt.themeOk(args[0]) : tt.themeErr); break }
+            case 'matrix': ctx.api.matrix(args[0] !== 'off'); print(tt.matrixMsg(args[0] !== 'off')); break
+            case 'clear': setLines([]); break
+            case 'whoami': print(tt.whoami); break
+            default: print(tt.notFound(name))
+          }
+        }
+        function onKeyDown(e) {
+          if (e.key === 'Enter') { run(input); setInput('') }
+          else if (e.key === 'ArrowUp') { e.preventDefault(); if (!hist.length) return; const i = hi < 0 ? hist.length - 1 : Math.max(0, hi - 1); setHi(i); setInput(hist[i]) }
+          else if (e.key === 'ArrowDown') { e.preventDefault(); if (hi < 0) return; const i = hi + 1; if (i >= hist.length) { setHi(-1); setInput('') } else { setHi(i); setInput(hist[i]) } }
+        }
+        return (
+          <section className="terminal">
+            <div className="term-head"><span className="dot red" /><span className="dot yellow" /><span className="dot green" /><span className="term-title">~/btc-signal — shell</span></div>
+            <div className="term-body" ref={bodyRef} onClick={() => bodyRef.current?.querySelector('input')?.focus()}>
+              {lines.map((l, i) => <div key={i} className="term-line">{l}</div>)}
+              <div className="term-input-row"><span className="term-prompt">satoshi@btc:~$</span>
+                <input autoFocus={autoFocusInput} value={input} spellCheck={false} onChange={(e) => setInput(e.target.value)} onKeyDown={onKeyDown} /></div>
+            </div>
+          </section>
+        )
+      }
+
+      /* =========================================================
+       *  시계
+       * ========================================================= */
+      function useClock() {
+        const [now, setNow] = useState(new Date())
+        useEffect(() => { const t = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(t) }, [])
+        return now
+      }
+
+      function useLocalStorage(key, initial) {
+        const [value, setValue] = useState(() => { try { const r = localStorage.getItem(key); return r != null ? JSON.parse(r) : initial } catch { return initial } })
+        useEffect(() => { try { localStorage.setItem(key, JSON.stringify(value)) } catch {} }, [key, value])
+        return [value, setValue]
+      }
+
+      /* =========================================================
+       *  App
+       * ========================================================= */
+      const THEMES = { green: '#00ff9c', cyan: '#00e5ff', amber: '#ffb000', red: '#ff3b5c' }
+      function App() {
+        const [price, setPrice] = useState(null)
+        const [klines, setKlines] = useState(null)
+        const [fng, setFng] = useState(null)
+        const [accent, setAccent] = useLocalStorage('btc:accent', THEMES.green)
+        const [matrixOn, setMatrixOn] = useLocalStorage('btc:matrix', true)
+        const [tipsOn, setTipsOn] = useLocalStorage('btc:tips', true)
+        const [lang, setLang] = useLocalStorage('btc:lang', detectLang())
+        const [scoreHist, setScoreHist] = useLocalStorage('btc:scoreHist', [])
+        const [booted, setBooted] = useState(() => sessionStorage.getItem('btcbooted') === '1')
+        const now = useClock()
+        const t = getT(lang)
+        const locale = localeOf(lang)
+
+        useEffect(() => { document.documentElement.style.setProperty('--neon', accent) }, [accent])
+
+        // 첫 진입 시 ?lang= 우선 적용(공유 링크/hreflang)
+        useEffect(() => {
+          const q = new URLSearchParams(window.location.search).get('lang')
+          if (q && LANGS.some((l) => l.code === q)) setLang(q)
+        }, [])
+
+        // 언어 변경 시 <html lang> / <title> / meta description 현지화
+        useEffect(() => {
+          document.documentElement.lang = lang
+          document.title = DOC_TITLE[lang] || DOC_TITLE.en
+          let m = document.querySelector('meta[name="description"]')
+          if (!m) { m = document.createElement('meta'); m.setAttribute('name', 'description'); document.head.appendChild(m) }
+          m.setAttribute('content', t.subtitle)
+        }, [lang, t])
+
+        const refresh = useCallback(() => {
+          setPrice((p) => (p ? { ...p, status: 'loading' } : p)); loadPrice().then(setPrice)
+          setKlines((k) => (k ? { ...k, status: 'loading' } : k)); loadKlines().then(setKlines)
+          setFng((f) => (f ? { ...f, status: 'loading' } : f)); loadFng().then(setFng)
+        }, [])
+
+        // 부팅: 캐시 하이드레이션(즉시) → 라이브 페치 → 폴링
+        useEffect(() => {
+          const pc = loadCache('btc:price'); if (pc) setPrice({ ...pc.data, status: 'cached', fetchedAt: pc.fetchedAt })
+          const kc = loadCache('btc:klines'); if (kc) setKlines({ ...kc.data, status: 'cached', fetchedAt: kc.fetchedAt })
+          const fc = loadCache('btc:fng'); if (fc) setFng({ ...fc.data, status: 'cached', fetchedAt: fc.fetchedAt })
+          refresh()
+          let n = 0
+          const id = setInterval(() => {
+            if (document.hidden) return
+            n++
+            loadPrice().then(setPrice)
+            if (n % 10 === 0) loadKlines().then(setKlines)
+            if (n % 60 === 0) loadFng().then(setFng)
+          }, 60000)
+          return () => clearInterval(id)
+        }, [refresh])
+
+        const analysis = useMemo(() => {
+          const closes = klines?.closes || []
+          const fngArr = fng?.arr || []
+          const livePrice = price?.price ?? (closes.length ? closes[closes.length - 1] : null)
+          if (!closes.length && !fngArr.length) return null
+          return computeAnalysis({ closes, fngArr, livePrice, t, times: klines?.times, fngTimes: fng?.times })
+        }, [klines, fng, price, t])
+
+        const analysisRef = useRef(analysis); analysisRef.current = analysis
+
+        // 점수 히스토리 기록(값이 바뀔 때만)
+        const lastScore = useRef(null)
+        useEffect(() => {
+          if (!analysis || analysis.score == null) return
+          if (lastScore.current === analysis.score) return
+          lastScore.current = analysis.score
+          setScoreHist((prev) => [...prev, { t: Date.now(), s: analysis.score }].slice(-80))
+        }, [analysis && analysis.score])
+
+        const api = useMemo(() => ({
+          refresh,
+          theme: (name) => { if (!THEMES[name]) return false; setAccent(THEMES[name]); return true },
+          matrix: (on) => setMatrixOn(!!on),
+        }), [refresh])
+
+        const finishBoot = useCallback(() => { sessionStorage.setItem('btcbooted', '1'); setBooted(true) }, [])
+        if (!booted) return <BootSequence onDone={finishBoot} t={t} />
+
+        const band = analysis?.band
+        const sysColor = band ? band.color : 'warn'
+        const score = analysis?.score
+        const gaugeColor = band ? (band.color === 'ok' ? 'var(--ok)' : band.color === 'warn' ? 'var(--warn)' : 'var(--crit)') : 'var(--dim)'
+        const r = 90, circ = 2 * Math.PI * r, dash = ((score || 0) / 100) * circ
+        const chgUp = (price?.change24hPct ?? 0) >= 0
+        const priceStale = price?.fetchedAt && Date.now() - price.fetchedAt > 5 * 60000
+
+        const ctx = { analysisRef, price, klines, fng, api }
+
+        return (
+          <I18nContext.Provider value={{ lang, t }}>
+          <TipsContext.Provider value={tipsOn}>
+          <div className={`app status-${sysColor}`}>
+            <MatrixRain enabled={matrixOn} accent={accent} />
+            <div className="scanlines" /><div className="vignette" />
+            <div className="shell">
+              <header className="topbar">
+                <div className="brand">
+                  <span className="logo">₿▰▱</span>
+                  <div>
+                    <h1 className="title">BTC_SIGNAL <span className="dim">// {t.tagline}</span></h1>
+                    <p className="subtitle">{t.subtitle}</p>
+                  </div>
+                </div>
+                <div className="topbar-right">
+                  <label className="lang-select" title={t.langLabel}>
+                    <span className="lang-globe" aria-hidden="true">🌐</span>
+                    <select value={lang} onChange={(e) => { const code = e.target.value; setLang(code); const u = new URL(window.location.href); u.searchParams.set('lang', code); window.history.replaceState(null, '', u) }} aria-label={t.langLabel}>
+                      {LANGS.map((l) => <option key={l.code} value={l.code}>{l.label}</option>)}
+                    </select>
+                  </label>
+                  <label className="tips-toggle" title={t.tipsHint}>
+                    <input type="checkbox" checked={tipsOn} onChange={(e) => setTipsOn(e.target.checked)} />
+                    <span>{t.tips} {tipsOn ? 'ON' : 'OFF'}</span>
+                  </label>
+                  <div className={`sys-status status-${sysColor}`}><span className="pulse" />{band ? (t.bands[band.id] ? t.bands[band.id].label : band.label) : t.loading}</div>
+                  <div className="clock"><span className="clock-time">{now.toLocaleTimeString(locale, { hour12: false })}</span><span className="clock-time-sm">{`${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`}</span><span className="clock-date">{now.toLocaleDateString(locale)}</span></div>
+                </div>
+              </header>
+
+              <div className="disclaimer-banner" role="note">
+                <span className="dz-icon">⚠</span>
+                <span>{t.banner.p1} <strong>{t.banner.s1}</strong> {t.banner.p2} <strong>{t.banner.s2}</strong> {t.banner.p3}</span>
+              </div>
+
+              <section className="hero">
+                <div className={`panel gauge-panel status-${sysColor}`} style={{ '--accent': gaugeColor }}>
+                  <span className="corner tl" /><span className="corner tr" /><span className="corner bl" /><span className="corner br" />
+                  <div className="panel-label">// <Term k="score">{t.buyTimingScore}</Term></div>
+                  <div className="gauge-big">
+                    <svg viewBox="0 0 210 210">
+                      <circle cx="105" cy="105" r={r} className="gauge-track" />
+                      <circle cx="105" cy="105" r={r} className="gauge-fill" stroke={gaugeColor} strokeDasharray={`${dash} ${circ}`} transform="rotate(-90 105 105)" />
+                    </svg>
+                    <div className="gauge-center">
+                      <span className="gauge-score" style={{ color: gaugeColor }}>{score == null ? '--' : score.toFixed(0)}</span>
+                      <span className="gauge-of">/ 100</span>
+                    </div>
+                  </div>
+                  <div className="verdict" style={{ color: gaugeColor }}>{band ? (t.bands[band.id] ? t.bands[band.id].label : band.label) : '…'}</div>
+                  <div className="verdict-advice">{band ? (t.bands[band.id] ? t.bands[band.id].advice : band.advice) : t.dataLoading}</div>
+                  <div className="coverage">{analysis ? <><Term k="coverage">{t.indicatorsOnline(analysis.online)}</Term> · {t.higherMoreBuy}</> : ''}</div>
+                </div>
+
+                <div className="panel market" style={{ '--accent': accent }}>
+                  <span className="corner tl" /><span className="corner br" />
+                  <div className="market-top">
+                    <div>
+                      <div className="panel-label">// BTC / USD {priceStale && <Term k="stale"><span className="na-flag">{t.stale}</span></Term>}</div>
+                      <div className="price-big">{fmtUsd(price?.price)}</div>
+                      <div className="price-sub">
+                        <Term k="chg24"><span className={`chg ${chgUp ? 'up' : 'down'}`}>{fmtPct(price?.change24hPct)} (24h)</span></Term>
+                        <Term k="vol"><span>{t.vol} {fmtCompact(price?.vol24h)}</span></Term>
+                        {price?.marketCap != null && <Term k="mcap"><span>{t.mcap} {fmtCompact(price.marketCap)}</span></Term>}
+                      </div>
+                    </div>
+                    <div className="badges-row">
+                      <SourceBadge label="price" src={price} />
+                      <SourceBadge label="hist" src={klines} />
+                      <SourceBadge label="f&g" src={fng} />
+                    </div>
+                  </div>
+                  <div className="spark-wrap">
+                    <div className="spark-title"><span>{t.priceHistory(Math.min(120, klines?.closes?.length || 0))}</span><span>{klines?.source || ''}</span></div>
+                    {klines?.closes?.length ? <Sparkline data={klines.closes.slice(-120)} times={klines.times?.slice(-120)} color={accent} height={64} fmt={fmtUsd} /> : <div className="spark-empty">{t.histLoading}</div>}
+                  </div>
+                  <div className="spark-wrap">
+                    <div className="spark-title"><span>{t.scoreTrend}</span><span>{scoreHist.length}p</span></div>
+                    {scoreHist.length > 1 ? <Sparkline data={scoreHist.map((h) => h.s)} times={scoreHist.map((h) => h.t)} color={gaugeColor} height={48} baseline={0} fmt={(v) => String(Math.round(v))} refLines={[{ v: 65, color: 'rgba(0,255,156,.25)' }, { v: 45, color: 'rgba(255,176,0,.25)' }]} /> : <div className="spark-empty spark-sm">{t.trendAccrues}</div>}
+                  </div>
+                </div>
+              </section>
+
+              <section className="ind-grid">
+                {INDICATOR_META.map((m) => <IndicatorCard key={m.key} meta={m} part={analysis?.parts?.[m.key]} />)}
+              </section>
+
+              <Terminal ctx={ctx} />
+
+              <footer className="footer">
+                <span>{t.footer} {t.dataLabel} CoinGecko · Binance · Alternative.me</span>
+                <span className="footer-cmds">
+                  <button className="chip" onClick={refresh}>↻ {t.refresh}</button>
+                  <button className="chip" onClick={() => setMatrixOn((v) => !v)}>matrix:{matrixOn ? 'on' : 'off'}</button>
+                  <button className="chip" onClick={() => { setScoreHist(analysis?.score != null ? [{ t: Date.now(), s: analysis.score }] : []); lastScore.current = analysis?.score ?? null }}>{t.clearHistory}</button>
+                </span>
+              </footer>
+            </div>
+          </div>
+          </TipsContext.Provider>
+          </I18nContext.Provider>
+        )
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+    </script>
   </body>
 </html>
