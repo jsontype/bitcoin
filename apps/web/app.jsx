@@ -26,6 +26,18 @@ const APPS = [
   },
 ];
 
+/* ***! TODO: 아래 ROADMAP은 "예정" 표시용 플레이스홀더입니다.
+   실제 앱을 출시하면 위 APPS(live)로 옮기고 여기서 제거하세요. */
+const ROADMAP = [
+  { slug: 'fx',    name: '환율 계산기',     category: '금융',   status: 'soon', desc: '실시간 환율로 즉시 변환하는 다통화 계산기.', tags: ['환율'] },
+  { slug: 'dday',  name: 'D-Day 카운터',    category: '생활',   status: 'soon', desc: '기념일·마감까지 남은 날짜를 카운트.', tags: ['날짜'] },
+  { slug: 'qr',    name: 'QR 생성기',       category: '도구',   status: 'soon', desc: '링크·텍스트를 QR 코드로 즉시 생성.', tags: ['QR'] },
+  { slug: 'unit',  name: '단위 변환기',     category: '도구',   status: 'soon', desc: '길이·무게·온도 등 단위를 빠르게 변환.', tags: ['변환'] },
+  { slug: 'color', name: '컬러 팔레트',     category: '디자인', status: 'soon', desc: '브랜드 컬러·팔레트 추출과 대비 검사.', tags: ['색상'] },
+  { slug: 'json',  name: 'JSON 포매터',     category: '개발',   status: 'soon', desc: 'JSON 정렬·검증·트리 뷰.', tags: ['개발'] },
+  { slug: 'timer', name: '포모도로 타이머', category: '생산성', status: 'soon', desc: '집중·휴식 사이클 타이머.', tags: ['타이머'] },
+];
+
 /* ---- 내비게이션 --------------------------------------------------------- */
 const NAV = [
   { group: '회사', items: [
@@ -129,9 +141,79 @@ function AboutPage({ go }) {
   );
 }
 
-/* ---- (#5에서 구현) 유용한 앱들 ----------------------------------------- */
+/* ---- 유용한 앱들 (페이지네이션 테이블 · 행 클릭 → 서브도메인) ---------- */
+function StatusTag({ status }) {
+  if (status === 'live') return <span className="tag live">live</span>;
+  if (status === 'beta') return <span className="tag beta">beta</span>;
+  return <span className="tag soon">예정</span>;
+}
+
+function Pager({ page, pages, onGo }) {
+  if (pages <= 1) return null;
+  const nums = [];
+  for (let i = 1; i <= pages; i++) nums.push(i);
+  return (
+    <div className="pager">
+      <span className="pinfo">{page} / {pages} 페이지</span>
+      <div className="pbtns">
+        <button className="pbtn" disabled={page <= 1} onClick={() => onGo(page - 1)} aria-label="이전">‹</button>
+        {nums.map(n => (
+          <button key={n} className={'pbtn' + (n === page ? ' active' : '')} onClick={() => onGo(n)}>{n}</button>
+        ))}
+        <button className="pbtn" disabled={page >= pages} onClick={() => onGo(page + 1)} aria-label="다음">›</button>
+      </div>
+    </div>
+  );
+}
+
 function AppsPage() {
-  return (<><PageHead title="유용한 앱들" desc="broodev가 만든 앱 모음" /><div className="empty">목록 준비 중…</div></>);
+  const ALL = [...APPS, ...ROADMAP];
+  const [q, setQ] = useState('');
+  const [page, setPage] = useState(1);
+  const pageSize = 6;
+  const ql = q.trim().toLowerCase();
+  useEffect(() => { setPage(1); }, [ql]);
+
+  const filtered = ALL.filter(a =>
+    !ql || (a.name + a.desc + a.category + (a.tags || []).join(' ')).toLowerCase().includes(ql));
+  const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const cur = Math.min(page, pages);
+  const rows = filtered.slice((cur - 1) * pageSize, cur * pageSize);
+  const open = (a) => { if (a.status === 'live' && a.url) window.open(a.url, '_blank', 'noopener'); };
+
+  return (
+    <>
+      <PageHead title="유용한 앱들" desc={`출시 ${APPS.length}개 · 준비 중 ${ROADMAP.length}개`} />
+      <div className="row" style={{ marginBottom: 14 }}>
+        <input className="input" placeholder="앱 검색 (이름·설명·카테고리)" value={q}
+          onChange={e => setQ(e.target.value)} style={{ flex: 1, minWidth: 220 }} />
+      </div>
+      <div className="table-wrap">
+        <table className="tbl">
+          <thead>
+            <tr><th>앱</th><th>설명</th><th>카테고리</th><th>상태</th><th style={{ textAlign: 'right' }}>링크</th></tr>
+          </thead>
+          <tbody>
+            {rows.length === 0 && <tr><td colSpan={5}><div className="empty">검색 결과가 없습니다.</div></td></tr>}
+            {rows.map(a => (
+              <tr key={a.slug} className={a.status === 'live' ? 'clickable' : ''}
+                onClick={() => open(a)} title={a.status === 'live' ? a.url : '준비 중'}>
+                <td className="t-name">{a.name}</td>
+                <td className="t-muted">{a.desc}</td>
+                <td className="t-muted">{a.category}</td>
+                <td><StatusTag status={a.status} /></td>
+                <td style={{ textAlign: 'right' }} className={a.status === 'live' ? 'neon' : 't-muted'}>
+                  {a.status === 'live' ? a.url.replace('https://', '') + ' ↗' : '준비 중'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <Pager page={cur} pages={pages} onGo={setPage} />
+      </div>
+      <p className="muted" style={{ fontSize: 11, marginTop: 12 }}>※ “예정” 앱은 출시 준비 중입니다. 출시되면 클릭해 바로 이동할 수 있어요.</p>
+    </>
+  );
 }
 
 /* ---- (#6에서 구현) 통상 부모도메인 기능 (목업) -------------------------- */
