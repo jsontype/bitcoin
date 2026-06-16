@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>broodev — 쓸모있는 웹앱 모음 | Y-Systems</title>
+    <meta name="description" content="broodev는 일상에 바로 쓰는 무료 웹앱들을 한곳에 모은 포털입니다. 비트코인 공포·탐욕 지수(btc.broodev.com)를 비롯해 설치 불필요·다국어·모바일 대응 웹앱을 제공합니다. 운영: Y-Systems." />
+    <meta name="theme-color" content="#05080a" />
+    <link rel="canonical" href="https://broodev.com/" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%2305080a'/%3E%3Ctext x='50' y='70' font-size='52' text-anchor='middle' fill='%2300ff9c' font-family='monospace'%3E%3E_%3C/text%3E%3C/svg%3E" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="broodev" />
+    <meta property="og:title" content="broodev — 쓸모있는 웹앱 모음" />
+    <meta property="og:description" content="일상에 바로 쓰는 무료 웹앱 포털. 설치 불필요·다국어·모바일 대응. 운영: Y-Systems." />
+    <meta property="og:url" content="https://broodev.com/" />
+    <meta property="og:locale" content="ko_KR" />
+
+    <!-- 구조화 데이터: 조직 + 사이트 -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "name": "broodev",
+            "legalName": "Y-Systems",
+            "url": "https://broodev.com/",
+            "email": "jsontyper@gmail.com",
+            "description": "일상에 쓸모있는 무료 웹앱을 만들어 제공하는 앱 포트폴리오."
+          },
+          {
+            "@type": "WebSite",
+            "name": "broodev",
+            "url": "https://broodev.com/"
+          }
+        ]
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="theme.css" />
+  </head>
+  <body>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <!-- React 마운트 전까지 보이는 정적 폴백 (크롤러/무JS 사용자용 SEO 콘텐츠) -->
+    <div id="root">
+      <main style="max-width:760px;margin:0 auto;padding:40px 20px;color:#c8ffe6;font-family:monospace">
+        <h1 style="color:#00ff9c">broodev — 쓸모있는 웹앱 모음</h1>
+        <p>broodev는 <strong>Y-Systems</strong>가 운영하는 무료 웹앱 포털입니다. 설치 없이 브라우저에서 바로 쓰는, 일상에 도움 되는 도구들을 한곳에 모았습니다.</p>
+        <h2>유용한 앱</h2>
+        <ul>
+          <li><a href="https://btc.broodev.com">btc.broodev.com</a> — 비트코인 공포·탐욕 지수 & 매수 타이밍 점수</li>
+        </ul>
+        <p>문의: jsontyper@gmail.com</p>
+      </main>
+    </div>
+
+    <!-- React 18 (CDN) + 브라우저 Babel — 빌드 불필요 -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel" data-presets="react" src="app.jsx"></script>
+  </body>
+</html>
