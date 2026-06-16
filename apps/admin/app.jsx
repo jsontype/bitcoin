@@ -242,7 +242,62 @@ function AnalyticsPage() {
   );
 }
 
-function TerminalPage()  { return (<><PageHead title="터미널" /><div className="empty">준비 중…</div></>); }
+/* ---- 터미널 (명령 콘솔) ------------------------------------------------ */
+function TerminalPage({ user }) {
+  const [lines, setLines] = useState([{ t: 'broodev admin shell — `help` 로 시작하세요.', c: 'dim' }]);
+  const [val, setVal] = useState('');
+  const bodyRef = useRef(null);
+  const inputRef = useRef(null);
+  useEffect(() => { if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight; }, [lines]);
+  const print = (arr) => setLines(l => [...l, ...arr]);
+
+  const run = (raw) => {
+    const cmd = raw.trim();
+    print([{ t: '$ ' + cmd, c: 'neon' }]);
+    const [c, ...args] = cmd.split(/\s+/);
+    switch ((c || '').toLowerCase()) {
+      case '': break;
+      case 'help': print([{ t: 'commands: help · status · apps · collectors · collect <id> · logs · whoami · clear' }]); break;
+      case 'status': print([
+        { t: `apps: ${MOCK_APPS.length} · collectors: ${MOCK_COLLECTORS.length} (1 warn)`, c: 'ok' },
+        { t: 'today visits: 340 · est. revenue: $— (AdSense 연동 예정)', c: 'dim' },
+      ]); break;
+      case 'apps': print(MOCK_APPS.map(a => ({ t: `• ${a.name.padEnd(12)} ${a.domain.padEnd(20)} [${a.status}]` }))); break;
+      case 'collectors': print(MOCK_COLLECTORS.map(j => ({ t: `• ${j.id.padEnd(12)} ${j.schedule.padEnd(8)} last:${j.last} [${j.status}]`, c: j.status === 'warn' ? 'warn' : undefined }))); break;
+      case 'collect': {
+        const id = args[0];
+        const job = MOCK_COLLECTORS.find(j => j.id === id);
+        if (!id) { print([{ t: 'usage: collect <job-id>', c: 'warn' }]); break; }
+        if (!job) { print([{ t: `unknown job: ${id}`, c: 'crit' }]); break; }
+        print([{ t: `triggering ${id}…` }]);
+        setTimeout(() => print([{ t: `✓ ${id} done (mock)`, c: 'ok' }]), 700); // ***! TODO: 실제 수집 API 호출
+        break;
+      }
+      case 'logs': print(MOCK_LOGS.slice(0, 6).map(l => ({ t: `${l.ts} [${l.app}] ${l.event} — ${l.detail}`, c: l.level === 'warn' ? 'warn' : 'dim' }))); break;
+      case 'whoami': print([{ t: (user && user.email) || 'unknown', c: 'ok' }]); break;
+      case 'clear': setLines([]); break;
+      default: print([{ t: `command not found: ${c} (try 'help')`, c: 'crit' }]);
+    }
+  };
+  const onKey = (e) => { if (e.key === 'Enter') { run(val); setVal(''); } };
+
+  return (
+    <>
+      <PageHead title="터미널" desc="운영 명령 콘솔" />
+      <div className="terminal">
+        <div className="term-head"><span className="dot red" /><span className="dot yellow" /><span className="dot green" /><span className="term-title">broodev — admin@console</span></div>
+        <div className="term-body" ref={bodyRef} onClick={() => inputRef.current && inputRef.current.focus()}>
+          {lines.map((l, i) => (<div key={i} className="term-line"><span className={l.c || ''}>{l.t}</span></div>))}
+          <div className="term-input-row">
+            <span className="term-prompt">$</span>
+            <input ref={inputRef} value={val} onChange={e => setVal(e.target.value)} onKeyDown={onKey} spellCheck={false} placeholder="help" />
+          </div>
+        </div>
+      </div>
+      <p className="muted" style={{ fontSize: 11, marginTop: 10 }}>※ collect 등 실제 동작은 백엔드 연동 후입니다. 지금은 목업 응답.</p>
+    </>
+  );
+}
 
 /* ---- 설정 ------------------------------------------------------------- */
 function SettingsPage() {
@@ -428,7 +483,7 @@ function AdminApp({ user, onSignOut }) {
               <Clock />
             </div>
           </header>
-          <div className="content"><Section go={go} /></div>
+          <div className="content"><Section go={go} user={user} /></div>
         </main>
       </div>
     </>
