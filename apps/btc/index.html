@@ -449,6 +449,7 @@
       <p class="seo-disclaimer">⚠ 본 점수는 공개 지표를 합성한 참고 신호이며 투자 자문이 아닙니다. 모든 투자 판단과 책임은 이용자 본인에게 있습니다.</p>
     </section>
 
+    <script src="seo-i18n.js"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
@@ -1640,9 +1641,8 @@
           let m = document.querySelector('meta[name="description"]')
           if (!m) { m = document.createElement('meta'); m.setAttribute('name', 'description'); document.head.appendChild(m) }
           m.setAttribute('content', t.subtitle)
-          // 하단 정적 SEO 본문은 한국어 키워드용 → 비한국어 UI에선 숨김(한국어 노이즈 방지)
-          const seo = document.querySelector('section.seo')
-          if (seo) seo.style.display = (lang === 'ko') ? '' : 'none'
+          // 하단 SEO 본문을 현재 언어로 렌더 (seo-i18n.js) — 언어별 "보이는" 콘텐츠라 SEO에도 유리
+          if (window.renderSEO) window.renderSEO(lang)
         }, [lang, t])
 
         const refresh = useCallback(() => {
