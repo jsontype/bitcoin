@@ -1623,6 +1623,14 @@
           if (q && LANGS.some((l) => l.code === q)) setLang(q)
         }, [])
 
+        // 현재 언어를 항상 URL(?lang=)에 반영 → 공유 링크가 그 언어 OG 썸네일로 뜨게(엣지 함수가 ?lang 사용)
+        useEffect(() => {
+          try {
+            const u = new URL(window.location.href)
+            if (u.searchParams.get('lang') !== lang) { u.searchParams.set('lang', lang); window.history.replaceState(null, '', u) }
+          } catch (e) {}
+        }, [lang])
+
         // 언어 변경 시 <html lang> / <title> / meta description 현지화
         useEffect(() => {
           document.documentElement.lang = lang

@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <!-- OG 이미지(1200x630) 생성기. ?lang= 로 언어 선택 후 Edge 헤드리스로 스크린샷.
+         예) msedge --headless --window-size=1200,630 --screenshot=og-ja.png "file:///.../og-image.html?lang=ja" -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
+      * { margin: 0; box-sizing: border-box; }
+      html, body { width: 1200px; height: 630px; }
+      body {
+        background: radial-gradient(900px 600px at 72% -10%, #0c1a18 0%, #05080a 60%);
+        color: #c8ffe6; overflow: hidden; position: relative;
+        font-family: 'JetBrains Mono', 'Segoe UI', 'Yu Gothic UI', 'Meiryo', 'Malgun Gothic', sans-serif;
+      }
+      .wrap { position: absolute; inset: 0; padding: 72px 80px; display: flex; flex-direction: column; justify-content: center; }
+      .badge { display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: #00ff9c; border: 1px solid rgba(0,255,156,.4); border-radius: 8px; padding: 8px 16px; width: max-content; text-shadow: 0 0 12px rgba(0,255,156,.5); }
+      .title { font-size: 74px; font-weight: 800; line-height: 1.12; margin-top: 30px; max-width: 770px; color: #eafff5; }
+      .title b { color: #00ff9c; text-shadow: 0 0 24px rgba(0,255,156,.45); }
+      .sub { font-size: 29px; color: #9fe9cf; margin-top: 22px; max-width: 770px; }
+      .tags { display: flex; gap: 14px; margin-top: 34px; font-family: 'JetBrains Mono', monospace; font-size: 18px; color: #4f7a6c; flex-wrap: wrap; }
+      .tag { border: 1px solid rgba(0,255,156,.2); border-radius: 6px; padding: 5px 12px; }
+      .ring { position: absolute; right: 86px; top: 50%; transform: translateY(-50%); width: 300px; height: 300px; }
+      .scan { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 3px, rgba(0,0,0,.18) 4px, rgba(0,0,0,0) 5px); pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="badge">₿ BTC_SIGNAL</div>
+      <div class="title" id="title"></div>
+      <div class="sub" id="sub"></div>
+      <div class="tags"><span class="tag">Fear &amp; Greed</span><span class="tag">RSI</span><span class="tag">MACD</span><span class="tag">Mayer</span><span class="tag">0–100</span></div>
+    </div>
+    <svg class="ring" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="7" />
+      <circle cx="50" cy="50" r="42" fill="none" stroke="#00ff9c" stroke-width="7" stroke-linecap="round" stroke-dasharray="190 264" transform="rotate(-90 50 50)" style="filter: drop-shadow(0 0 6px #00ff9c)" />
+      <text x="50" y="60" font-size="34" text-anchor="middle" fill="#00ff9c" font-family="monospace">₿</text>
+    </svg>
+    <div class="scan"></div>
+    <script>
+      var T = {
+        en: { t: 'Bitcoin <b>Fear &amp; Greed</b> Index', s: 'Buy-Timing Score · 6 live indicators in one 0–100 score' },
+        ja: { t: 'ビットコイン <b>恐怖・強欲</b>指数', s: '買い時スコア · 6つのリアルタイム指標を0〜100で' },
+        ko: { t: '비트코인 <b>공포·탐욕</b> 지수', s: '매수 타이밍 점수 · 실시간 6개 지표' }
+      };
+      var lang = new URLSearchParams(location.search).get('lang') || 'en';
+      var m = T[lang] || T.en;
+      document.getElementById('title').innerHTML = m.t;
+      document.getElementById('sub').textContent = m.s;
+    </script>
+  </body>
+</html>
