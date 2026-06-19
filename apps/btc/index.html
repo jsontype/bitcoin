@@ -1564,6 +1564,8 @@
           sub: '아래 버튼을 누르면 6개 지표를 실시간 합성해 점수를 계산합니다.',
           cta: '비트코인 매수 타이밍 점수 계산 시작',
           note: '계산은 몇 초 걸립니다. 그동안 아래 광고가 노출됩니다.',
+          recalc: '재산출',
+          staleNotice: '데이터가 오래됐어요. 최신 데이터로 다시 산출하세요.',
           adlabel: '광고',
           lines: ['[init] 데이터 파이프라인 연결…', '[fetch] 시세·거래량 수집…', '[calc] RSI(14) 산출…', '[calc] MACD(12·26·9) 계산…', '[calc] 공포·탐욕 지수 합성…', '[calc] Mayer·낙폭·골든크로스 가중…', '[done] 매수 타이밍 점수 산출 완료 ✓'],
         },
@@ -1573,6 +1575,8 @@
           sub: 'Tap the button to synthesize 6 live indicators into a score.',
           cta: 'Start calculating the Bitcoin buy-timing score',
           note: 'This takes a few seconds. An ad is shown below while you wait.',
+          recalc: 'Recalculate',
+          staleNotice: 'Data is stale. Recalculate with the latest data.',
           adlabel: 'Ad',
           lines: ['[init] connecting data pipeline…', '[fetch] price & volume…', '[calc] RSI(14)…', '[calc] MACD(12·26·9)…', '[calc] Fear & Greed synthesis…', '[calc] Mayer · drawdown · cross weighting…', '[done] buy-timing score ready ✓'],
         },
@@ -1606,6 +1610,7 @@
         const gate = getGate(lang)
         const [scoreRevealed, setScoreRevealed] = useState(false)
         const [calc, setCalc] = useState(null) // null=대기, 0..N=계산 진행 단계
+        const [recalc, setRecalc] = useState(false) // STALE로 재가림되어 재산출이 필요한 상태
         const startCalc = () => {
           if (calc != null) return
           const n = gate.lines.length
@@ -1620,7 +1625,7 @@
           const step = () => {
             i += 1
             setCalc(i)
-            if (i >= n) { setTimeout(() => setScoreRevealed(true), 300 + Math.floor(Math.random() * 400)); return }
+            if (i >= n) { setTimeout(() => { setScoreRevealed(true); setRecalc(false) }, 300 + Math.floor(Math.random() * 400)); return }
             setTimeout(step, durs[i])
           }
           setTimeout(step, durs[0])
@@ -1711,6 +1716,12 @@
         const r = 90, circ = 2 * Math.PI * r, dash = ((score || 0) / 100) * circ
         const chgUp = (price?.change24hPct ?? 0) >= 0
         const priceStale = price?.fetchedAt && Date.now() - price.fetchedAt > 5 * 60000
+        // STALE(데이터 5분 초과)로 "전환"되면 점수를 다시 가리고 재산출 요구 (공개 직후 깜빡임 방지: 전환 시에만)
+        const prevStaleRef = useRef(false)
+        useEffect(() => {
+          if (priceStale && !prevStaleRef.current && scoreRevealed) { setScoreRevealed(false); setCalc(null); setRecalc(true) }
+          prevStaleRef.current = priceStale
+        }, [priceStale, scoreRevealed])
 
         const ctx = { analysisRef, price, klines, fng, api }
 
@@ -1774,10 +1785,10 @@
                     <div className="score-gate">
                       {calc == null ? (
                         <>
-                          <div className="gate-lock">🔒</div>
-                          <div className="gate-title">{gate.title}</div>
-                          <div className="gate-sub">{gate.sub}</div>
-                          <button className="gate-btn" onClick={startCalc}>▶ {gate.cta}</button>
+                          <div className="gate-lock">{recalc ? '⟳' : '🔒'}</div>
+                          <div className="gate-title">{recalc ? (t.stale + ' · ' + gate.recalc) : gate.title}</div>
+                          <div className="gate-sub">{recalc ? gate.staleNotice : gate.sub}</div>
+                          <button className="gate-btn" onClick={recalc ? (() => { refresh(); startCalc() }) : startCalc}>▶ {recalc ? gate.recalc : gate.cta}</button>
                           <div className="gate-note">{gate.note}</div>
                         </>
                       ) : (
