@@ -180,6 +180,11 @@
       .gauge-panel.status-crit { animation: cardalert 1.6s infinite; }
       @keyframes cardalert { 50% { box-shadow: 0 0 26px -8px var(--crit); } }
       .panel-label { align-self: flex-start; font-size: 10px; letter-spacing: 2px; color: var(--dim); margin-bottom: 6px; }
+      .mode-tabs { display: flex; gap: 4px; padding: 3px; margin-bottom: 4px; border: 1px solid rgba(255,255,255,.08); border-radius: 9px; background: rgba(0,0,0,.25); }
+      .mode-tab { flex: 1; padding: 6px 10px; font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: .5px; white-space: nowrap; color: var(--dim); background: transparent; border: 0; border-radius: 6px; cursor: pointer; transition: color .2s, background .2s, box-shadow .2s; }
+      .mode-tab:hover { color: var(--text); }
+      .mode-tab.on { color: #04110b; background: var(--accent); box-shadow: 0 0 14px -2px var(--accent); }
+      .mode-hint { font-size: 10px; line-height: 1.45; color: var(--dim); opacity: .85; margin-bottom: 10px; max-width: 280px; text-align: center; }
       .gauge-big { position: relative; width: 210px; height: 210px; }
       .gauge-big svg { width: 100%; height: 100%; }
       .gauge-track { fill: none; stroke: rgba(255,255,255,.07); stroke-width: 10; }
@@ -1001,13 +1006,19 @@
         return { sma50: fast, sma200: slow, crossState: fast > slow ? 'GOLDEN' : 'DEATH', event, gapPct: (fast / slow - 1) * 100, isFallback: N < 200 }
       }
 
-      const WEIGHTS = { RSI: 0.18, MACD: 0.18, FNG: 0.18, Mayer: 0.18, DD: 0.14, GC_DC: 0.14 }
+      // 단기(모멘텀) 가중치 — 2017~현재 백테스트 예측력 순(90일 +0.21)
+      const WEIGHTS_MOM = { RSI: 0.28, MACD: 0.14, FNG: 0.28, Mayer: 0.04, DD: 0.18, GC_DC: 0.08 }
+      // 장기(역발상) 가중치 — 사이클 평균회귀(540일 +0.18). 균형 배분.
+      const WEIGHTS_CON = { RSI: 0.18, MACD: 0.18, FNG: 0.18, Mayer: 0.18, DD: 0.14, GC_DC: 0.14 }
+      const WEIGHTS_BY_MODE = { short: WEIGHTS_MOM, long: WEIGHTS_CON }
+      const WEIGHTS = WEIGHTS_MOM // 하위호환(터미널 기본 = 단기)
+      // 밴드: 임계/색은 공유. advice/label = 장기(역발상), adviceMom/labelMom = 단기(모멘텀)
       const BANDS = [
-        { id: 'STRONG_BUY', min: 80, label: 'STRONG BUY', color: 'ok', advice: '과매도+공포+저평가 다중 합류. 분할 매수 적극 구간.' },
-        { id: 'ACCUMULATE', min: 65, label: 'ACCUMULATE', color: 'ok', advice: '매수 우호. 분할 적립 권장. 추세 필터와 함께 확인.' },
-        { id: 'NEUTRAL', min: 45, label: 'NEUTRAL', color: 'warn', advice: '관망/중립. 뚜렷한 우위 없음. 추가 신호 대기.' },
-        { id: 'CAUTION', min: 25, label: 'CAUTION', color: 'warn', advice: '주의. 탐욕·고평가 진입 초입. 추격 매수 자제.' },
-        { id: 'OVERHEATED', min: 0, label: 'OVERHEATED', color: 'crit', advice: '과열. 극탐욕/고평가/고점 근접. 신규 매수 금지.' },
+        { id: 'STRONG_BUY', min: 80, color: 'ok', label: 'STRONG BUY', advice: '과매도+공포+저평가 다중 합류. 분할 매수 적극 구간.', labelMom: 'STRONG BUY', adviceMom: '강한 상승 모멘텀·추세 동행. 적극 가담 구간.' },
+        { id: 'ACCUMULATE', min: 65, color: 'ok', label: 'ACCUMULATE', advice: '매수 우호. 분할 적립 권장. 추세 필터와 함께 확인.', labelMom: 'BUY', adviceMom: '상승 추세 우위. 추세 추종 분할 매수.' },
+        { id: 'NEUTRAL', min: 45, color: 'warn', label: 'NEUTRAL', advice: '관망/중립. 뚜렷한 우위 없음. 추가 신호 대기.', labelMom: 'NEUTRAL', adviceMom: '추세 혼조. 방향 확인까지 관망.' },
+        { id: 'CAUTION', min: 25, color: 'warn', label: 'CAUTION', advice: '주의. 탐욕·고평가 진입 초입. 추격 매수 자제.', labelMom: 'WEAK', adviceMom: '하락 모멘텀 우위. 신규 매수 신중.' },
+        { id: 'OVERHEATED', min: 0, color: 'crit', label: 'OVERHEATED', advice: '과열. 극탐욕/고평가/고점 근접. 신규 매수 금지.', labelMom: 'AVOID', adviceMom: '강한 하락 추세. 추세 반전 전 매수 자제.' },
       ]
       const bandFor = (score) => BANDS.find((b) => score >= b.min) || BANDS[BANDS.length - 1]
       const fngLabel = (v, t) => { const f = (t && t.fng) || T.ko.fng; return v == null ? '—' : v <= 25 ? f.extremeFear : v <= 45 ? f.fear : v < 55 ? f.neutral : v < 75 ? f.greed : f.extremeGreed }
@@ -1024,11 +1035,20 @@
       // 모든 지표 + 합성 점수 계산 (t = 현재 언어 번들; 상세 문구 현지화)
       function computeAnalysis({ closes, fngArr, livePrice, t, times = null, fngTimes = null }) {
         const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x))
-        // 역사적 캘리브레이션 매핑 (평범=50, 진짜 극단에서만 꼬리값)
-        const rsiScore = (r) => clamp(50 + (50 - r) * 1.7, 0, 100)
-        const macdScoreFn = (cur, prev, px) => clamp(50 + 25 * Math.tanh(((cur - prev) / px) * 600) + 10 * Math.tanh((cur / px) * 600), 0, 100)
-        const mayerScore = (m) => { if (m <= 0.8) return 100; if (m <= 1.4) return clamp(50 + ((1.4 - m) / 0.6) * 50, 50, 100); if (m <= 2.4) return clamp(10 + ((2.4 - m) / 1.0) * 40, 10, 50); return clamp(10 - (m - 2.4) * 25, 0, 10) }
-        const ddScore = (ddPct) => clamp(-ddPct * 1.4, 0, 100)
+        // ── 단기(모멘텀) 매핑 — BTC는 단기에서 모멘텀 자산(백테스트 90일 +0.21).
+        //    추세/탐욕/고점근접일수록 高점수. 극단 과열은 아래 톱가드로 하향.
+        const momRsi = (r) => clamp(50 + (r - 50) * 1.6, 0, 100)
+        const momMacd = (cur, prev, px) => clamp(50 + 30 * Math.tanh((cur / px) * 800) + 15 * Math.tanh(((cur - prev) / px) * 800), 0, 100)
+        const momMayer = (m) => clamp(50 + (m - 1) * 25, 0, 100)
+        const momDd = (ddPct) => clamp(100 + ddPct * 1.3, 0, 100)
+        const momFng = (arr) => { const a = (arr || []).map(Number).filter((v) => !isNaN(v)); if (!a.length) return null; return clamp(50 + (a[a.length - 1] - 50) * 1.2, 0, 100) }
+        // ── 장기(역발상) 매핑 — 사이클 평균회귀(백테스트 540일 +0.18).
+        //    과매도/공포/저평가/깊은낙폭일수록 高점수. (전통적 바닥 매집 관점)
+        const conRsi = (r) => clamp(50 + (50 - r) * 1.7, 0, 100)
+        const conMacd = (cur, prev, px) => clamp(50 + 25 * Math.tanh(((cur - prev) / px) * 600) + 10 * Math.tanh((cur / px) * 600), 0, 100)
+        const conMayer = (m) => { if (m <= 0.8) return 100; if (m <= 1.4) return clamp(50 + ((1.4 - m) / 0.6) * 50, 50, 100); if (m <= 2.4) return clamp(10 + ((2.4 - m) / 1.0) * 40, 10, 50); return clamp(10 - (m - 2.4) * 25, 0, 10) }
+        const conDd = (ddPct) => clamp(-ddPct * 1.4, 0, 100)
+        const conFng = (arr) => { const a = (arr || []).map(Number).filter((v) => !isNaN(v)); if (!a.length) return null; const cur = a[a.length - 1]; const mean = (k) => { const m = Math.min(k, a.length); let s = 0; for (let i = a.length - m; i < a.length; i++) s += a[i]; return s / m }; let sc = 0.5 * (100 - cur) + 0.3 * (100 - mean(7)) + 0.2 * (100 - mean(30)); if (cur <= 25) sc += (25 - cur) * 0.4; else if (cur >= 75) sc -= (cur - 75) * 0.4; return clamp(sc, 0, 100) }
         // 시리즈(앞쪽 null 가능)와 평행 타임스탬프를 함께 필터링해 마지막 n개 반환
         const tailTimed = (values, ts2, n = 120) => {
           const useT = Array.isArray(ts2) && ts2.length === values.length
@@ -1043,13 +1063,13 @@
         const r = closes.length ? rsiSeries[closes.length - 1] : null
         const rsiT = tailTimed(rsiSeries, times)
         parts.RSI = {
-          score: r == null ? null : rsiScore(r),
+          sShort: r == null ? null : momRsi(r), sLong: r == null ? null : conRsi(r),
           value: r == null ? 'N/A' : r.toFixed(1),
           detail: r == null ? D.nodata : r < 30 ? D.oversold : r > 70 ? D.overbought : D.neutral,
           series: rsiT.series, times: rsiT.times,
         }
 
-        let macdScore = null, macdVal = 'N/A', macdDetail = D.nodata, macdSeries = [], macdTimes = null, macdCur = null
+        let macdShort = null, macdLong = null, macdVal = 'N/A', macdDetail = D.nodata, macdSeries = [], macdTimes = null, macdCur = null
         if (closes.length >= 35) {
           const { histogram: h } = macd(closes, 12, 26, 9)
           const mt = tailTimed(h, times); macdSeries = mt.series; macdTimes = mt.times
@@ -1057,46 +1077,61 @@
           if (cur != null && prev != null) {
             macdCur = cur
             const px = livePrice && livePrice > 0 ? livePrice : closes[closes.length - 1]
-            macdScore = macdScoreFn(cur, prev, px)
+            macdShort = momMacd(cur, prev, px); macdLong = conMacd(cur, prev, px)
             macdVal = (cur > prev ? '▲' : '▼') + ' ' + (Math.abs(cur) >= 1 ? cur.toFixed(0) : cur.toFixed(2))
             macdDetail = (cur > 0 ? D.posZone : D.negZone) + (cur > prev ? D.turnUp : D.falling)
           }
         }
-        parts.MACD = { score: macdScore, value: macdVal, detail: macdDetail, series: macdSeries, times: macdTimes }
+        parts.MACD = { sShort: macdShort, sLong: macdLong, value: macdVal, detail: macdDetail, series: macdSeries, times: macdTimes }
 
-        const fngScore = fngCompositeScore(fngArr)
         const fngCur = fngArr.length ? fngArr[fngArr.length - 1] : null
         const fngT = tailTimed(fngArr, fngTimes)
-        parts.FNG = { score: fngScore, value: fngCur == null ? 'N/A' : String(fngCur), detail: fngLabel(fngCur, t), series: fngT.series, times: fngT.times }
+        parts.FNG = { sShort: momFng(fngArr), sLong: conFng(fngArr), value: fngCur == null ? 'N/A' : String(fngCur), detail: fngLabel(fngCur, t), series: fngT.series, times: fngT.times }
 
         const mm = mayerMultiple(closes, livePrice)
         parts.Mayer = {
-          score: mm == null ? null : mayerScore(mm.mayer),
+          sShort: mm == null ? null : momMayer(mm.mayer), sLong: mm == null ? null : conMayer(mm.mayer),
           value: mm == null ? 'N/A' : mm.mayer.toFixed(2) + '×',
           detail: mm == null ? D.nodata : (mm.isFallback ? D.fallback200(mm.usedPeriod) : D.vs200),
         }
 
         const dd = drawdownFromHigh(closes, 365, livePrice)
         parts.DD = {
-          score: dd == null ? null : ddScore(dd.drawdownPct),
+          sShort: dd == null ? null : momDd(dd.drawdownPct), sLong: dd == null ? null : conDd(dd.drawdownPct),
           value: dd == null ? 'N/A' : dd.drawdownPct.toFixed(1) + '%',
           detail: dd == null ? D.nodata : D.high(fmtUsd(dd.rollingHigh)),
         }
 
         const gc = goldenDeathCross(closes)
         parts.GC_DC = {
-          score: gc == null ? 50 : gc.event === 'GOLDEN_CROSS' ? 85 : gc.event === 'DEATH_CROSS' ? 15 : gc.crossState === 'GOLDEN' ? 60 : 35,
+          sShort: gc == null ? 50 : gc.event === 'GOLDEN_CROSS' ? 75 : gc.event === 'DEATH_CROSS' ? 30 : gc.crossState === 'GOLDEN' ? 65 : 40,
+          sLong: gc == null ? 50 : gc.event === 'GOLDEN_CROSS' ? 85 : gc.event === 'DEATH_CROSS' ? 15 : gc.crossState === 'GOLDEN' ? 60 : 35,
           value: gc == null ? 'N/A' : gc.crossState + (gc.event !== 'NONE' ? ' ⚡' : ''),
           detail: gc == null ? D.nodata : `gap ${gc.gapPct.toFixed(1)}%` + (gc.event !== 'NONE' ? ' · ' + gc.event : ''),
         }
 
-        let acc = 0, wsum = 0, online = 0
-        for (const k in WEIGHTS) { const v = parts[k].score; if (v != null && !isNaN(v)) { acc += v * WEIGHTS[k]; wsum += WEIGHTS[k]; online++ } }
-        let score = wsum === 0 ? null : Math.round((acc / wsum) * 10) / 10
-        // falling-knife 가드: 하락추세(데드크로스)+모멘텀(MACD 히스토) 음수 → 확인 안 된 바닥, 중립쪽 20% 감쇠
-        let knifeGuard = false
-        if (score != null && gc && gc.crossState === 'DEATH' && macdCur != null && macdCur <= 0) { score = Math.round((50 + (score - 50) * 0.8) * 10) / 10; knifeGuard = true }
-        return { score, coverage: Math.round(wsum * 100) / 100, online, knifeGuard, band: score == null ? null : bandFor(score), parts, livePrice }
+        const aggregate = (subKey, weights) => {
+          let acc = 0, wsum = 0, online = 0
+          for (const k in weights) { const v = parts[k][subKey]; if (v != null && !isNaN(v)) { acc += v * weights[k]; wsum += weights[k]; online++ } }
+          return { raw: wsum === 0 ? null : acc / wsum, wsum, online }
+        }
+        const mv = mm ? mm.mayer : null
+        // 단기(모멘텀) + 블로우오프 톱 가드: 극단 과열(Mayer>2.0 / 극탐욕≥90) 강제 하향
+        const sh = aggregate('sShort', WEIGHTS_MOM)
+        let scoreShort = sh.raw, knifeShort = false
+        if (scoreShort != null) {
+          if (mv != null && mv > 2.0) { scoreShort = scoreShort * clamp(1 - (mv - 2.0) * 0.55, 0.25, 1); knifeShort = true }
+          if (fngCur != null && fngCur >= 90) { scoreShort = scoreShort - (fngCur - 90) * 2.0; knifeShort = true }
+          scoreShort = Math.round(clamp(scoreShort, 0, 100) * 10) / 10
+        }
+        // 장기(역발상) — 과열은 이미 저점수라 별도 가드 불필요
+        const lg = aggregate('sLong', WEIGHTS_CON)
+        const scoreLong = lg.raw == null ? null : Math.round(clamp(lg.raw, 0, 100) * 10) / 10
+        return {
+          short: { score: scoreShort, band: scoreShort == null ? null : bandFor(scoreShort), knifeGuard: knifeShort, online: sh.online, coverage: Math.round(sh.wsum * 100) / 100 },
+          long: { score: scoreLong, band: scoreLong == null ? null : bandFor(scoreLong), knifeGuard: false, online: lg.online, coverage: Math.round(lg.wsum * 100) / 100 },
+          parts, livePrice,
+        }
       }
 
       /* =========================================================
@@ -1381,17 +1416,19 @@
       /* =========================================================
        *  지표 카드
        * ========================================================= */
-      function IndicatorCard({ meta, part }) {
+      function IndicatorCard({ meta, part, mode = 'long', xm }) {
         const { t } = useI18n()
         const ti = t.ind[meta.key] || { name: meta.name, desc: meta.desc }
-        const s = part?.score
+        const desc = mode === 'short' ? ((xm && xm.ind && xm.ind[meta.key]) || ti.desc) : ti.desc
+        const weight = (mode === 'short' ? WEIGHTS_MOM : WEIGHTS_CON)[meta.key]
+        const s = part ? (mode === 'long' ? part.sLong : part.sShort) : null
         const status = s == null ? 'na' : (bandFor(s).color)
         return (
           <article className={`ind-card status-${status}`}>
             <span className="corner tl" /><span className="corner br" />
             <div className="ind-head">
               <Term k={meta.key}><span className="ind-short">{meta.short}</span></Term>
-              <span className="ind-weight">w {Math.round(WEIGHTS[meta.key] * 100)}%</span>
+              <span className="ind-weight">w {Math.round(weight * 100)}%</span>
             </div>
             <div className="ind-name">{ti.name}</div>
             <div className="ind-value" style={{ color: 'var(--accent)' }}>{part ? part.value : '…'}</div>
@@ -1400,7 +1437,7 @@
               part?.series?.length ? <Sparkline data={part.series} times={part.times} color="var(--accent)" height={40} fmt={meta.key === 'RSI' ? (v) => v.toFixed(1) : meta.key === 'FNG' ? (v) => String(Math.round(v)) : undefined} refLines={meta.key === 'RSI' ? [{ v: 30, color: 'rgba(0,255,156,.3)' }, { v: 70, color: 'rgba(255,59,92,.3)' }] : []} /> : null}
             <div className="mini-bar"><div className="mini-fill" style={{ width: `${s == null ? 0 : s}%`, background: 'var(--accent)' }} /></div>
             <div className="mini-row"><span>{s == null ? <span className="na-flag">N/A · OFFLINE</span> : t.subScore}</span><span>{s == null ? '' : s.toFixed(0) + ' / 100'}</span></div>
-            <div className="ind-desc">{ti.desc}</div>
+            <div className="ind-desc">{desc}</div>
           </article>
         )
       }
@@ -1431,16 +1468,18 @@
           switch (name.toLowerCase()) {
             case 'help': print(tt.help); break
             case 'score':
-              if (!a || a.score == null) { print(tt.needRefresh); break }
-              print(`  BUY TIMING SCORE: ${a.score.toFixed(1)} / 100   [${bandLabel(a.band)}]`, `  ${bandAdvice(a.band)}`, tt.scoreCoverage(a.online, Math.round(a.coverage * 100)))
+              if (!a || a.short.score == null) { print(tt.needRefresh); break }
+              print(`  SHORT (momentum): ${a.short.score.toFixed(1)} / 100   [${bandLabel(a.short.band)}]`,
+                    `  LONG  (contrarian): ${a.long.score == null ? 'N/A' : a.long.score.toFixed(1) + ' / 100'}   [${a.long.band ? bandLabel(a.long.band) : '—'}]`,
+                    tt.scoreCoverage(a.short.online, Math.round(a.short.coverage * 100)))
               break
             case 'why': {
-              if (!a || a.score == null) { print(tt.needData); break }
-              const contribs = Object.keys(WEIGHTS).map((k) => ({ k, v: a.parts[k].score, w: WEIGHTS[k] })).filter((c) => c.v != null)
+              if (!a || a.short.score == null) { print(tt.needData); break }
+              const contribs = Object.keys(WEIGHTS_MOM).map((k) => ({ k, v: a.parts[k].sShort, w: WEIGHTS_MOM[k] })).filter((c) => c.v != null)
               const wsum = contribs.reduce((s, c) => s + c.w, 0)
               contribs.map((c) => ({ ...c, contr: (c.v * c.w) / wsum })).sort((x, y) => y.contr - x.contr)
                 .forEach((c) => print(`  ${c.k.padEnd(6)} score ${c.v.toFixed(0).padStart(3)} ×${c.w.toFixed(2)} → ${c.contr >= 0 ? '+' : ''}${c.contr.toFixed(1)}`))
-              print(tt.whySum(a.score.toFixed(1)))
+              print(tt.whySum(a.short.score.toFixed(1)))
               break
             }
             case 'show': {
@@ -1448,7 +1487,7 @@
               if (!key || !a) { print(tt.showUsage); break }
               const m = INDICATOR_META.find((x) => x.key === key), p = a.parts[key]
               const ti = t.ind[key] || { name: m.name, desc: m.desc }
-              print(`  ${m.short} — ${ti.name}`, tt.showVal(p.value, p.detail), tt.showScore(p.score == null ? 'N/A' : p.score.toFixed(1) + '/100', Math.round(WEIGHTS[key] * 100)), `    ${ti.desc}`)
+              print(`  ${m.short} — ${ti.name}`, tt.showVal(p.value, p.detail), tt.showScore(p.sShort == null ? 'N/A' : p.sShort.toFixed(1) + '/100', Math.round(WEIGHTS_MOM[key] * 100)), `    ${ti.desc}`)
               break
             }
             case 'bands':
@@ -1502,6 +1541,246 @@
       /* =========================================================
        *  App
        * ========================================================= */
+      // ===== 단기(모멘텀)/장기(역발상) 탭 i18n =====
+      //  장기 밴드/지표 문구 = 기존 t.bands / t.ind (역발상, 13개 언어 완비).
+      //  여기엔 탭 라벨 + 단기(모멘텀) 전용 밴드 라벨/조언 + 단기 지표 설명만 둔다.
+      const MODE_I18N = {
+        en: {
+          tabTitle: 'Time horizon', short: 'Short · Momentum', long: 'Long · Contrarian',
+          shortHint: 'Trend-following over ~1–3 months. High = uptrend strength (ride the trend).',
+          longHint: 'Cycle mean-reversion over ~1 year+. High = fear/cheap (accumulate the dip).',
+          higherShort: 'higher = stronger uptrend', higherLong: 'higher = more buy-favorable (cheap/fear)',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: 'Strong upward momentum, trend aligned. Active participation zone.' },
+            ACCUMULATE: { label: 'BUY', advice: 'Uptrend has the edge. Trend-following staged buying.' },
+            NEUTRAL: { label: 'NEUTRAL', advice: 'Mixed trend. Wait until direction confirms.' },
+            CAUTION: { label: 'WEAK', advice: 'Downward momentum dominates. Be cautious with new buys.' },
+            OVERHEATED: { label: 'AVOID', advice: 'Strong downtrend. Hold off buying until the trend reverses.' },
+          },
+          ind: {
+            RSI: 'High (>70) = strong momentum / Low (<30) = weak', MACD: 'Positive & rising histogram = buy momentum',
+            FNG: 'Greed = momentum follow-through / Fear = weak (momentum view)', Mayer: '>1 = above 200D trend (strength) / <1 = below',
+            DD: 'Near highs = strong / deep drawdown = weak momentum', GC_DC: 'Golden cross = uptrend / Death cross = downtrend',
+          },
+        },
+        ko: {
+          tabTitle: '투자 기간', short: '단기 · 모멘텀', long: '장기 · 역발상',
+          shortHint: '약 1~3개월 추세추종. 높을수록 상승추세 강함(추세 동행).',
+          longHint: '약 1년+ 사이클 평균회귀. 높을수록 공포·저평가(저점 매집).',
+          higherShort: '높을수록 상승추세 강함', higherLong: '높을수록 매수 우호(저평가·공포)',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: '강한 상승 모멘텀·추세 동행. 적극 가담 구간.' },
+            ACCUMULATE: { label: 'BUY', advice: '상승 추세 우위. 추세 추종 분할 매수.' },
+            NEUTRAL: { label: 'NEUTRAL', advice: '추세 혼조. 방향 확인까지 관망.' },
+            CAUTION: { label: 'WEAK', advice: '하락 모멘텀 우위. 신규 매수 신중.' },
+            OVERHEATED: { label: 'AVOID', advice: '강한 하락 추세. 추세 반전 전 매수 자제.' },
+          },
+          ind: {
+            RSI: '높음(>70) = 강한 모멘텀 / 낮음(<30) = 약세', MACD: '양(+)·상승 히스토그램 = 매수 모멘텀',
+            FNG: '탐욕 = 모멘텀 지속 / 공포 = 약세 (모멘텀 관점)', Mayer: '>1 = 200일선 위(강세) / <1 = 아래',
+            DD: '고점 근접 = 강세 / 깊은 낙폭 = 약한 모멘텀', GC_DC: '골든크로스 = 상승추세 / 데드크로스 = 하락추세',
+          },
+        },
+        ja: {
+          tabTitle: '投資期間', short: '短期 · モメンタム', long: '長期 · 逆張り',
+          shortHint: '約1〜3か月の順張り。高い=上昇トレンドの強さ（トレンド追随）。',
+          longHint: '約1年以上のサイクル平均回帰。高い=恐怖・割安（押し目で積立）。',
+          higherShort: '高いほど上昇トレンドが強い', higherLong: '高いほど買い有利（割安・恐怖）',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: '強い上昇モメンタム、トレンド一致。積極参加ゾーン。' },
+            ACCUMULATE: { label: 'BUY', advice: '上昇トレンド優勢。トレンド追随の分割買い。' },
+            NEUTRAL: { label: 'NEUTRAL', advice: 'トレンド混在。方向が確認できるまで待機。' },
+            CAUTION: { label: 'WEAK', advice: '下降モメンタム優勢。新規買いは慎重に。' },
+            OVERHEATED: { label: 'AVOID', advice: '強い下降トレンド。反転までは買いを控える。' },
+          },
+          ind: {
+            RSI: '高い(>70)=強いモメンタム / 低い(<30)=弱い', MACD: 'プラス＆上昇ヒストグラム=買いモメンタム',
+            FNG: '強欲=モメンタム継続 / 恐怖=弱い（モメンタム視点）', Mayer: '>1=200日線の上（強さ）/ <1=下',
+            DD: '高値圏=強い / 深い下落=弱いモメンタム', GC_DC: 'ゴールデンクロス=上昇 / デッドクロス=下降',
+          },
+        },
+        zh: {
+          tabTitle: '投资周期', short: '短期 · 动量', long: '长期 · 逆向',
+          shortHint: '约1–3个月顺势。越高=上涨趋势越强（顺势而为）。',
+          longHint: '约1年以上周期均值回归。越高=恐慌·低估（逢低积累）。',
+          higherShort: '越高上涨趋势越强', higherLong: '越高越利于买入（低估·恐慌）',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: '强劲上行动量，趋势一致。积极参与区。' },
+            ACCUMULATE: { label: 'BUY', advice: '上涨趋势占优。顺势分批买入。' },
+            NEUTRAL: { label: 'NEUTRAL', advice: '趋势混杂。待方向明确再行动。' },
+            CAUTION: { label: 'WEAK', advice: '下行动量占优。新买入需谨慎。' },
+            OVERHEATED: { label: 'AVOID', advice: '强下行趋势。趋势反转前暂缓买入。' },
+          },
+          ind: {
+            RSI: '高(>70)=强动量 / 低(<30)=弱', MACD: '正且上升的柱状图=买入动量',
+            FNG: '贪婪=动量延续 / 恐慌=偏弱（动量视角）', Mayer: '>1=在200日线上方（强）/ <1=下方',
+            DD: '接近高点=强 / 深度回撤=动量弱', GC_DC: '金叉=上涨 / 死叉=下跌',
+          },
+        },
+        'zh-Hant': {
+          tabTitle: '投資週期', short: '短期 · 動能', long: '長期 · 逆向',
+          shortHint: '約1–3個月順勢。越高=上漲趨勢越強（順勢操作）。',
+          longHint: '約1年以上週期均值回歸。越高=恐慌·低估（逢低累積）。',
+          higherShort: '越高上漲趨勢越強', higherLong: '越高越利於買進（低估·恐慌）',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: '強勁上行動能，趨勢一致。積極參與區。' },
+            ACCUMULATE: { label: 'BUY', advice: '上漲趨勢占優。順勢分批買進。' },
+            NEUTRAL: { label: 'NEUTRAL', advice: '趨勢混雜。待方向明確再行動。' },
+            CAUTION: { label: 'WEAK', advice: '下行動能占優。新買進需謹慎。' },
+            OVERHEATED: { label: 'AVOID', advice: '強下行趨勢。趨勢反轉前暫緩買進。' },
+          },
+          ind: {
+            RSI: '高(>70)=強動能 / 低(<30)=弱', MACD: '正且上升的柱狀圖=買進動能',
+            FNG: '貪婪=動能延續 / 恐慌=偏弱（動能視角）', Mayer: '>1=在200日線上方（強）/ <1=下方',
+            DD: '接近高點=強 / 深度回撤=動能弱', GC_DC: '黃金交叉=上漲 / 死亡交叉=下跌',
+          },
+        },
+        th: {
+          tabTitle: 'กรอบเวลา', short: 'สั้น · โมเมนตัม', long: 'ยาว · สวนทาง',
+          shortHint: 'ตามแนวโน้มราว 1–3 เดือน สูง = แนวโน้มขาขึ้นแข็งแกร่ง (ไปตามเทรนด์)',
+          longHint: 'คืนสู่ค่าเฉลี่ยตามวัฏจักรราว 1 ปีขึ้นไป สูง = กลัว/ราคาถูก (ทยอยสะสมตอนย่อ)',
+          higherShort: 'ยิ่งสูง แนวโน้มขาขึ้นยิ่งแข็งแกร่ง', higherLong: 'ยิ่งสูง ยิ่งเอื้อต่อการซื้อ (ถูก/กลัว)',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: 'โมเมนตัมขาขึ้นแรง แนวโน้มสอดคล้อง โซนเข้าร่วมเชิงรุก' },
+            ACCUMULATE: { label: 'BUY', advice: 'แนวโน้มขาขึ้นได้เปรียบ ทยอยซื้อตามเทรนด์' },
+            NEUTRAL: { label: 'NEUTRAL', advice: 'แนวโน้มผสม รอจนทิศทางชัดเจน' },
+            CAUTION: { label: 'WEAK', advice: 'โมเมนตัมขาลงครอง ระวังการซื้อใหม่' },
+            OVERHEATED: { label: 'AVOID', advice: 'แนวโน้มขาลงแรง ชะลอการซื้อจนกว่าจะกลับตัว' },
+          },
+          ind: {
+            RSI: 'สูง (>70) = โมเมนตัมแรง / ต่ำ (<30) = อ่อน', MACD: 'ฮิสโทแกรมบวกและเพิ่มขึ้น = โมเมนตัมซื้อ',
+            FNG: 'โลภ = โมเมนตัมต่อเนื่อง / กลัว = อ่อน (มุมมองโมเมนตัม)', Mayer: '>1 = เหนือเส้น 200 วัน (แข็งแกร่ง) / <1 = ต่ำกว่า',
+            DD: 'ใกล้จุดสูงสุด = แข็งแกร่ง / ย่อลึก = โมเมนตัมอ่อน', GC_DC: 'Golden cross = ขาขึ้น / Death cross = ขาลง',
+          },
+        },
+        es: {
+          tabTitle: 'Horizonte temporal', short: 'Corto · Momentum', long: 'Largo · Contrario',
+          shortHint: 'Seguimiento de tendencia a ~1–3 meses. Alto = fuerza alcista (seguir la tendencia).',
+          longHint: 'Reversión a la media del ciclo a ~1 año+. Alto = miedo/barato (acumular en caídas).',
+          higherShort: 'más alto = tendencia alcista más fuerte', higherLong: 'más alto = más favorable para comprar (barato/miedo)',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: 'Fuerte momentum alcista, tendencia alineada. Zona de participación activa.' },
+            ACCUMULATE: { label: 'BUY', advice: 'La tendencia alcista tiene ventaja. Compra escalonada siguiendo la tendencia.' },
+            NEUTRAL: { label: 'NEUTRAL', advice: 'Tendencia mixta. Espera a que se confirme la dirección.' },
+            CAUTION: { label: 'WEAK', advice: 'Domina el momentum bajista. Cautela con nuevas compras.' },
+            OVERHEATED: { label: 'AVOID', advice: 'Fuerte tendencia bajista. Espera a que se invierta antes de comprar.' },
+          },
+          ind: {
+            RSI: 'Alto (>70) = momentum fuerte / Bajo (<30) = débil', MACD: 'Histograma positivo y creciente = momentum de compra',
+            FNG: 'Codicia = continuación del momentum / Miedo = débil (visión de momentum)', Mayer: '>1 = sobre la MM200 (fuerza) / <1 = por debajo',
+            DD: 'Cerca de máximos = fuerte / caída profunda = momentum débil', GC_DC: 'Cruce dorado = alcista / Cruce de la muerte = bajista',
+          },
+        },
+        fr: {
+          tabTitle: 'Horizon temporel', short: 'Court · Momentum', long: 'Long · Contrarian',
+          shortHint: 'Suivi de tendance sur ~1–3 mois. Élevé = force haussière (suivre la tendance).',
+          longHint: 'Retour à la moyenne du cycle sur ~1 an+. Élevé = peur/bon marché (accumuler dans les creux).',
+          higherShort: 'plus élevé = tendance haussière plus forte', higherLong: 'plus élevé = plus favorable à l\'achat (bon marché/peur)',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: 'Fort momentum haussier, tendance alignée. Zone de participation active.' },
+            ACCUMULATE: { label: 'BUY', advice: 'La tendance haussière a l\'avantage. Achat échelonné en suivi de tendance.' },
+            NEUTRAL: { label: 'NEUTRAL', advice: 'Tendance mitigée. Attendez la confirmation de la direction.' },
+            CAUTION: { label: 'WEAK', advice: 'Le momentum baissier domine. Prudence avec les nouveaux achats.' },
+            OVERHEATED: { label: 'AVOID', advice: 'Forte tendance baissière. Attendez le retournement avant d\'acheter.' },
+          },
+          ind: {
+            RSI: 'Élevé (>70) = fort momentum / Bas (<30) = faible', MACD: 'Histogramme positif et en hausse = momentum d\'achat',
+            FNG: 'Avidité = poursuite du momentum / Peur = faible (vue momentum)', Mayer: '>1 = au-dessus de la MM200 (force) / <1 = en dessous',
+            DD: 'Près des sommets = fort / repli profond = momentum faible', GC_DC: 'Croisement doré = hausse / Croisement de la mort = baisse',
+          },
+        },
+        de: {
+          tabTitle: 'Zeithorizont', short: 'Kurz · Momentum', long: 'Lang · Antizyklisch',
+          shortHint: 'Trendfolge über ~1–3 Monate. Hoch = Aufwärtsstärke (dem Trend folgen).',
+          longHint: 'Zyklische Mean-Reversion über ~1 Jahr+. Hoch = Angst/günstig (im Rücksetzer akkumulieren).',
+          higherShort: 'höher = stärkerer Aufwärtstrend', higherLong: 'höher = kauffreundlicher (günstig/Angst)',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: 'Starkes Aufwärtsmomentum, Trend im Einklang. Aktive Teilnahmezone.' },
+            ACCUMULATE: { label: 'BUY', advice: 'Aufwärtstrend im Vorteil. Trendfolgender gestaffelter Kauf.' },
+            NEUTRAL: { label: 'NEUTRAL', advice: 'Gemischter Trend. Auf Richtungsbestätigung warten.' },
+            CAUTION: { label: 'WEAK', advice: 'Abwärtsmomentum dominiert. Bei Neukäufen vorsichtig sein.' },
+            OVERHEATED: { label: 'AVOID', advice: 'Starker Abwärtstrend. Mit Käufen bis zur Trendwende warten.' },
+          },
+          ind: {
+            RSI: 'Hoch (>70) = starkes Momentum / Niedrig (<30) = schwach', MACD: 'Positives & steigendes Histogramm = Kaufmomentum',
+            FNG: 'Gier = Momentum hält an / Angst = schwach (Momentum-Sicht)', Mayer: '>1 = über dem 200-Tage-Schnitt (Stärke) / <1 = darunter',
+            DD: 'Nahe Hochs = stark / tiefer Rücksetzer = schwaches Momentum', GC_DC: 'Golden Cross = aufwärts / Death Cross = abwärts',
+          },
+        },
+        it: {
+          tabTitle: 'Orizzonte temporale', short: 'Breve · Momentum', long: 'Lungo · Contrarian',
+          shortHint: 'Segui-trend su ~1–3 mesi. Alto = forza rialzista (segui il trend).',
+          longHint: 'Ritorno alla media del ciclo su ~1 anno+. Alto = paura/conveniente (accumula nei ribassi).',
+          higherShort: 'più alto = trend rialzista più forte', higherLong: 'più alto = più favorevole all\'acquisto (conveniente/paura)',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: 'Forte momentum rialzista, trend allineato. Zona di partecipazione attiva.' },
+            ACCUMULATE: { label: 'BUY', advice: 'Il trend rialzista è in vantaggio. Acquisto scaglionato in segui-trend.' },
+            NEUTRAL: { label: 'NEUTRAL', advice: 'Trend misto. Attendi la conferma della direzione.' },
+            CAUTION: { label: 'WEAK', advice: 'Domina il momentum ribassista. Cautela con i nuovi acquisti.' },
+            OVERHEATED: { label: 'AVOID', advice: 'Forte trend ribassista. Attendi l\'inversione prima di comprare.' },
+          },
+          ind: {
+            RSI: 'Alto (>70) = momentum forte / Basso (<30) = debole', MACD: 'Istogramma positivo e in crescita = momentum d\'acquisto',
+            FNG: 'Avidità = continuazione del momentum / Paura = debole (vista momentum)', Mayer: '>1 = sopra la MM200 (forza) / <1 = sotto',
+            DD: 'Vicino ai massimi = forte / ribasso profondo = momentum debole', GC_DC: 'Golden cross = rialzo / Death cross = ribasso',
+          },
+        },
+        pt: {
+          tabTitle: 'Horizonte temporal', short: 'Curto · Momentum', long: 'Longo · Contrário',
+          shortHint: 'Seguimento de tendência em ~1–3 meses. Alto = força de alta (seguir a tendência).',
+          longHint: 'Reversão à média do ciclo em ~1 ano+. Alto = medo/barato (acumular nas quedas).',
+          higherShort: 'mais alto = tendência de alta mais forte', higherLong: 'mais alto = mais favorável à compra (barato/medo)',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: 'Forte momentum de alta, tendência alinhada. Zona de participação ativa.' },
+            ACCUMULATE: { label: 'BUY', advice: 'A tendência de alta leva vantagem. Compra escalonada seguindo a tendência.' },
+            NEUTRAL: { label: 'NEUTRAL', advice: 'Tendência mista. Aguarde a confirmação da direção.' },
+            CAUTION: { label: 'WEAK', advice: 'O momentum de baixa domina. Cautela com novas compras.' },
+            OVERHEATED: { label: 'AVOID', advice: 'Forte tendência de baixa. Aguarde a reversão antes de comprar.' },
+          },
+          ind: {
+            RSI: 'Alto (>70) = momentum forte / Baixo (<30) = fraco', MACD: 'Histograma positivo e crescente = momentum de compra',
+            FNG: 'Ganância = continuação do momentum / Medo = fraco (visão de momentum)', Mayer: '>1 = acima da MM200 (força) / <1 = abaixo',
+            DD: 'Perto das máximas = forte / queda profunda = momentum fraco', GC_DC: 'Cruzamento dourado = alta / Cruzamento da morte = baixa',
+          },
+        },
+        ru: {
+          tabTitle: 'Горизонт', short: 'Кратко · Моментум', long: 'Долго · Контртренд',
+          shortHint: 'Следование тренду ~1–3 месяца. Выше = сила роста (движение по тренду).',
+          longHint: 'Возврат к среднему по циклу ~1 год+. Выше = страх/дёшево (докупать на просадках).',
+          higherShort: 'выше = сильнее восходящий тренд', higherLong: 'выше = выгоднее для покупки (дёшево/страх)',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: 'Сильный восходящий моментум, тренд совпадает. Зона активного участия.' },
+            ACCUMULATE: { label: 'BUY', advice: 'Восходящий тренд в преимуществе. Поэтапная покупка по тренду.' },
+            NEUTRAL: { label: 'NEUTRAL', advice: 'Смешанный тренд. Ждите подтверждения направления.' },
+            CAUTION: { label: 'WEAK', advice: 'Преобладает нисходящий моментум. Осторожно с новыми покупками.' },
+            OVERHEATED: { label: 'AVOID', advice: 'Сильный нисходящий тренд. Воздержитесь от покупок до разворота.' },
+          },
+          ind: {
+            RSI: 'Высокий (>70) = сильный моментум / Низкий (<30) = слабый', MACD: 'Положительная растущая гистограмма = моментум на покупку',
+            FNG: 'Жадность = продолжение моментума / Страх = слабость (взгляд моментума)', Mayer: '>1 = выше 200-дн. средней (сила) / <1 = ниже',
+            DD: 'У максимумов = сила / глубокая просадка = слабый моментум', GC_DC: 'Золотой крест = рост / Мёртвый крест = падение',
+          },
+        },
+        nl: {
+          tabTitle: 'Tijdshorizon', short: 'Kort · Momentum', long: 'Lang · Contrair',
+          shortHint: 'Trendvolgend over ~1–3 maanden. Hoog = opwaartse kracht (volg de trend).',
+          longHint: 'Cyclische mean-reversion over ~1 jaar+. Hoog = angst/goedkoop (accumuleer bij dips).',
+          higherShort: 'hoger = sterkere opwaartse trend', higherLong: 'hoger = gunstiger om te kopen (goedkoop/angst)',
+          bands: {
+            STRONG_BUY: { label: 'STRONG BUY', advice: 'Sterk opwaarts momentum, trend in lijn. Zone voor actieve deelname.' },
+            ACCUMULATE: { label: 'BUY', advice: 'Opwaartse trend heeft de overhand. Trendvolgend gefaseerd kopen.' },
+            NEUTRAL: { label: 'NEUTRAL', advice: 'Gemengde trend. Wacht op bevestiging van de richting.' },
+            CAUTION: { label: 'WEAK', advice: 'Neerwaarts momentum overheerst. Wees voorzichtig met nieuwe aankopen.' },
+            OVERHEATED: { label: 'AVOID', advice: 'Sterke neerwaartse trend. Wacht met kopen tot de trend keert.' },
+          },
+          ind: {
+            RSI: 'Hoog (>70) = sterk momentum / Laag (<30) = zwak', MACD: 'Positief & stijgend histogram = koopmomentum',
+            FNG: 'Hebzucht = momentum zet door / Angst = zwak (momentum-zicht)', Mayer: '>1 = boven 200-daags gemiddelde (kracht) / <1 = eronder',
+            DD: 'Dicht bij highs = sterk / diepe terugval = zwak momentum', GC_DC: 'Golden cross = opwaarts / Death cross = neerwaarts',
+          },
+        },
+      }
+      const getMode = (lang) => MODE_I18N[lang] || MODE_I18N.en
       const THEMES = { green: '#00ff9c', cyan: '#00e5ff', amber: '#ffb000', red: '#ff3b5c' }
       function App() {
         const [price, setPrice] = useState(null)
@@ -1516,6 +1795,8 @@
         const now = useClock()
         const t = getT(lang)
         const locale = localeOf(lang)
+        const xm = getMode(lang)
+        const [mode, setMode] = useLocalStorage('btc:mode', 'long') // 'short'=모멘텀(단기), 'long'=역발상(장기·기본)
 
         useEffect(() => { document.documentElement.style.setProperty('--neon', accent) }, [accent])
 
@@ -1568,15 +1849,19 @@
         }, [klines, fng, price, t])
 
         const analysisRef = useRef(analysis); analysisRef.current = analysis
+        // 현재 탭(단기/장기)에 해당하는 점수·밴드 묶음
+        const A = analysis ? (mode === 'long' ? analysis.long : analysis.short) : null
 
         // 점수 히스토리 기록(값이 바뀔 때만)
         const lastScore = useRef(null)
+        // 탭(단기/장기) 전환 시 점수 추이 초기화 — 두 철학의 점수를 한 차트에 섞지 않음
+        useEffect(() => { setScoreHist([]); lastScore.current = null }, [mode])
         useEffect(() => {
-          if (!analysis || analysis.score == null) return
-          if (lastScore.current === analysis.score) return
-          lastScore.current = analysis.score
-          setScoreHist((prev) => [...prev, { t: Date.now(), s: analysis.score }].slice(-80))
-        }, [analysis && analysis.score])
+          if (!A || A.score == null) return
+          if (lastScore.current === A.score) return
+          lastScore.current = A.score
+          setScoreHist((prev) => [...prev, { t: Date.now(), s: A.score }].slice(-80))
+        }, [A && A.score])
 
         const api = useMemo(() => ({
           refresh,
@@ -1587,9 +1872,12 @@
         const finishBoot = useCallback(() => { sessionStorage.setItem('btcbooted', '1'); setBooted(true) }, [])
         if (!booted) return <BootSequence onDone={finishBoot} t={t} />
 
-        const band = analysis?.band
+        const band = A?.band
         const sysColor = band ? band.color : 'warn'
-        const score = analysis?.score
+        const score = A?.score
+        // 모드별 밴드 라벨/조언: 장기=기존 t.bands(역발상, 13개 언어) · 단기=xm.bands(모멘텀)
+        const bandLabel = (b) => b ? (mode === 'long' ? (t.bands[b.id] ? t.bands[b.id].label : b.label) : ((xm.bands[b.id] && xm.bands[b.id].label) || b.labelMom || b.label)) : '…'
+        const bandAdvice = (b) => b ? (mode === 'long' ? (t.bands[b.id] ? t.bands[b.id].advice : b.advice) : ((xm.bands[b.id] && xm.bands[b.id].advice) || b.adviceMom || b.advice)) : t.dataLoading
         const gaugeColor = band ? (band.color === 'ok' ? 'var(--ok)' : band.color === 'warn' ? 'var(--warn)' : 'var(--crit)') : 'var(--dim)'
         const r = 90, circ = 2 * Math.PI * r, dash = ((score || 0) / 100) * circ
         const chgUp = (price?.change24hPct ?? 0) >= 0
@@ -1623,7 +1911,7 @@
                     <input type="checkbox" checked={tipsOn} onChange={(e) => setTipsOn(e.target.checked)} />
                     <span>{t.tips} {tipsOn ? 'ON' : 'OFF'}</span>
                   </label>
-                  <div className={`sys-status status-${sysColor}`}><span className="pulse" />{band ? (t.bands[band.id] ? t.bands[band.id].label : band.label) : t.loading}</div>
+                  <div className={`sys-status status-${sysColor}`}><span className="pulse" />{band ? bandLabel(band) : t.loading}</div>
                   <div className="clock"><span className="clock-time">{now.toLocaleTimeString(locale, { hour12: false })}</span><span className="clock-time-sm">{`${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`}</span><span className="clock-date">{now.toLocaleDateString(locale)}</span></div>
                 </div>
               </header>
@@ -1637,6 +1925,11 @@
                 <div className={`panel gauge-panel status-${sysColor}`} style={{ '--accent': gaugeColor }}>
                   <span className="corner tl" /><span className="corner tr" /><span className="corner bl" /><span className="corner br" />
                   <div className="panel-label">// <Term k="score">{t.buyTimingScore}</Term></div>
+                  <div className="mode-tabs" role="tablist" aria-label={xm.tabTitle}>
+                    <button role="tab" aria-selected={mode === 'short'} className={`mode-tab ${mode === 'short' ? 'on' : ''}`} onClick={() => setMode('short')} title={xm.shortHint}>{xm.short}</button>
+                    <button role="tab" aria-selected={mode === 'long'} className={`mode-tab ${mode === 'long' ? 'on' : ''}`} onClick={() => setMode('long')} title={xm.longHint}>{xm.long}</button>
+                  </div>
+                  <div className="mode-hint">{mode === 'long' ? xm.longHint : xm.shortHint}</div>
                   <div className="gauge-big">
                     <svg viewBox="0 0 210 210">
                       <circle cx="105" cy="105" r={r} className="gauge-track" />
@@ -1647,9 +1940,9 @@
                       <span className="gauge-of">/ 100</span>
                     </div>
                   </div>
-                  <div className="verdict" style={{ color: gaugeColor }}>{band ? (t.bands[band.id] ? t.bands[band.id].label : band.label) : '…'}</div>
-                  <div className="verdict-advice">{band ? (t.bands[band.id] ? t.bands[band.id].advice : band.advice) : t.dataLoading}</div>
-                  <div className="coverage">{analysis ? <><Term k="coverage">{t.indicatorsOnline(analysis.online)}</Term> · {t.higherMoreBuy}</> : ''}</div>
+                  <div className="verdict" style={{ color: gaugeColor }}>{bandLabel(band)}</div>
+                  <div className="verdict-advice">{bandAdvice(band)}</div>
+                  <div className="coverage">{A ? <><Term k="coverage">{t.indicatorsOnline(A.online)}</Term> · {mode === 'long' ? xm.higherLong : xm.higherShort}</> : ''}</div>
                 </div>
 
                 <div className="panel market" style={{ '--accent': accent }}>
@@ -1682,7 +1975,7 @@
               </section>
 
               <section className="ind-grid">
-                {INDICATOR_META.map((m) => <IndicatorCard key={m.key} meta={m} part={analysis?.parts?.[m.key]} />)}
+                {INDICATOR_META.map((m) => <IndicatorCard key={m.key} meta={m} part={analysis?.parts?.[m.key]} mode={mode} xm={xm} />)}
               </section>
 
               <Terminal ctx={ctx} />
@@ -1692,7 +1985,7 @@
                 <span className="footer-cmds">
                   <button className="chip" onClick={refresh}>↻ {t.refresh}</button>
                   <button className="chip" onClick={() => setMatrixOn((v) => !v)}>matrix:{matrixOn ? 'on' : 'off'}</button>
-                  <button className="chip" onClick={() => { setScoreHist(analysis?.score != null ? [{ t: Date.now(), s: analysis.score }] : []); lastScore.current = analysis?.score ?? null }}>{t.clearHistory}</button>
+                  <button className="chip" onClick={() => { setScoreHist(A?.score != null ? [{ t: Date.now(), s: A.score }] : []); lastScore.current = A?.score ?? null }}>{t.clearHistory}</button>
                 </span>
               </footer>
             </div>
