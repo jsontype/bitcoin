@@ -1053,7 +1053,7 @@
         return { sma50: fast, sma200: slow, crossState: fast > slow ? 'GOLDEN' : 'DEATH', event, gapPct: (fast / slow - 1) * 100, isFallback: N < 200 }
       }
 
-      const WEIGHTS = { RSI: 0.18, MACD: 0.18, FNG: 0.18, Mayer: 0.18, DD: 0.14, GC_DC: 0.14 }
+      const WEIGHTS = { RSI: 0.28, MACD: 0.14, FNG: 0.28, Mayer: 0.04, DD: 0.18, GC_DC: 0.08 } // 데이터 보정 가중치(백테스트 예측력 순)
       const BANDS = [
         { id: 'STRONG_BUY', min: 80, label: 'STRONG BUY', color: 'ok', advice: '과매도+공포+저평가 다중 합류. 분할 매수 적극 구간.' },
         { id: 'ACCUMULATE', min: 65, label: 'ACCUMULATE', color: 'ok', advice: '매수 우호. 분할 적립 권장. 추세 필터와 함께 확인.' },
@@ -1076,11 +1076,13 @@
       // 모든 지표 + 합성 점수 계산 (t = 현재 언어 번들; 상세 문구 현지화)
       function computeAnalysis({ closes, fngArr, livePrice, t, times = null, fngTimes = null }) {
         const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x))
-        // 역사적 캘리브레이션 매핑 (평범=50, 진짜 극단에서만 꼬리값)
-        const rsiScore = (r) => clamp(50 + (50 - r) * 1.7, 0, 100)
-        const macdScoreFn = (cur, prev, px) => clamp(50 + 25 * Math.tanh(((cur - prev) / px) * 600) + 10 * Math.tanh((cur / px) * 600), 0, 100)
-        const mayerScore = (m) => { if (m <= 0.8) return 100; if (m <= 1.4) return clamp(50 + ((1.4 - m) / 0.6) * 50, 50, 100); if (m <= 2.4) return clamp(10 + ((2.4 - m) / 1.0) * 40, 10, 50); return clamp(10 - (m - 2.4) * 25, 0, 10) }
-        const ddScore = (ddPct) => clamp(-ddPct * 1.4, 0, 100)
+        // 데이터 보정 매핑 — 2017~현재 백테스트 결과 BTC는 모멘텀 자산.
+        // 추세/탐욕/고점근접일수록 高점수, 극단 과열은 아래 톱가드로 하향. (역발상 X)
+        const rsiScore = (r) => clamp(50 + (r - 50) * 1.6, 0, 100)
+        const macdScoreFn = (cur, prev, px) => clamp(50 + 30 * Math.tanh((cur / px) * 800) + 15 * Math.tanh(((cur - prev) / px) * 800), 0, 100)
+        const mayerScore = (m) => clamp(50 + (m - 1) * 25, 0, 100)
+        const ddScore = (ddPct) => clamp(100 + ddPct * 1.3, 0, 100)
+        const fngMomScore = (arr) => { const a = (arr || []).map(Number).filter((v) => !isNaN(v)); if (!a.length) return null; return clamp(50 + (a[a.length - 1] - 50) * 1.2, 0, 100) }
         // 시리즈(앞쪽 null 가능)와 평행 타임스탬프를 함께 필터링해 마지막 n개 반환
         const tailTimed = (values, ts2, n = 120) => {
           const useT = Array.isArray(ts2) && ts2.length === values.length
@@ -1116,7 +1118,7 @@
         }
         parts.MACD = { score: macdScore, value: macdVal, detail: macdDetail, series: macdSeries, times: macdTimes }
 
-        const fngScore = fngCompositeScore(fngArr)
+        const fngScore = fngMomScore(fngArr)
         const fngCur = fngArr.length ? fngArr[fngArr.length - 1] : null
         const fngT = tailTimed(fngArr, fngTimes)
         parts.FNG = { score: fngScore, value: fngCur == null ? 'N/A' : String(fngCur), detail: fngLabel(fngCur, t), series: fngT.series, times: fngT.times }
@@ -1137,7 +1139,7 @@
 
         const gc = goldenDeathCross(closes)
         parts.GC_DC = {
-          score: gc == null ? 50 : gc.event === 'GOLDEN_CROSS' ? 85 : gc.event === 'DEATH_CROSS' ? 15 : gc.crossState === 'GOLDEN' ? 60 : 35,
+          score: gc == null ? 50 : gc.event === 'GOLDEN_CROSS' ? 75 : gc.event === 'DEATH_CROSS' ? 30 : gc.crossState === 'GOLDEN' ? 65 : 40,
           value: gc == null ? 'N/A' : gc.crossState + (gc.event !== 'NONE' ? ' ⚡' : ''),
           detail: gc == null ? D.nodata : `gap ${gc.gapPct.toFixed(1)}%` + (gc.event !== 'NONE' ? ' · ' + gc.event : ''),
         }
@@ -1146,8 +1148,14 @@
         for (const k in WEIGHTS) { const v = parts[k].score; if (v != null && !isNaN(v)) { acc += v * WEIGHTS[k]; wsum += WEIGHTS[k]; online++ } }
         let score = wsum === 0 ? null : Math.round((acc / wsum) * 10) / 10
         // falling-knife 가드: 하락추세(데드크로스)+모멘텀(MACD 히스토) 음수 → 확인 안 된 바닥, 중립쪽 20% 감쇠
+        // 블로우오프 톱 가드: 극단 과열(Mayer>2.0 / 극탐욕≥90)에서 점수 강제 하향 → 사이클 꼭지 매수 방지
         let knifeGuard = false
-        if (score != null && gc && gc.crossState === 'DEATH' && macdCur != null && macdCur <= 0) { score = Math.round((50 + (score - 50) * 0.8) * 10) / 10; knifeGuard = true }
+        if (score != null) {
+          const mv = mm ? mm.mayer : null
+          if (mv != null && mv > 2.0) { score = score * clamp(1 - (mv - 2.0) * 0.55, 0.25, 1); knifeGuard = true }
+          if (fngCur != null && fngCur >= 90) { score = score - (fngCur - 90) * 2.0; knifeGuard = true }
+          score = Math.round(clamp(score, 0, 100) * 10) / 10
+        }
         return { score, coverage: Math.round(wsum * 100) / 100, online, knifeGuard, band: score == null ? null : bandFor(score), parts, livePrice }
       }
 
