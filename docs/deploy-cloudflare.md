@@ -25,6 +25,19 @@
 4. Save and Deploy → `*.pages.dev` 프리뷰 확인.
 5. **Custom domains** 탭 → `broodev.com` 추가 → (원하면 `www.broodev.com` 도) → CF가 DNS 레코드를 자동 생성/검증.
 
+## 1-B. (AdSense 대응) broodev.com 루트 = btc 앱으로 전환 ⭐
+`broodev.com` 루트가 AdSense **“가치 없는 콘텐츠”**로 미충족됨(2026-07). 심사 관문인 루트에 얇은 포털 대신 **콘텐츠가 풍부한 btc 앱을 서빙**한다. 코드 준비(canonical=`https://broodev.com/`, 정적 푸터, `privacy.html`·`terms.html`, sitemap/robots)는 이미 `apps/btc` 에 반영됨 — Cloudflare에서 루트만 재지정하면 된다.
+
+1. Cloudflare → `broodev-web` 프로젝트 → **Settings → Builds & deployments → Root directory** 를 `apps/web` → **`apps/btc`** 로 변경.
+2. **Retry deployment**(또는 새 커밋 push)로 재배포.
+3. `btc.broodev.com`(`broodev-btc`) 중복 콘텐츠 처리 — 둘 중 하나:
+   - (권장) `apps/btc` 의 canonical 이 이미 `https://broodev.com/` 이므로 그대로 둬도 검색엔진이 루트로 통합.
+   - 또는 `broodev-btc` 에 `_redirects` 파일 추가로 301: `/*  https://broodev.com/:splat  301`
+4. 전파 후 확인: `https://broodev.com/` 이 **대시보드 렌더** + `https://broodev.com/ads.txt`·`/privacy.html`·`/terms.html` 이 **200**.
+5. AdSense → 사이트 `broodev.com` **재심사 요청**.
+
+> 회사 포털(`apps/web`)은 심사 통과 후 `broodev.com/about` 서브경로나 별도 서브도메인으로 재배치 예정. 지금은 루트를 btc로 두는 것이 우선.
+
 ## 2. admin (admin.broodev.com) — 정적
 1. 위와 동일하게 새 Pages 프로젝트 `broodev-admin`, Root directory `apps/admin`, 빌드 없음, output `.`.
 2. Custom domains → `admin.broodev.com` 추가.

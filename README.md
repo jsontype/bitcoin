@@ -7,6 +7,8 @@
 
 ![monorepo](https://img.shields.io/badge/monorepo-broodev-00ff9c) ![host](https://img.shields.io/badge/host-Cloudflare%20Pages-f38020) ![ads](https://img.shields.io/badge/monetize-AdSense-4285f4)
 
+> **⚠ AdSense 심사 대응 (2026-07):** `broodev.com` 루트가 “가치 없는 콘텐츠”로 미충족되어, **심사 관문인 루트를 콘텐츠가 풍부한 btc 앱으로 전환**한다. Cloudflare `broodev-web` 프로젝트의 Root directory를 `apps/web` → **`apps/btc`** 로 변경(절차: [docs/deploy-cloudflare.md](docs/deploy-cloudflare.md) §1-B). 코드 준비(canonical·게시자 푸터·`privacy.html`/`terms.html`·sitemap)는 `apps/btc` 에 반영 완료. 회사 포털(`apps/web`)은 통과 후 서브경로/서브도메인으로 재배치 예정.
+
 ## 🧱 모노레포 구조
 
 ```text
@@ -38,7 +40,7 @@ broodev/
 
 | Pages 프로젝트 | Root directory | 도메인 |
 | --- | --- | --- |
-| broodev-web | `apps/web` | broodev.com |
+| broodev-web | `apps/btc` ⭐(전환) | broodev.com |
 | broodev-btc | `apps/btc` | btc.broodev.com |
 | broodev-admin | `apps/admin` | admin.broodev.com |
 

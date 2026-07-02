@@ -3,7 +3,7 @@
 // 응답 직전에 OG 메타(title/description/locale/image)를 해당 언어로 갈아끼운다.
 // 기본(ko) 또는 미지원 lang → 원본 HTML 그대로(한국어).
 
-const IMG = 'https://btc.broodev.com';
+const IMG = 'https://broodev.com';
 const M = {
   en: { t: 'Bitcoin Fear & Greed Index · Buy-Timing Score | BTC_SIGNAL', d: 'Real-time Bitcoin Fear & Greed Index plus RSI, MACD, Mayer Multiple and more — 6 indicators in one 0–100 buy-timing score. Free, no install.', l: 'en_US', img: IMG + '/og-en.png' },
   ja: { t: 'ビットコイン 恐怖・強欲指数 · 買い時スコア | BTC_SIGNAL', d: 'ビットコインの恐怖・強欲指数にRSI・MACD・マイヤー倍率など6指標を合成し、買い時を0〜100で示す無料ダッシュボード。インストール不要。', l: 'ja_JP', img: IMG + '/og-ja.png' },

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://btc.broodev.com/sitemap.xml
+Sitemap: https://broodev.com/sitemap.xml
